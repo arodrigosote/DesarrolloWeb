@@ -1,0 +1,4 @@
+npm init react-app
+
+//Instalamos dependencia para rutas
+npm install react-router-dom
