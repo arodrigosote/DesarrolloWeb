@@ -1,0 +1,57 @@
+/* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+:root {
+  --black: #1f1f20;
+  --dark-blue: #2b4c7e;
+  --light-blue: #567ebb;
+  --dark-grey: #606d80;
+  --light-grey: #dce0e6;
+  --more-light: #fdffd9;
+  --light: #fff0b8;
+  --secondary: #ffd6a3;
+  --secondary-dark: #e2a861;
+  --primary: #faad8e;
+  --dark-primary: #df7c56;
+  --dark: #142f30;
+}
+
+.white-text {
+  color: white !important;
+}
+
+.black-text {
+  color: var(--black);
+}
+.dark-text{
+  color: var(--dark)
+}
+
+.btn-primary{
+  background-color: var(--dark-primary) !important;
+  border-color: var(--dark-primary) !important;
+}
+
+.background-primary{
+  background-color: var(-primary) !important;
+}
+.background-secondary{
+  background-color: var(--secondary) !important;
+}
+.background-secondary-dark{
+  background-color: var(--secondary-dark) !important;
+}
