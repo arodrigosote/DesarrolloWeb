@@ -1,0 +1,30 @@
+composer create-project laravel/laravel:^8.0 icasys
+
+composer require laravel/ui    |    composer require laravel/breeze --dev
+
+php artisan ui bootstrap       |    php artisan breeze:install react 
+
+php artisan ui bootstrap --auth	 |  npm install 
+
+composer require mercadopago/dx-php
+
+composer require ibex/crud-generator --dev
+
+php artisan vendor:publish --tag=crud
+
+composer require laravel-lang/common --dev
+
+php artisan lang:add es
+
+php artisan lang:update
+
+composer require barryvdh/laravel-dompdf
+
+npm install
+
+npm run build
+
+npm i laravel-mix
+
+
+
