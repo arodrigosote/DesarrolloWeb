@@ -10,8 +10,6 @@ export default function () {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [isMovileMenuOpen, setMovileMenuOpen] = useState(false);
 
-    const contact = route('page.contact')
-
     const movileToggle = () => {
         setMovileMenuOpen(!isMovileMenuOpen);
     }
@@ -26,10 +24,10 @@ export default function () {
                 <img src={icono} alt="icono icasys" className='icon' />
                 <nav className='nav'>
                     <ul className='nav-menu'>
-                        <li className='nav-menu-item'><a href="#" className='nav-menu-link'>Inicio</a></li>
+                        <li className='nav-menu-item'><a href={route('page.home')} className='nav-menu-link'>Inicio</a></li>
                         <li className='nav-menu-item'><a href="#" className='nav-menu-link'>Cursos</a></li>
-                        <li className='nav-menu-item'><a href={contact} className='nav-menu-link'>Contacto</a></li>
-                        <li className='nav-menu-item'><a href="#" className='nav-menu-link'>Acercade</a></li>
+                        <li className='nav-menu-item'><a href={route('page.contact')} className='nav-menu-link'>Contacto</a></li>
+                        <li className='nav-menu-item'><a href={route('page.about')} className='nav-menu-link'>Acercade</a></li>
                     </ul>
                 </nav>
             </div>
