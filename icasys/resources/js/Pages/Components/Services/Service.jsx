@@ -5,27 +5,31 @@ import foto2 from '../../../Assets/Images/oferta-educativa/2.webp';
 import foto3 from '../../../Assets/Images/oferta-educativa/3.webp';
 
 
-export default function(){
-    return(
-        <div className="bg-primary">
-            <div className="flex justify-center">
-                <h1 className="text-white font-bold text-center my-12 text-4xl">Oferta Educativa</h1>
-            </div>
-            <div className="flex justify-around text-center">
-                <div className="w-96 ml-44">
-                    <img src={foto1} alt="" className="rounded-[80px]" />
-                    <h2 className="font-bold text-white text-3xl mt-5">Curso</h2>
-                    <p className="text-white text-xl mt-2">Programas y clases de vanguardia</p>
+export default function () {
+    return (
+        <div className="oferta text-center">
+            <h2 className="font-bold text-center mb-2 text-white py-14 text-4xl">Oferta Educativa</h2>
+            <div className="cajaOfertaEducativa mr-32 ml-32 pb-14">
+                <div className="col-4 cajaOferta ml-5">
+                    <a href="#">
+                        <img src={foto1} className="imagenCuadrada" alt="icasys"/>
+                        <h2 className="font-bold text-white text-3xl my-4"><strong>Cursos</strong></h2>
+                        <p className="text-white text-xl mt-2">Programas y clases de vanguardia</p>
+                    </a>
                 </div>
-                <div className="w-96">
-                    <img src={foto2} alt="" className="rounded-[80px]" />
-                    <h2 className="font-bold text-white text-3xl mt-5">Carrera</h2>
-                    <p className="text-white text-xl mt-2">Vuélvete Técnico En Sistemas Digitales</p>
+                <div className="col-4 cajaOferta">
+                    <a href="#">
+                        <img src={foto2} className="imagenCuadrada" alt="icasys"/>
+                        <h2 className="font-bold text-white text-3xl my-4"><strong>Carrera</strong></h2>
+                        <p className="text-white text-xl mt-2">Vuélvete Técnico En Sistemas Digitales</p>
+                    </a>
                 </div>
-                <div className="w-96 mr-44">
-                <img src={foto3} alt="" className="rounded-[80px]" />
-                    <h2 className="font-bold text-white text-3xl mt-5">Tutoriales</h2>
-                    <p className="text-white text-xl mt-2">Videos Explicativos gratuitos</p>
+                <div className="col-4 cajaOferta mr-5">
+                    <a href="https://www.youtube.com/c/ICASYS">
+                        <img src={foto3} className="imagenCuadrada" alt="icasys"/>
+                        <h2 className="font-bold text-white text-3xl my-4"><strong>Tutoriales</strong></h2>
+                        <p className="text-white text-xl mt-2">Videos Explicativos gratuitos</p>
+                    </a>
                 </div>
             </div>
         </div>
