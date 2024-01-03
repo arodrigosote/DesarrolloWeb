@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,5 +44,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/', [PagesController::class, "home"])->name('page.home');
 Route::get('/contacto', [PagesController::class, "contact"])->name('page.contact');
 Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
+
+//dashboard
+Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dashboard.home');
 
 require __DIR__.'/auth.php';

@@ -37,6 +37,7 @@ export default function () {
                     <img src={profilepic} alt="" className='profile-pic' />
                     <ul className={`menu ${isMenuOpen ? 'menu-open' : ''}`}>
                         <li className='menu-item'><a href="#" className='menu-link'>Perfil</a></li>
+                        <li className='menu-item'><a href={route('dashboard.home')} className='menu-link'>Escritorio</a></li>
                         <li className='menu-item'><a href="#" className='menu-link'>Mis cursos</a></li>
                         <li className='menu-item'><a href="#" className='menu-link'>Cerrar sesión</a></li>
                     </ul>

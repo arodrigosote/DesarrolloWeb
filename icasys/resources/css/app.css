@@ -22,7 +22,25 @@ html, body{
     padding: 0;
     font-family: 'Verdana', sans-serif !important;
 }
+.text-primary{
+    color: var(--primary);
+}
+.text-auxiliar2{
+    color: var(--auxiliar2);
+}
+.text-auxiliar1{
+    color: var(--auxiliar1);
+}
+.text-secondary{
+    color: var(--secondary);
+}
 .bg-primary{
     background-color: var(--primary);
 }
+.bg-auxiliar2{
+    background-color: var(--auxiliar2);
+}
+
+
+
 
