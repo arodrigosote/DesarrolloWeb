@@ -46,6 +46,6 @@ Route::get('/contacto', [PagesController::class, "contact"])->name('page.contact
 Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
 
 //dashboard
-Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dashboard.home');
+Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dashboard.home')->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
