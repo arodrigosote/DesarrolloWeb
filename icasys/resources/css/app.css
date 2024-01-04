@@ -23,7 +23,7 @@ html, body{
     font-family: 'Verdana', sans-serif !important;
 }
 .text-primary{
-    color: var(--primary);
+    color: var(--primary) !important;
 }
 .text-auxiliar2{
     color: var(--auxiliar2);

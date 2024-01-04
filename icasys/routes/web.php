@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DayController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -47,5 +48,13 @@ Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
 
 //dashboard
 Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dashboard.home')->middleware(['auth', 'verified']);
+
+//ADMIN DASHBOARD
+// Route::get('administrador/dias', [DayController::class, "index"])->name("index.day");
+// Route::post("administrador/dia/agregar", [DayController::class,"create"])->name("create.day");
+
+
+Route::resource('dias', DayController::class);
+
 
 require __DIR__.'/auth.php';

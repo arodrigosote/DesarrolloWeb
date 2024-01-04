@@ -1,0 +1,4 @@
+@import url('../css/app.css');
+.border-primary {
+    border-color: var(--secondary);
+}

@@ -19,7 +19,7 @@ export default function () {
                 <img src={foto} alt="" className="w-10 rounded-full" />
                 <RiArrowDownSFill className="text-lg"></RiArrowDownSFill>
             </button>
-            <nav className={`${isMenuOpen ? 'hidden' : 'absolute'} transition-all bg-white w-40 right-5 mt-2 rounded-[10px] border border-slate-400 p-2`}>
+            <nav className={`${isMenuOpen ? 'absolute' : 'hidden'} transition-all bg-white w-40 right-5 mt-2 rounded-[10px] border border-slate-400 p-2`}>
                 <ul className="block text-right">
                     <li className="text-right flex justify-end"><NavLink to='' className="w-full justify-end pt-2 pb-2 px-4">Perfil</NavLink></li>
                     <li className="text-right flex justify-end"><NavLink to='' className="w-full justify-end pt-2 pb-2 px-4">Ajustes</NavLink></li>

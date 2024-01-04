@@ -1,25 +1,22 @@
-import React, {useState} from "react";
+import Dashboard from "../../Layouts/Dashboard/DashboardLayout";
+import { Head } from '@inertiajs/react'
 
-import NavLink from '@/Components/NavLink';
-import '../../../css/app.css'
-import { RiDashboardFill, RiMenuFill, RiCloseFill    } from "react-icons/ri";
-import icono from '../../Assets/Images/blanco.webp';
-import Sidebar from "./Components/Sidebar/Sidebar";
-import DashboardHeader from "./Components/Header/DashboardHeader";
-
-
-export default function () {
-
+const Content = () => {
     return (
-        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-7">
-
-            <Sidebar></Sidebar>
-
-            {/* content */}
-            <div className="col-span-6">
-                <DashboardHeader></DashboardHeader>
+        <>
+            <div>
+                Pagina principal
             </div>
 
-        </div>
+            <Head>
+                <title>Mostrar Dias - Admin</title>
+                <meta name="Days Index" content="It shows created days" />
+            </Head>
+        </>
     )
 }
+
+
+Content.layout = page => <Dashboard children={page} title="Bienvenido"></Dashboard>
+
+export default Content
