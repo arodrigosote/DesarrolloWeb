@@ -22,7 +22,7 @@ export default function ({children, title}) {
                 <div className="bg-white p-16 w-[85%] mx-auto mt-8 shadow-md ">
                     <h2 className="text-primary font-bold text-2xl ">{title}</h2>
                 </div>
-                <div className="px-16 py-6 bg-white mx-auto w-[85%] mt-8 shadow-md ">{children}</div>
+                <div className="px-16 py-8 bg-white mx-auto w-[85%] mt-8 mb-8 shadow-md ">{children}</div>
             </div>
 
         </div>
