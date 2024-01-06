@@ -55,6 +55,7 @@ Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dash
 
 
 Route::resource('dias', DayController::class);
-
+Route::get('/dias', [DayController::class, "index"])->name("day.index");
+Route::get("/dias/eliminacion-exitosa", [DayController::class, "index_after_deleting"])->name("day.index_after_deleting");
 
 require __DIR__.'/auth.php';

@@ -40,6 +40,10 @@ html, body{
 .bg-auxiliar2{
     background-color: var(--auxiliar2);
 }
+.bg-yellow{
+    background-color: var(--yellow);
+    color: black;
+}
 
 
 
