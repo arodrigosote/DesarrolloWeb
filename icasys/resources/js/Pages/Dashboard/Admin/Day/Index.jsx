@@ -118,7 +118,7 @@ const Index = ({ days, props }) => {
         <>
             <ToastContainer></ToastContainer>
             <div className="flex justify-end mb-8">
-                <ButtonPrimary onClick={() => openModal(1)} className="bg-primary">Agregar</ButtonPrimary>
+                <ButtonPrimary onClick={() => openModal(1)}>Agregar</ButtonPrimary>
             </div>
             <TableContainer component={Paper}>
                 <Table>

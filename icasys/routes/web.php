@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DayController;
+use App\Http\Controllers\HourController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -37,6 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('dias', DayController::class);
+    Route::get('/dias', [DayController::class, "index"])->name("day.index");
+
+    Route::resource("/horas", HourController::class);
+    Route::get("/horas", [HourController::class,"index"])->name('horas.index');
 });
 
 
@@ -54,8 +60,6 @@ Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dash
 // Route::post("administrador/dia/agregar", [DayController::class,"create"])->name("create.day");
 
 
-Route::resource('dias', DayController::class);
-Route::get('/dias', [DayController::class, "index"])->name("day.index");
-Route::get("/dias/eliminacion-exitosa", [DayController::class, "index_after_deleting"])->name("day.index_after_deleting");
 
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';
