@@ -17,6 +17,7 @@ import InputError from "@/Components/InputError";
 import Swal from "sweetalert2";
 import ButtonDelete from "@/Components/ButtonDelete";
 import ButtonEdit from "@/Components/ButtonEdit";
+import ButtonCancel from "@/Components/ButtonCancel";
 
 
 const Index = ({ days, props }) => {
@@ -52,20 +53,20 @@ const Index = ({ days, props }) => {
     const save = (e) => {
         e.preventDefault();
         if (operation === 1) {
-            post(route('dias.store'),{
+            post(route('dias.store'), {
                 onSuccess: () => { ok('Día guardado con éxito') },
                 onError: () => {
-                    if(errors.name){
+                    if (errors.name) {
                         reset('name');
                         nameInput.current.focus();
                     }
                 }
             });
-        }else{
-            put(route('dias.update', data.id),{
+        } else {
+            put(route('dias.update', data.id), {
                 onSuccess: () => { ok('Día editado con éxito') },
                 onError: () => {
-                    if(errors.name){
+                    if (errors.name) {
                         reset('name');
                         nameInput.current.focus();
                     }
@@ -74,36 +75,46 @@ const Index = ({ days, props }) => {
         }
     }
 
+    const [deleteModal, setDeleteModal] = useState(false);
+
+    const openDeleteModal = (dayID, name) => {
+        setDeleteModal(true);
+        setData({
+            id: dayID,
+            name: name,
+        })
+    }
+
+    const closeDeleteModal = () => {
+        setDeleteModal(false);
+    }
+
+    const deleteDay = (e) => {
+        e.preventDefault();
+        destroy(route('dias.destroy', data.id), {
+            preserveScroll: true,
+            onSuccess: () => { ok('Día eliminado con éxito.') },
+            onError: (error) => {
+                console.error(error); // Log the error for debugging
+                errorModal('Error al eliminar el día.');
+            },
+            onFinish: reset(),
+        });
+    }
 
 
     const ok = (message) => {
         reset();
         closeModal();
-        // useEffect is typically used at the component level, not inside functions
-        // Instead, you can directly check the success condition and display the success message
-        Swal.fire({title:message, icon:'success'})
+        closeDeleteModal();
+        Swal.fire({ title: message, icon: 'success' })
     };
 
-    const deletee = (id, name) => {
-        const alert = Swal.mixin({
-            buttonsStyling:true
-        });
-        alert.fire({
-            title:`¿Está seguro que quiere eliminar ${name}?`,
-            text:'Se perderá el día',
-            icon:'question',
-            showCancelButton:true,
-            confirmButtonText:'Eliminar',
-            cancelButtonText:'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                destroy(route('dias.destroy', id),
-                {onSuccess: ()=>{
-                    ok('Día eliminado correctamente');
-                }})
-            }
-        })
+    const errorModal = () => {
+        closeDeleteModal();
+        Swal.fire({ title: message, icon: 'error' })
     }
+
 
     return (
         <>
@@ -127,7 +138,7 @@ const Index = ({ days, props }) => {
                                 <TableCell>{day.name}</TableCell>
                                 <TableCell>
                                     <ButtonEdit onClick={() => openModal(2, day.id, day.name)} className="mr-2">Editar</ButtonEdit>
-                                    <ButtonDelete onClick={() => deletee(day.id, day.name)}>Eliminar</ButtonDelete>
+                                    <ButtonDelete onClick={() => openDeleteModal(day.id, day.name)}>Eliminar</ButtonDelete>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -141,26 +152,49 @@ const Index = ({ days, props }) => {
             </Head>
 
             <Modal show={modal} onClose={closeModal}>
-                <h2 className="text-lg font-medium text-gray-900">
+                <h2 className="text-3xl font-medium text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
                     {title}
                 </h2>
 
-                <form onSubmit={save} className="p-6">
+                <form onSubmit={save} className=" pl-6 pr-6 pb-6 ">
                     <div className="mt-6">
-                            <InputLabel htmlFor='name' value='Nombre'></InputLabel>
-                            <TextInput id='name' name='name' ref={nameInput} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
-                            <InputError message={errors.make}></InputError>
+                        <InputLabel htmlFor='name' value='Nombre'></InputLabel>
+                        <TextInput id='name' name='name' ref={nameInput} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
+                        <InputError message={errors.make}></InputError>
                     </div>
                     <div className="mt-6">
 
 
                     </div>
                     <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-                        <ButtonPrimary processing={processing ? 'true' : undefined}>Guardar</ButtonPrimary>
-                        {/* <DangerButton className="ml-3" disabled={processing}>
+                        <ButtonCancel type='button' onClick={closeModal}>Cancel</ButtonCancel>
+                        <ButtonPrimary disabled={processing} className="ml-3">Guardar</ButtonPrimary>
+                    </div>
+                </form>
+            </Modal>
+
+            <Modal show={deleteModal} onClose={closeDeleteModal}>
+                <div className="p-6">
+                    <h2 className="text-3xl font-medium text-primary font-extrabold text-center">
+                        ¿Estás seguro que quieres eliminar el dia "{data.name}"?
+                    </h2>
+                    {/* <p className="mt-1 text-sm text-gray-600">
+                        Esta acción no se puede revertir.
+                    </p> */}
+                </div>
+                <form onSubmit={deleteDay} className="p-6">
+
+                    <TextInput
+                        id="id"
+                        name='id'
+                        defaultValue={data.id}
+                        style={{ display: 'none' }}
+                    />
+                    <div className="flex justify-end items-center">
+                        <ButtonCancel type='button' onClick={closeDeleteModal} className="">Cancel</ButtonCancel>
+                        <ButtonDelete className="ml-3" disabled={processing}>
                             Borrar Día
-                        </DangerButton> */}
+                        </ButtonDelete>
                     </div>
                 </form>
             </Modal>

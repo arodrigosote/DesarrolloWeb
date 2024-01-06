@@ -53,10 +53,10 @@ class DayController extends Controller
         $day->update($request->all());
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $day = Day::findOrFail($id);
-
+        // dd($request);
+        $day = Day::findOrFail($request->id);
         $day->delete();
 
 
