@@ -9,8 +9,6 @@ import { RiEditBoxLine, RiDeleteBin6Fill } from "react-icons/ri";
 import { Inertia } from '@inertiajs/inertia';
 import Modal from "@/Components/Modal";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import SecondaryButton from "@/Components/SecondaryButton";
-import DangerButton from "@/Components/DangerButton";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
@@ -107,12 +105,12 @@ const Index = ({ days, props }) => {
         reset();
         closeModal();
         closeDeleteModal();
-        Swal.fire({ title: message, icon: 'success' })
+        Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
     };
 
     const errorModal = () => {
         closeDeleteModal();
-        Swal.fire({ title: message, icon: 'error' })
+        Swal.fire({ title: message, icon: 'error',confirmButtonColor: '#014ba0' })
     }
 
 
