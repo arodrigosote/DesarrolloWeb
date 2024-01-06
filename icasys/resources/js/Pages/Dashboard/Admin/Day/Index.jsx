@@ -124,7 +124,7 @@ const Index = ({ days, props }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell><span className="font-bold uppercase">ID</span></TableCell>
+                            <TableCell><span className="font-bolder uppercase">ID</span></TableCell>
                             <TableCell><h2 className="font-bold uppercase">Nombre</h2></TableCell>
                             <TableCell><h2 className="font-bold uppercase">Acciones</h2></TableCell>
                         </TableRow>
