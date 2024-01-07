@@ -108,10 +108,6 @@ const Index = ({ days, props }) => {
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
     };
 
-    const errorModal = () => {
-        closeDeleteModal();
-        Swal.fire({ title: message, icon: 'error',confirmButtonColor: '#014ba0' })
-    }
 
 
     return (

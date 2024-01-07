@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hour extends Model
 {
+    use HasFactory;
     static $rules = [
 		'name' => 'required',
     ];
@@ -18,8 +19,6 @@ class Hour extends Model
      *
      * @var array
      */
-    protected $fillable = ['nombre'];
+    protected $fillable = ['name'];
 
-
-    use HasFactory;
 }
