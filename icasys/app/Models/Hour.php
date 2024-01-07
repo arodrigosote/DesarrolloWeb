@@ -20,5 +20,8 @@ class Hour extends Model
      * @var array
      */
     protected $fillable = ['name'];
-
+    public function schedules()
+    {
+        return $this->hasMany('App\Models\Schedule', 'hour_id', 'id');
+    }
 }

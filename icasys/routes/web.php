@@ -5,6 +5,7 @@ use App\Http\Controllers\HourController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +45,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("/horas", HourController::class);
     Route::get("/horas", [HourController::class,"index"])->name('horas.index');
+
+    Route::resource("/horarios", ScheduleController::class);
 });
 
 
