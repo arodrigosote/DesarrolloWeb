@@ -28,7 +28,7 @@ export default function () {
                 <nav>
                     <ul>
                         <li className="flex pb-2">
-                            <NavLink to='' className="hover:bg-white h-text-blue text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl font-bold transition-colors text-lg"><RiDashboardFill className="text-xl"></RiDashboardFill>Escritorio</NavLink>
+                            <NavLink to={route('dashboard.home')} className="hover:bg-white h-text-blue text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl font-bold transition-colors text-lg"><RiDashboardFill className="text-xl"></RiDashboardFill>Escritorio</NavLink>
                         </li>
                         <li className="flex pb-2">
                             <NavLink to='' className="hover:bg-white h-text-blue text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl font-bold transition-colors text-lg"><RiDashboardFill className="text-xl"></RiDashboardFill>Escritorio</NavLink>

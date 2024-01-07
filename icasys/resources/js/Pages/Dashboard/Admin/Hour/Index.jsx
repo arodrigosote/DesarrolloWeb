@@ -54,7 +54,7 @@ const Hour = ({ hours }) => {
         e.preventDefault();
         if (operation === 1) {
             post(route('horas.store'),{
-                onSuccess: () => {ok('Hora guardado con éxito')},
+                onSuccess: () => {ok('Hora guardada con éxito')},
                 onError: () => {
                     if (errors.name) {
                         reset('name');
@@ -64,7 +64,7 @@ const Hour = ({ hours }) => {
             });
         }else {
             put(route('horas.update', data.id),{
-                onSuccess: () => {ok('Hora actualizado con éxito')},
+                onSuccess: () => {ok('Hora actualizada con éxito')},
                 onError: () => {
                     if (errors.name) {
                         reset('name');
@@ -93,7 +93,7 @@ const Hour = ({ hours }) => {
         e.preventDefault();
         destroy(route('horas.destroy', data.id), {
             preserveScroll: true,
-            onSuccess: () => { ok('Hora eliminado con éxito.') },
+            onSuccess: () => { ok('Hora eliminada con éxito.') },
             onError: (error) => {
                 console.error(error); // Log the error for debugging
                 errorModal('Error al eliminar el día.');
