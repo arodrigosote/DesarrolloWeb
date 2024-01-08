@@ -1,7 +1,7 @@
 import DashboardLayout from "@/Layouts/Dashboard/DashboardLayout";
 import React from "react";
 import ButtonPrimary from "@/Components/ButtonPrimary";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, Select, FormControl } from '@mui/material';
 import { Head, useForm } from "@inertiajs/react";
 import { ToastContainer, toast } from "react-toastify";
 import ButtonEdit from "@/Components/ButtonEdit";
@@ -14,6 +14,7 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import ButtonCancel from "@/Components/ButtonCancel";
+import SecondaryLink from "@/Components/SecondaryLink";
 
 
 
@@ -109,10 +110,17 @@ const Hour = ({ hours }) => {
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
     };
 
+    const errorModal = (message) => {
+        reset();
+        closeMainModal();
+        closeDeleteModal();
+        Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
+    };
     return (
         <>
             <ToastContainer></ToastContainer>
-            <div className="flex justify-end mb-8">
+            <div className="flex justify-between mb-8">
+                <SecondaryLink to={route('horarios.index')}>Ver horarios</SecondaryLink>
                 <ButtonPrimary onClick={() => {openMainModal(1)}}>Agregar</ButtonPrimary>
             </div>
 

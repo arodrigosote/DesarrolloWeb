@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import ButtonDelete from "@/Components/ButtonDelete";
 import ButtonEdit from "@/Components/ButtonEdit";
 import ButtonCancel from "@/Components/ButtonCancel";
+import SecondaryLink from "@/Components/SecondaryLink";
 
 
 const Index = ({ days, props }) => {
@@ -113,7 +114,8 @@ const Index = ({ days, props }) => {
     return (
         <>
             <ToastContainer></ToastContainer>
-            <div className="flex justify-end mb-8">
+            <div className="flex justify-between mb-8">
+                <SecondaryLink to={route('horarios.index')}>Ver horarios</SecondaryLink>
                 <ButtonPrimary onClick={() => openModal(1)}>Agregar</ButtonPrimary>
             </div>
             <TableContainer component={Paper}>

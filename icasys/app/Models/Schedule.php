@@ -9,6 +9,17 @@ class Schedule extends Model
 {
     use HasFactory;
 
+    static $rules = [
+    ];
+
+    protected $perPage = 20;
+
+    /**
+     * Attributes that should be mass-assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['dia_id','hora_id'];
 
 
     public function day(){
