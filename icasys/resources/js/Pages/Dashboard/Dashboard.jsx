@@ -9,7 +9,7 @@ const Content = () => {
             </div>
 
             <Head>
-                <title>Mostrar Dias - Admin</title>
+                <title>Escritorio</title>
                 <meta name="Days Index" content="It shows created days" />
             </Head>
         </>

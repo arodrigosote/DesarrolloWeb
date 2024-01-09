@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './Sidebar.css';
 import NavLink from '@/Components/NavLink';
 import '../../../../../css/app.css';
-import { RiDashboardFill, RiMenuFill, RiCloseFill, RiCompass2Fill } from "react-icons/ri";
+import { RiDashboardFill, RiMenuFill, RiCloseFill, RiCompass2Fill, RiUser2Fill } from "react-icons/ri";
 import icono from '../../../../Assets/Images/blanco.webp';
 import { Link } from "@inertiajs/react";
 
@@ -37,6 +37,10 @@ export default function () {
 
                         <li className="flex pb-2">
                             <Link href={route('horarios.index')} className="hover:bg-white h-text-blue text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl font-bold transition-colors text-lg flex items-center justify-start text-sm"><RiCompass2Fill className="text-xl"></RiCompass2Fill >Horarios</Link>
+                        </li>
+
+                        <li className="flex pb-2">
+                            <Link href={route('profesores.index')} className="hover:bg-white h-text-blue text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl font-bold transition-colors text-lg flex items-center justify-start text-sm"><RiUser2Fill className='text-xl'/>Profesores</Link>
                         </li>
                     </ul>
                 </nav>

@@ -4,6 +4,7 @@ use App\Http\Controllers\DayController;
 use App\Http\Controllers\HourController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Foundation\Application;
@@ -47,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::get("/horas", [HourController::class,"index"])->name('horas.index');
 
     Route::resource("/horarios", ScheduleController::class);
+    Route::resource("/profesores", ProfessorController::class);
 });
 
 
