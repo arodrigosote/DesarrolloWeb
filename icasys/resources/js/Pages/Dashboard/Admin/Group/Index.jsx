@@ -270,6 +270,10 @@ const Group = () => {
                     </div>
                 </form>
             </Modal>
+
+            <Head>
+                <title>Grupos</title>
+            </Head>
         </>
     )
 }
