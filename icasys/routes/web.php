@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\GroupController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,6 +50,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("/horarios", ScheduleController::class);
     Route::resource("/profesores", ProfessorController::class);
+    Route::resource("/grupos", GroupController::class);
 });
 
 

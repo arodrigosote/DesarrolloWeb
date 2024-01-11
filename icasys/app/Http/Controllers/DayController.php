@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Day;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class DayController extends Controller
@@ -12,53 +13,105 @@ class DayController extends Controller
     //
     public function index()
     {
-        $days = Day::all();
-        return Inertia::render("Dashboard/Admin/Day/Index", compact("days"));
+        if (Gate::denies('isAdmin')) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No tienes permiso para ver esta página.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            return Inertia::render("Dashboard/Admin/Day/Index", [
+                "days" => Day::all(),
+                'shared' => [
+                    'user' => auth()->user()->name,
+                ],
+            ]);
+        }
+
     }
 
-    public function index_after_deleting(){
-        $days = Day::all();
-        return Inertia::render("Dashboard/Admin/Day/Index", compact("days"))->with("success", "Operacion exitosa");
+    public function index_after_deleting()
+    {
+        if (Gate::denies('isAdmin')) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $days = Day::all();
+            return Inertia::render("Dashboard/Admin/Day/Index", compact("days"))->with("success", "Operacion exitosa");
+        }
+
     }
 
     public function show($dayId)
     {
-        $day = Day::find($dayId);
-        return Inertia::render("Dashboard/Admin/Day/Show", compact("day"));
-    }
+        if (Gate::denies('isAdmin')) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $day = Day::find($dayId);
+            return Inertia::render("Dashboard/Admin/Day/Show", compact("day"));
+        }
 
-    public function create()
-    {
-        return Inertia::render("Dashboard/Admin/Day/Create");
     }
 
     public function store(Request $request)
     {
-        $day = Day::create($request->all());
-        $days = Day::all();
-        return Inertia::render("Dashboard/Admin/Day/Index", compact("days"))->with("success", "Operacion exitosa");
+        if (Gate::denies('isAdmin')) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $day = Day::create($request->all());
+            $days = Day::all();
+            return Inertia::render("Dashboard/Admin/Day/Index", compact("days"))->with("success", "Operacion exitosa");
+        }
     }
 
     public function edit($dayID)
     {
-        $day = Day::find($dayID);
-        return Inertia::render("Dashboard/Admin/Day/Edit", [
-            'day' => $day,
-        ]);
+
+        if (Gate::denies('isAdmin')) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $day = Day::find($dayID);
+            return Inertia::render("Dashboard/Admin/Day/Edit", [
+                'day' => $day,
+            ]);
+        }
     }
 
     public function update(Request $request, $dayID)
     {
-        $day = Day::findOrFail($dayID);
-        $day->update($request->all());
+
+        if (Gate::denies('isAdmin')) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $day = Day::findOrFail($dayID);
+            $day->update($request->all());
+        }
     }
 
     public function destroy(Request $request)
     {
-        // dd($request);
-        $day = Day::findOrFail($request->id);
-        $day->delete();
-
+        if (Gate::denies('isAdmin')) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $day = Day::findOrFail($request->id);
+            $day->delete();
+        }
 
     }
 

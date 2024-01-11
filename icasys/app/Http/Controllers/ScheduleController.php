@@ -16,18 +16,6 @@ class ScheduleController extends Controller
     //
     public function index()
     {
-        // $schedules = Schedule::all();
-        // $schedules = Schedule::with('day', 'hour')->get();
-        // $days = Day::select('id', 'name')->get();
-        // // $days = Day::all();
-        // $hours = DB::table('hours')->pluck('name', 'id')->toArray();
-        // // $days = DB::table('days')->pluck('name', 'id')->toArray();
-        // $days = new Schedules($days);
-        // // return response()->json($schedules);
-
-        // // dd($days);
-
-        // return Inertia::render("Dashboard/Admin/Schedule/Index", compact(['schedules', 'days', 'hours']));
         return Inertia::render("Dashboard/Admin/Schedule/Index", [
             "schedules"=> Schedule::with('day', 'hour')->get(),
             "days"=> Day::all(),

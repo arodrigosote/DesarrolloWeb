@@ -59,7 +59,7 @@ const Professor = () => {
         x_url: '',
         linkedin_url: '',
         web_url: '',
-        picture: '',
+        picture: File,
     })
 
     const openMainModal = (op, id, user_id, name, email, phone, skill, career, biography, facebook_url, github_url, x_url, linkedin_url, web_url, picture) => {
@@ -79,7 +79,7 @@ const Professor = () => {
             x_url: '',
             linkedin_url: '',
             web_url: '',
-            picture: '',
+            picture: File,
         })
         if (op === 1) {
             setTitle('Añadir profesor.');
@@ -110,6 +110,9 @@ const Professor = () => {
     }
 
     const submit = (e) => {
+        const formData = new FormData();
+        formData.append('picture', data.picture);
+        console.log(data.picture)
         e.preventDefault();
         if (operation === 1) {
             post(route('profesores.store'), {
@@ -133,7 +136,7 @@ const Professor = () => {
                 }
             })
         } else {
-            put(route('profesores.update', data.id), {
+            put(route('profesores.update', data.id), formData, {
                 preserveScroll: true,
                 onSuccess: () => { ok('Profesor editado con éxito.') },
                 onError: () => {
@@ -195,6 +198,37 @@ const Professor = () => {
         Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
     };
 
+    const handleInputChange = (e) => {
+        const { name, files } = e.target;
+
+        // Verificar si el campo es de tipo archivo
+        if (files && files.length > 0) {
+
+            // Obtener el objeto de archivo y actualizar el estado
+            const file = files[0];
+            console.log(name)
+            setData(name, files[0]);
+        } else {
+            // Actualizar otros campos de entrada
+            setData(name, e.target.value);
+        }
+    };
+
+    // const handleImageUpdate = async (e) => {
+    //     const formData = new FormData();
+    //     formData.append('picture', e.target.files[0]);
+
+    //     try {
+    //         await put((route()), formData, {
+    //             onSuccess: () => {
+    //                 // Lógica para manejar el éxito, por ejemplo, redireccionar a otra página.
+    //             },
+    //         });
+    //     } catch (error) {
+    //         console.error('Error updating image:', error);
+    //     }
+    // };
+
     return (
         <>
             <ToastContainer></ToastContainer>
@@ -224,7 +258,7 @@ const Professor = () => {
                                 <TableCell>{professor.phone}</TableCell>
                                 <TableCell>
                                     <ButtonEdit onClick={(e) => openMainModal(2, professor.id, professor.user_id, professor.name, professor.email, professor.phone, professor.skill, professor.career, professor.biography, professor.facebook_url, professor.github_url, professor.x_url, professor.linkedin_url, professor.web_url, professor.picture)}>Editar</ButtonEdit>
-                                    <ButtonDelete onClick={(e) => openDeleteModal(professor.id, professor.name)}>Eliminar</ButtonDelete>
+                                    <ButtonDelete onClick={(e) => openDeleteModal(professor.id, professor.name)} className="ml-2">Eliminar</ButtonDelete>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -234,70 +268,70 @@ const Professor = () => {
 
 
             <Dialog open={mainModal} onClose={closeMainModal} maxWidth="md" fullWidth>
-                <DialogTitle>
-                    <h2 className="text-3xl font-bold text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
-                        {title}
-                    </h2>
+                <DialogTitle className="text-3xl font-bold text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
+                    {title}
                 </DialogTitle>
                 <DialogContent>
-                    <form onSubmit={submit} className="p-6">
+                    <form onSubmit={submit} className="p-6" encType="multipart/form-data" method="POST">
+
                         <FormControl className="w-full">
                             {/* Name */}
                             <InputLabel htmlFor='name' value='Nombre:'></InputLabel>
-                            <TextInput className="" id='name' name='name' ref={nameInput} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
+                            <TextInput className="" id='name' name='name' ref={nameInput} value={data.name || ''} required='required' onChange={handleInputChange}></TextInput>
                             <InputError message={errors.make}></InputError>
 
                             {/* Email */}
                             <InputLabel htmlFor='email' value='Correo:'></InputLabel>
-                            <TextInput id='email' name='email' ref={emailInput} value={data.email} required='required' onChange={(e) => setData('email', e.target.value)}></TextInput>
+                            <TextInput id='email' name='email' ref={emailInput} value={data.email || ''} required='required' onChange={handleInputChange}></TextInput>
                             <InputError message={errors.make}></InputError>
 
                             {/* Phone */}
                             <InputLabel htmlFor='phone' value="Teléfono:" />
-                            <TextInput id="phone" name="phone" ref={phoneInput} value={data.phone} onChange={(e) => setData('phone', e.target.value)} />
+                            <TextInput id="phone" name="phone" ref={phoneInput} value={data.phone || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
                             {/* Skill */}
                             <InputLabel htmlFor="skill" value="Habilidades:" />
-                            <TextField multiline rows={4} id="skill" name="skill" ref={skillInput} value={data.skill} onChange={(e) => setData('skill', e.target.value)} />
+                            <TextField multiline rows={4} id="skill" name="skill" ref={skillInput} value={data.skill || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
                             {/* Career */}
                             <InputLabel htmlFor='career' value="Profesión:" className="mt-2" />
-                            <TextInput id='career' name='career' ref={careerInput} value={data.career} onChange={(e) => setData('career', e.target.value)} />
+                            <TextInput id='career' name='career' ref={careerInput} value={data.career || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
                             {/* facebook_url */}
                             <InputLabel htmlFor='facebook_url' value='Facebook:' />
-                            <TextInput id='facebook_url' name='facebook_url' ref={facebook_urlInput} value={data.facebook_url} onChange={(e) => setData('facebook_url', e.target.value)} />
+                            <TextInput id='facebook_url' name='facebook_url' ref={facebook_urlInput} value={data.facebook_url || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
                             {/* github_url */}
                             <InputLabel htmlFor='github_url' value='Github:' />
-                            <TextInput id='github_url' name='github_url' ref={github_urlInput} value={data.github_url} onChange={(e) => setData('github_url', e.target.value)} />
+                            <TextInput id='github_url' name='github_url' ref={github_urlInput} value={data.github_url || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
                             {/* x_url */}
                             <InputLabel htmlFor='x_url' value='X:' />
-                            <TextInput id='x_url' name='x_url' ref={x_urlInput} value={data.x_url} onChange={(e) => setData('x_url', e.target.value)} />
+                            <TextInput id='x_url' name='x_url' ref={x_urlInput} value={data.x_url || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
                             {/* linkedin_url */}
                             <InputLabel htmlFor='linkedin_url' value='Linkedin:' />
-                            <TextInput id='linkedin_url' name='linkedin_url' ref={linkedin_urlInput} value={data.linkedin_url} onChange={(e) => setData('linkedin_url', e.target.value)} />
+                            <TextInput id='linkedin_url' name='linkedin_url' ref={linkedin_urlInput} value={data.linkedin_url || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
                             {/* web_url */}
                             <InputLabel htmlFor='web_url' value='Web:' />
-                            <TextInput id='web_url' name='web_url' ref={web_urlInput} value={data.web_url} onChange={(e) => setData('web_url', e.target.value)} />
+                            <TextInput id='web_url' name='web_url' ref={web_urlInput} value={data.web_url || ''} onChange={handleInputChange} />
                             <InputError message={errors.make} />
 
-                            <InputLabel htmlFor='picture' value='Foto de perfil:' />
+                            <InputLabel htmlFor="picture">Foto de perfil:</InputLabel>
                             <TextField
                                 type="file"
-                                accept="image/*"
-                                onChange={(e) => setData('picture', e.target.value)}
-                                fullWidth
+                                // accept="image/*"
+                                id="picture"
+                                name="picture"
+                                onChange={handleInputChange}
                             />
                             <InputError message={errors.make} />
 

@@ -44,6 +44,11 @@ return [
             'throw' => false,
         ],
 
+        'storage' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'), // Cambia esto a storage_path('app/storage') si prefieres 'storage'
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

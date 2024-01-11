@@ -22,4 +22,9 @@ class Professor extends Model
      * @var array
      */
     protected $fillable = ['name','email','phone','skill','career','biography','facebook_url','github_url','x_url','linkedin_url','web_url','picture'];
+
+    public function groups()
+    {
+        return $this->hasMany('App\Models\Group', 'professor_id', 'id');
+    }
 }
