@@ -94,4 +94,8 @@ class Student extends Model
     {
         return $this->hasOne('App\Models\Inscription', 'id', 'inscription_id');
     }
+    public function tutor()
+    {
+        return $this->hasOne('App\Models\Tutor', 'id', 'tutor_id');
+    }
 }

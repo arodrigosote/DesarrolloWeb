@@ -274,6 +274,7 @@ const Student = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>FOTO</TableCell>
+                            <TableCell>NOMBRE</TableCell>
                             <TableCell>DIA</TableCell>
                             <TableCell>HORA</TableCell>
                             <TableCell>MAESTRO</TableCell>
@@ -286,14 +287,15 @@ const Student = () => {
                         {students.map((student) => (
                             <TableRow key={student.id}>
                                 <TableCell>{student.profile_pic}</TableCell>
-                                <TableCell>{student.group.day.name}</TableCell>
-                                <TableCell>{student.hour}</TableCell>
-                                <TableCell>{student.professor}</TableCell>
+                                <TableCell>{student.name}</TableCell>
+                                <TableCell>{student.group.schedule.day.name}</TableCell>
+                                <TableCell>{student.group.schedule.hour.name}</TableCell>
+                                <TableCell>{student.group.professor.name}</TableCell>
                                 <TableCell>{student.tuition}</TableCell>
-                                <TableCell>{student.active}</TableCell>
+                                <TableCell>{student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</TableCell>
                                 <TableCell>
                                     <ButtonShow>Mostrar</ButtonShow>
-                                    <ButtonEdit>Editar</ButtonEdit>
+                                    <ButtonEdit onClick={(e)=>openMainModal(2,student.id, student.name, student.group_id, student.active===1 ? true : false, student.address, student.postal_code, student.phone, student.user_id,student.email,student.school_cycle,student.grade_id,student.activity_id,student.location_id,student.inscription_id,student.birthday, student.firstday, student.curp, student.tutor_id, student.occupation, student.tuition, student.profile_pic, student.credential_pic, student.tutor.name, student.tutor.phone, student.tutor.email, student.tutor.occupation)}>Editar</ButtonEdit>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -352,10 +354,6 @@ const Student = () => {
                         <InputLabel htmlFor='phone' value='Teléfono: ' />
                         <TextInput className='' id='phone' name='phone' ref={phoneInput} value={data.phone || ''} onChange={(e) => setData("phone", e.target.value)} />
                         <InputError message={errors.make} />
-
-                        {/* <InputLabel htmlFor='user_id' value='user_id: ' />
-                            <TextInput className='' id='user_id' name='user_id' ref={user_idInput} value={data.user_id || ''} required='required' onChange={(e) => setData("user_id", e.target.value)} />
-                            <InputError message={errors.make} /> */}
 
                         <InputLabel htmlFor='email' value='Email: ' />
                         <TextInput className='' id='email' name='email' ref={emailInput} value={data.email || ''} required='required' onChange={(e) => setData("email", e.target.value)} />
@@ -441,10 +439,6 @@ const Student = () => {
                         <TextInput className='' id='curp' name='curp' ref={curpInput} value={data.curp || ''} onChange={(e) => setData("curp", e.target.value)} />
                         <InputError message={errors.make} />
 
-                        {/* <InputLabel htmlFor='tutor_id' value='tutor_id: ' />
-                            <TextInput className='' id='tutor_id' name='tutor_id' ref={tutor_idInput} value={data.tutor_id || ''} required='required' onChange={(e) => setData("tutor_id", e.target.value)} />
-                            <InputError message={errors.make} /> */}
-
                         <InputLabel htmlFor='occupation' value='Ocupación: ' />
                         <TextInput className='' id='occupation' name='occupation' ref={occupationInput} value={data.occupation || ''} onChange={(e) => setData("occupation", e.target.value)} />
                         <InputError message={errors.make} />
@@ -460,7 +454,6 @@ const Student = () => {
                         <InputLabel htmlFor='credential_pic' value='Foto de credencial: ' />
                         <TextInput className='' id='credential_pic' name='credential_pic' ref={credential_picInput} value={data.credential_pic || ''} onChange={(e) => setData("credential_pic", e.target.value)} />
                         <InputError message={errors.make} />
-
 
                         <h2 className="text-2xl text-primary font-bold my-2">Datos del tutor</h2>
                         <InputLabel htmlFor='tutor_name' value='Nombre del tutor:' />
