@@ -9,6 +9,7 @@ use App\Models\Inscription;
 use App\Models\Locations;
 use App\Models\Student;
 use App\Models\Tutor;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -25,7 +26,7 @@ class StudentController extends Controller
             ]);
         } else {
             return Inertia::render('Dashboard/Admin/Student/Index', [
-                'students' => Student::where('active', 1)->get(),
+                'students' => Student::where('active', 1)->with('groups.schedule', 'groups.schedule.day', 'groups.schedule.hour'),
                 'groups' => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
                 'grades' => Grade::all(),
                 'activities' => Activity::all(),
@@ -42,6 +43,7 @@ class StudentController extends Controller
                 'tipo' => 'error',
             ]);
         } else {
+            // dd($request->active);
             $request->validate(Student::$rules);
 
             $tutor = Tutor::create([
@@ -52,12 +54,17 @@ class StudentController extends Controller
             ]);
 
             $student = Student::create($request->all());
+            if ($request->active) {
+                $student->active = 1;
+            }else{
+                $student->active = 0;
+            }
             $password = bcrypt('usualuica');
 
             // Crear un nuevo registro en la tabla 'users'
             $user = User::create([
-                'name' => $request->nombre,
-                'email' => $request->correo,
+                'name' => $request->name,
+                'email' => $request->email,
                 'password' => $password,
                 // Otros campos de 'users' que necesites completar
             ]);
@@ -71,8 +78,8 @@ class StudentController extends Controller
                 $student->profile_pic = $rutaDestino . $nombreArchivo;
                 $user->profile_pic = $rutaDestino . $nombreArchivo;
             } else {
-                $student->profile_pic = 'imagenes/alumnos/user.jpg';
-                $user->profile_pic = 'imagenes/alumnos/user.jpg';
+                $student->profile_pic = 'images/students/user.jpg';
+                $user->profile_pic = 'images/students/user.jpg';
             }
             if ($request->hasFile('credential_pic')) {
                 $file = $request->file('credential_pic');
@@ -81,7 +88,7 @@ class StudentController extends Controller
                 $moverArchivo = $file->storeAs($rutaDestino, $nombreArchivo, 'storage'); // Usar el disco 'storage'
                 $student->credential_pic = $rutaDestino . $nombreArchivo;
             } else {
-                $student->credential_pic = 'imagenes/alumnos/user.jpg';
+                $student->credential_pic = 'images/students/user.jpg';
             }
 
             $student->user_id = $user->id;

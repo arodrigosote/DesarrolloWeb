@@ -157,6 +157,7 @@ const Student = () => {
     const submit = (e) => {
         e.preventDefault();
         if (operation === 1) {
+            data.active = true;
             post(route('alumnos.store'), {
                 onSuccess: () => { ok('Alumno dado de alta con éxito') },
                 onError: () => {
@@ -253,14 +254,12 @@ const Student = () => {
     const ok = (message) => {
         reset();
         closeMainModal();
-        closeDeleteModal();
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
     };
 
     const errorModal = (message) => {
         reset();
         closeMainModal();
-        closeDeleteModal();
         Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
     };
 
@@ -287,7 +286,7 @@ const Student = () => {
                         {students.map((student) => (
                             <TableRow key={student.id}>
                                 <TableCell>{student.profile_pic}</TableCell>
-                                <TableCell>{student.day}</TableCell>
+                                <TableCell>{student.group.day.name}</TableCell>
                                 <TableCell>{student.hour}</TableCell>
                                 <TableCell>{student.professor}</TableCell>
                                 <TableCell>{student.tuition}</TableCell>
@@ -332,10 +331,8 @@ const Student = () => {
                         {operation === 1 ? <Switch
                             id="active"
                             name="active"
-                            defaultChecked
-                            disabled
-                            // onChange={(e) => setData("active", e.target.checked)}
-                            inputProps={{ 'aria-label': 'controlled' }}
+                            checked={true}
+
                         /> : <Switch
                             id="active"
                             name="active"

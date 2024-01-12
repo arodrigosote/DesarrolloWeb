@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('tutors', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('name');
-            $table->string('phone');
-            $table->string('email');
-            $table->string('occupation');
+            $table->string('name')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('occupation')->nullable();
             $table->timestamps();
         });
     }
