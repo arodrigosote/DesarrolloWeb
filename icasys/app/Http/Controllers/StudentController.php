@@ -34,6 +34,7 @@ class StudentController extends Controller
                 'activities' => Activity::all(),
                 'locations' => Locations::all(),
                 'inscriptions' => Inscription::all(),
+                'url' => env('APP_URL'),
             ]);
         }
     }
@@ -109,7 +110,10 @@ class StudentController extends Controller
                 'tipo' => 'error',
             ]);
         } else {
-
+            return Inertia::render('Dashboard/Admin/Student/Show',[
+                'student'=> Student::find($id),
+                'baseUrl' => env('APP_URL'),
+            ]);
         }
     }
     public function update(Request $request, $id)

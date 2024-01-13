@@ -27,11 +27,11 @@ import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 
 const Student = () => {
-    const { students, groups, activities, inscriptions, grades, locations } = usePage().props;
+    const { students, groups, activities, inscriptions, grades, locations, url } = usePage().props;
     const [mainModal, setMainModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(0);
-    const { data, setData, delete: destroy, post, put, processing, errors, reset } = useForm({
+    const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
         id: '',
         name: '',
         group_id: '',
@@ -154,6 +154,9 @@ const Student = () => {
     const closeMainModal = () => {
         setMainModal(false);
     }
+    const showStudent = (id) => {
+        get(route('alumnos.show', id));
+    }
     const submit = (e) => {
         e.preventDefault();
         if (operation === 1) {
@@ -224,33 +227,6 @@ const Student = () => {
         }
     }
 
-    // const [deleteModal, setDeleteModal] = useState(false);
-
-    // const openDeleteModal = (id, name) => {
-    //     setDeleteModal(true);
-    //     setData({
-    //         id: id,
-    //         name: name,
-    //     })
-    // }
-
-    // const closeDeleteModal = () => {
-    //     setDeleteModal(false);
-    // }
-
-    // const deletee = (e) => {
-    //     e.preventDefault();
-    //     destroy(route('alumnos.destroy', data.id), {
-    //         preserveScroll: true,
-    //         onSuccess: () => { ok('Alumno eliminada con éxito.') },
-    //         onError: (error) => {
-    //             console.error(error); // Log the error for debugging
-    //             errorModal('Error al eliminar el grupo.');
-    //         },
-    //         onFinish: reset(),
-    //     });
-    // }
-
     const ok = (message) => {
         reset();
         closeMainModal();
@@ -269,39 +245,83 @@ const Student = () => {
                 <ButtonPrimary onClick={(e) => openMainModal(1)}>Agregar</ButtonPrimary>
             </div>
 
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>FOTO</TableCell>
-                            <TableCell>NOMBRE</TableCell>
-                            <TableCell>DIA</TableCell>
-                            <TableCell>HORA</TableCell>
-                            <TableCell>MAESTRO</TableCell>
-                            <TableCell>COLEGIATURA</TableCell>
-                            <TableCell>ACTIVO</TableCell>
-                            <TableCell>ACCIONES</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {students.map((student) => (
-                            <TableRow key={student.id}>
-                                <TableCell>{student.profile_pic}</TableCell>
-                                <TableCell>{student.name}</TableCell>
-                                <TableCell>{student.group.schedule.day.name}</TableCell>
-                                <TableCell>{student.group.schedule.hour.name}</TableCell>
-                                <TableCell>{student.group.professor.name}</TableCell>
-                                <TableCell>{student.tuition}</TableCell>
-                                <TableCell>{student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</TableCell>
-                                <TableCell>
-                                    <ButtonShow>Mostrar</ButtonShow>
-                                    <ButtonEdit onClick={(e)=>openMainModal(2,student.id, student.name, student.group_id, student.active===1 ? true : false, student.address, student.postal_code, student.phone, student.user_id,student.email,student.school_cycle,student.grade_id,student.activity_id,student.location_id,student.inscription_id,student.birthday, student.firstday, student.curp, student.tutor_id, student.occupation, student.tuition, student.profile_pic, student.credential_pic, student.tutor.name, student.tutor.phone, student.tutor.email, student.tutor.occupation)}>Editar</ButtonEdit>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <div className="container mx-auto p-4">
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border border-gray-300 text-center">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className="p-2">FOTO</th>
+                                <th className="p-2">NOMBRE</th>
+                                <th className="p-2">DIA</th>
+                                <th className="p-2">HORA</th>
+                                <th className="p-2">MAESTRO</th>
+                                <th className="p-2">COLEGIATURA</th>
+                                <th className="p-2">ACTIVO</th>
+                                <th className="p-2">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {students.map((student) => (
+                                <tr key={student.id} className="border-t border-gray-300">
+                                    <td className="p-2">
+                                        <img src={`${url}/storage/${student.profile_pic}`} alt="student_pic" className="max-w-20 max-h-20 rounded-full" />
+                                    </td>
+                                    <td className="p-2">{student.name}</td>
+                                    <td className="p-2">{student.group.schedule.day.name}</td>
+                                    <td className="p-2">{student.group.schedule.hour.name}</td>
+                                    <td className="p-2">{student.group.professor.name}</td>
+                                    <td className="p-2">{student.tuition}</td>
+                                    <td className="p-2">
+                                        {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}
+                                    </td>
+                                    <td className="p-2">
+                                        <ButtonShow type='button' className="md:inline-block hidden" onClick={(e) => showStudent(student.id)}>Mostrar</ButtonShow>
+                                        <ButtonEdit
+                                            onClick={(e) =>
+                                                openMainModal(
+                                                    2,
+                                                    student.id,
+                                                    student.name,
+                                                    student.group_id,
+                                                    student.active === 1 ? true : false,
+                                                    student.address,
+                                                    student.postal_code,
+                                                    student.phone,
+                                                    student.user_id,
+                                                    student.email,
+                                                    student.school_cycle,
+                                                    student.grade_id,
+                                                    student.activity_id,
+                                                    student.location_id,
+                                                    student.inscription_id,
+                                                    student.birthday,
+                                                    student.firstday,
+                                                    student.curp,
+                                                    student.tutor_id,
+                                                    student.occupation,
+                                                    student.tuition,
+                                                    student.profile_pic,
+                                                    student.credential_pic,
+                                                    student.tutor.name,
+                                                    student.tutor.phone,
+                                                    student.tutor.email,
+                                                    student.tutor.occupation
+                                                )
+                                            }
+                                            className="md:inline-block hidden"
+                                        >
+                                            Editar
+                                        </ButtonEdit>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
 
             <Dialog open={mainModal} onClose={closeMainModal} maxWidth="md" fullWidth>
                 <form onSubmit={submit} className="p-6" encType="multipart/form-data" method="POST">
