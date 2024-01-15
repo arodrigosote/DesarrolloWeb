@@ -1,0 +1,9 @@
+composer create-project laravel/laravel api_whatsapp
+
+composer require laravel/breeze --dev
+php artisan breeze:install react
+npm install
+npm run dev
+
+
+composer require guzzlehttp/guzzle
