@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->timestamps();
         });
-        DB::table('categorias')->insert([
+        DB::table('categories')->insert([
             ['name' => 'Programación y Desarrollo de Software'],
             ['name' => 'Sistemas Operativos'],
             ['name' => 'Seguridad Informática'],
