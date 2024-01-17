@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chats;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -32,7 +33,7 @@ class WhatsController extends Controller
         return response()->json($response->json());
     }
 
-    public function send_message(Request $request)
+    public function webhook(Request $request)
     {
         try {
             $verifyToken = "prueba";
@@ -44,19 +45,40 @@ class WhatsController extends Controller
 
             if ($mode && $token) {
                 if ($mode === 'subscribe' && $token == $verifyToken) { // Corregir también aquí ('subscribe' en lugar de 'suscribe')
-                    return response()->json([
-                        'success' => true,
-                    ], 200);
+                    echo $challenge;
                 }
             }
-
-            throw new Exception('invalid request');
+            // throw new Exception('invalid request');
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function receive()
+    {
+        //LEEMOS LOS DATOS ENVIADOS POR WHATSAPP
+        $respuesta = file_get_contents("php://input");
+        //echo file_put_contents("text.txt", "Hola");
+        //SI NO HAY DATOS NOS SALIMOS
+        if ($respuesta == null) {
+            exit;
+        }
+        //CONVERTIMOS EL JSON EN ARRAY DE PHP
+        $respuesta = json_decode($respuesta, true);
+        //EXTRAEMOS EL TELEFONO DEL ARRAY
+        $phone = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['from'] . "\n";
+        //EXTRAEMOS EL MENSAJE DEL ARRAY
+        $message = $respuesta['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
+        //GUARDAMOS EL MENSAJE Y LA RESPUESTA EN EL ARCHIVO text.txt
+
+        $chat = Chats::create([
+            'phone' => $phone,
+            'text' => $message,
+        ]);
+
     }
 
 }

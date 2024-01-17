@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/hello_world', [WhatsController::class, 'hello_world']);
-Route::get('/webhook', [WhatsController::class, 'send_message']);
+Route::get('/webhook', [WhatsController::class, 'webhook']);
+Route::post('/webhook', [WhatsController::class, 'receive']);
 
 require __DIR__.'/auth.php';
