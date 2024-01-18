@@ -53,6 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::resource("/profesores", ProfessorController::class);
     Route::resource("/grupos", GroupController::class);
     Route::resource("/alumnos", StudentController::class);
+
+    //STUDENTS PAYMENTS
+    Route::get("/alumno/{id}/agregar/pagos", [StudentController::class, "showStudentPayment"])->name("alumnos.payment");
 });
 
 

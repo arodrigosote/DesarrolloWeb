@@ -25,6 +25,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import ButtonSecondary from "@/Components/ButtonSecondary";
 import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
+import ButtonPayment from "@/Components/ButtonPayment";
+import ButtonYellow from "@/Components/ButtonYellow";
 
 const Student = () => {
     const { students, groups, activities, inscriptions, grades, locations, url } = usePage().props;
@@ -157,6 +159,9 @@ const Student = () => {
     const showStudent = (id) => {
         get(route('alumnos.show', id));
     }
+    const studetnPayment = (id) => {
+        get(route('alumnos.payment', id));
+    }
     const submit = (e) => {
         e.preventDefault();
         if (operation === 1) {
@@ -275,7 +280,8 @@ const Student = () => {
                                         {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}
                                     </td>
                                     <td className="p-2">
-                                        <ButtonShow type='button' className="md:inline-block hidden" onClick={(e) => showStudent(student.id)}>Mostrar</ButtonShow>
+                                        <ButtonYellow type='button' className="md:inline-block" onClick={(e) => studetnPayment(student.id)}>Pago</ButtonYellow>
+                                        <ButtonShow type='button' className="md:inline-block" onClick={(e) => showStudent(student.id)}>Mostrar</ButtonShow>
                                         <ButtonEdit
                                             onClick={(e) =>
                                                 openMainModal(
@@ -308,7 +314,7 @@ const Student = () => {
                                                     student.tutor.occupation
                                                 )
                                             }
-                                            className="md:inline-block hidden"
+                                            className="md:inline-block"
                                         >
                                             Editar
                                         </ButtonEdit>

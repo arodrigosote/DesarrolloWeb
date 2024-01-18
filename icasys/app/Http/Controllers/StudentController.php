@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\Inscription;
 use App\Models\Locations;
 use App\Models\Student;
+use App\Models\Studentpayment;
 use App\Models\Tutor;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -201,6 +202,21 @@ class StudentController extends Controller
 
             $student->save();
             $user->save();
+        }
+    }
+
+    public function ShowStudentPayment($id){
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            return Inertia::render('Dashboard/Admin/Student/Payment',[
+                'student'=> Student::find($id),
+                'payments' => Studentpayment::where('student_id', $id)->get(),
+                'baseUrl' => env('APP_URL'),
+            ]);
         }
     }
 }

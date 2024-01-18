@@ -56,6 +56,7 @@ const ShowStudent = () => {
                         <p className="mt2"><strong>Email:</strong> {student.email}</p>
                         <div className="lg:flex sm:block justify-between mt-4">
                             <ButtonSecondary className="sm:w-[100%] lg:w-auto">Historia académica</ButtonSecondary>
+                            <ButtonSecondary className="sm:w-[100%] lg:w-auto">Formato inscripción</ButtonSecondary>
                             <ButtonEdit className="sm:w-[100%] lg:w-auto">Editar</ButtonEdit>
                             <ButtonYellow className="sm:w-[100%] lg:w-auto">Pagos</ButtonYellow>
                             <ButtonSecondary className="sm:w-[100%] lg:w-auto">Credencial</ButtonSecondary>
