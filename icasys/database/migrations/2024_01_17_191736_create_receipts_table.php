@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('set null');
             $table->integer('amount');
             $table->date('date_payment');
-            $table->tinyInteger('week_number');
+            $table->tinyInteger('weeks_number');
             $table->timestamps();
         });
     }
