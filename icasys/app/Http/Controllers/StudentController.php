@@ -268,6 +268,6 @@ class StudentController extends Controller
         $receipt->date_payment  = $payment->payment_day;
         $receipt->weeks_number  = $trueCount;
         $receipt->save();
-        return redirect(route('alumnos.payment.show', [$student->id]));
+        //return redirect(route('alumnos.payment.show', [$student->id]));
     }
 }
