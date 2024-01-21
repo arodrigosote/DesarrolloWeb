@@ -160,7 +160,7 @@ const Student = () => {
         get(route('alumnos.show', id));
     }
     const studetnPayment = (id) => {
-        get(route('alumnos.payment', id));
+        get(route('alumnos.payment.show', id));
     }
     const submit = (e) => {
         e.preventDefault();

@@ -216,8 +216,9 @@ class StudentController extends Controller
         } else {
             return Inertia::render('Dashboard/Admin/Student/Payment', [
                 'student' => Student::find($id),
-                'payments' => Studentpayment::where('student_id', $id)->get(),
                 'baseUrl' => env('APP_URL'),
+                'payments' => Studentpayment::where('student_id', $id)->get(),
+
             ]);
         }
     }
@@ -227,7 +228,8 @@ class StudentController extends Controller
     {
 
 
-        $requestData = json_decode($request->getContent(), true);
+        // dd($requestData = $request->json());
+        $requestData = $request->json();
 
         $student = Student::find($request->student_id);
 
@@ -265,9 +267,7 @@ class StudentController extends Controller
         $receipt->amount  = $student->tuition*$trueCount;
         $receipt->date_payment  = $payment->payment_day;
         $receipt->weeks_number  = $trueCount;
-
-
-        $payment->save();
         $receipt->save();
+        return redirect(route('alumnos.payment.show', [$student->id]));
     }
 }
