@@ -19,7 +19,7 @@ import SecondaryLink from "@/Components/SecondaryLink";
 
 const Schedule = () => {
 
-    const { days, hours, schedules } = usePage().props;
+    const { days, hours, schedules, auth } = usePage().props;
 
     const [mainModal, setMainModal] = useState(false);
     const [title, setTitle] = useState('');
@@ -40,7 +40,7 @@ const Schedule = () => {
         setData({
             day_id: '',
             hour_id: '',
-            id:''
+            id: ''
 
         })
         if (op === 1) {
@@ -98,7 +98,7 @@ const Schedule = () => {
     const openDeleteModal = (scheduleID, scheduleDay, scheduleHour) => {
         setDeleteModal(true);
         setData({
-            id:scheduleID,
+            id: scheduleID,
             day_name: scheduleDay,
             hour_name: scheduleHour
         })
@@ -112,7 +112,7 @@ const Schedule = () => {
         e.preventDefault()
         destroy(route('horarios.destroy', data.id), {
             preserveScroll: true,
-            onSuccess: () => {ok('Horario eliminado con éxito.')},
+            onSuccess: () => { ok('Horario eliminado con éxito.') },
             onError: (error) => {
                 console.error(error);
                 errorModal('Error al eliminar el horario');
@@ -138,41 +138,43 @@ const Schedule = () => {
         <>
 
             <ToastContainer></ToastContainer>
-            <div className="flex justify-between items-center mb-7">
-                <div className="flex justify-start">
-                    <SecondaryLink to={route('day.index')} className="mr-2">Ver dias</SecondaryLink>
-                    <SecondaryLink to={route('horas.index')}>Ver horas</SecondaryLink>
+            <DashboardLayout title={'Mostrando horarios en sistema'} auth={auth}>
+                <div className="flex justify-between items-center mb-7">
+                    <div className="flex justify-start">
+                        <SecondaryLink to={route('day.index')} className="mr-2">Ver dias</SecondaryLink>
+                        <SecondaryLink to={route('horas.index')}>Ver horas</SecondaryLink>
+                    </div>
+                    <div>
+                        <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
+                    </div>
                 </div>
-                <div>
-                    <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
-                </div>
-            </div>
 
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>DÍA</TableCell>
-                            <TableCell>HORA</TableCell>
-                            <TableCell>ACCIONES</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {schedules.map((schedule) => (
-                            <TableRow key={schedule.id}>
-                                <TableCell>{schedule.id}</TableCell>
-                                <TableCell>{schedule.day ? schedule.day.name : 'N/A'}</TableCell>
-                                <TableCell>{schedule.hour ? schedule.hour.name : 'N/A'}</TableCell>
-                                <TableCell>
-                                    <ButtonEdit onClick={() => { openMainModal(2, schedule.id, schedule.day.id, schedule.hour.id) }}>Editar</ButtonEdit>
-                                    <ButtonDelete className="ml-3" onClick={()=>{openDeleteModal(schedule.id, schedule.day.name, schedule.hour.name)}}>Eliminar</ButtonDelete>
-                                </TableCell>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>DÍA</TableCell>
+                                <TableCell>HORA</TableCell>
+                                <TableCell>ACCIONES</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {schedules.map((schedule) => (
+                                <TableRow key={schedule.id}>
+                                    <TableCell>{schedule.id}</TableCell>
+                                    <TableCell>{schedule.day ? schedule.day.name : 'N/A'}</TableCell>
+                                    <TableCell>{schedule.hour ? schedule.hour.name : 'N/A'}</TableCell>
+                                    <TableCell>
+                                        <ButtonEdit onClick={() => { openMainModal(2, schedule.id, schedule.day.id, schedule.hour.id) }}>Editar</ButtonEdit>
+                                        <ButtonDelete className="ml-3" onClick={() => { openDeleteModal(schedule.id, schedule.day.name, schedule.hour.name) }}>Eliminar</ButtonDelete>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </DashboardLayout>
 
             <Modal show={mainModal} onClose={closeMainModal}>
                 <h2 className="text-3xl font-medium text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
@@ -202,11 +204,11 @@ const Schedule = () => {
                         ref={hourInput}
                         value={data.hour_id || ''}
                         onChange={(e) => setData('hour_id', e.target.value)}>
-                            {hours.map((hour)=>(
-                                <MenuItem key={hour.id} value={hour.id}>
-                                    {hour.name}
-                                </MenuItem>
-                            ))}
+                        {hours.map((hour) => (
+                            <MenuItem key={hour.id} value={hour.id}>
+                                {hour.name}
+                            </MenuItem>
+                        ))}
                     </Select>
 
                     <div className="flex justify-end mt-6">
@@ -250,6 +252,6 @@ const Schedule = () => {
     )
 }
 
-Schedule.layout = page => <DashboardLayout children={page} title={'Mostrando horarios en sistema'}></DashboardLayout>
+// Schedule.layout = page => <DashboardLayout children={page} ></DashboardLayout>
 
 export default Schedule;

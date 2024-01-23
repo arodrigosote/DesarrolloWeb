@@ -22,10 +22,11 @@ import SelectInput from "@mui/material/Select/SelectInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import ButtonSecondary from "@/Components/ButtonSecondary";
 import SecondaryLink from "@/Components/SecondaryLink";
+import Avatar from '@mui/material/Avatar';
 
 
 const Professor = () => {
-    const { professors } = usePage().props;
+    const { professors, url, auth } = usePage().props;
 
     const [mainModal, setMainModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
@@ -232,39 +233,43 @@ const Professor = () => {
     return (
         <>
             <ToastContainer></ToastContainer>
-            <div className="flex justify-end items-center">
-                <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
-            </div>
+            <DashboardLayout title={'Mostrando profesores en sistema.'} auth={auth}>
+                <div className="flex justify-end items-center">
+                    <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
+                </div>
 
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>FOTO</TableCell>
-                            <TableCell>NOMBRE</TableCell>
-                            <TableCell>CORREO</TableCell>
-                            <TableCell>TELÉFONO</TableCell>
-                            <TableCell>ACCIONES</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {professors.map((professor) => (
-                            <TableRow key={professor.id}>
-                                <TableCell>{professor.id}</TableCell>
-                                <TableCell>{professor.picture}</TableCell>
-                                <TableCell>{professor.name}</TableCell>
-                                <TableCell>{professor.email}</TableCell>
-                                <TableCell>{professor.phone}</TableCell>
-                                <TableCell>
-                                    <ButtonEdit onClick={(e) => openMainModal(2, professor.id, professor.user_id, professor.name, professor.email, professor.phone, professor.skill, professor.career, professor.biography, professor.facebook_url, professor.github_url, professor.x_url, professor.linkedin_url, professor.web_url, professor.picture)}>Editar</ButtonEdit>
-                                    <ButtonDelete onClick={(e) => openDeleteModal(professor.id, professor.name)} className="ml-2">Eliminar</ButtonDelete>
-                                </TableCell>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>FOTO</TableCell>
+                                <TableCell>NOMBRE</TableCell>
+                                <TableCell>CORREO</TableCell>
+                                <TableCell>TELÉFONO</TableCell>
+                                <TableCell>ACCIONES</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {professors.map((professor) => (
+                                <TableRow key={professor.id}>
+                                    <TableCell>{professor.id}</TableCell>
+                                    <TableCell>
+                                        <Avatar alt={professor.name} src={`/storage/${professor.picture}`} />
+                                    </TableCell>
+                                    <TableCell>{professor.name}</TableCell>
+                                    <TableCell>{professor.email}</TableCell>
+                                    <TableCell>{professor.phone}</TableCell>
+                                    <TableCell>
+                                        <ButtonEdit onClick={(e) => openMainModal(2, professor.id, professor.user_id, professor.name, professor.email, professor.phone, professor.skill, professor.career, professor.biography, professor.facebook_url, professor.github_url, professor.x_url, professor.linkedin_url, professor.web_url, professor.picture)}>Editar</ButtonEdit>
+                                        <ButtonDelete onClick={(e) => openDeleteModal(professor.id, professor.name)} className="ml-2">Eliminar</ButtonDelete>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </DashboardLayout>
 
 
             <Dialog open={mainModal} onClose={closeMainModal} maxWidth="md" fullWidth>
@@ -378,6 +383,6 @@ const Professor = () => {
     )
 }
 
-Professor.layout = page => <DashboardLayout children={page} title={'Mostrando profesores en sistema.'}></DashboardLayout>
+// Professor.layout = page => <DashboardLayout children={page} ></DashboardLayout>
 
 export default Professor;

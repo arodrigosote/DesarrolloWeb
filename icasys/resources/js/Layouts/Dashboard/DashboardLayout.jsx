@@ -9,7 +9,7 @@ import DashboardHeader from "./Components/Header/DashboardHeader";
 import '../../../css/app.css'
 
 
-export default function ({children, title}) {
+export default function ({auth, children, title }) {
 
     return (
         <div className="min-h-screen grid grid-cols-1 lg:grid-cols-7">
@@ -18,7 +18,7 @@ export default function ({children, title}) {
 
             {/* content */}
             <div className="col-span-6 bg-slate-100">
-                <DashboardHeader></DashboardHeader>
+                <DashboardHeader auth={auth}></DashboardHeader>
                 <div className="bg-white p-16 w-[85%] mx-auto mt-8 shadow-md ">
                     <h2 className="text-primary font-bold text-2xl ">{title}</h2>
                 </div>

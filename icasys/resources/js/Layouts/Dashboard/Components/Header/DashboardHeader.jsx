@@ -3,11 +3,11 @@ import StudentSearchForm from "./StudentSearchForm/StudentSearchForm";
 import DropdownMenu from "./DropdownMenu/DropdownMenu";
 
 
-export default function(){
+export default function(props){
     return(
         <div className="lg:flex md:flex flex justify-between px-4 py-5 bg-white">
             <StudentSearchForm></StudentSearchForm>
-            <DropdownMenu></DropdownMenu>
+            <DropdownMenu auth={props.auth}></DropdownMenu>
         </div>
     )
 }

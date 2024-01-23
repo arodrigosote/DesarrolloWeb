@@ -32,7 +32,7 @@ const Group = (props) => {
 
 
 
-    const { groups, professors, schedules } = usePage().props;
+    const { groups, professors, schedules, auth } = usePage().props;
     const [mainModal, setMainModal] = useState(false);
     // const [active, setActive] = useState(false);
     const [title, setTitle] = useState('');
@@ -42,7 +42,7 @@ const Group = (props) => {
         professor_id: '',
         shedule_id: '',
         name: '',
-        active:false
+        active: false
     });
     const professorInput = useRef();
     const scheduleInput = useRef();
@@ -166,18 +166,18 @@ const Group = (props) => {
     const [toastInfo, setToastInfo] = useState(null);
 
     useEffect(() => {
-      // Verificar si hay información de "toast" y mostrar el "toast" correspondiente
-      if (props.toast) {
-        setToastInfo(props.toast);
-      }
+        // Verificar si hay información de "toast" y mostrar el "toast" correspondiente
+        if (props.toast) {
+            setToastInfo(props.toast);
+        }
     }, [props.toast]);
 
     useEffect(() => {
-      // Mostrar el "toast" cuando se actualice el estado local
-      if (toastInfo) {
-        toast[toastInfo.tipo](toastInfo.mensaje);
-        setToastInfo(null); // Limpiar el estado después de mostrar el "toast"
-      }
+        // Mostrar el "toast" cuando se actualice el estado local
+        if (toastInfo) {
+            toast[toastInfo.tipo](toastInfo.mensaje);
+            setToastInfo(null); // Limpiar el estado después de mostrar el "toast"
+        }
     }, [toastInfo]);
 
     const handleShowGroup = (id) => {
@@ -185,38 +185,40 @@ const Group = (props) => {
     }
     return (
         <>
-            <ToastContainer/>
-            <div className="flex justify-end">
-                <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
-            </div>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>MAESTRO</TableCell>
-                            <TableCell>HORARIO</TableCell>
-                            <TableCell>ACTIVO</TableCell>
-                            <TableCell>ACCIONES</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {groups.map((group) => (
-                            <TableRow key={group.id}>
-                                <TableCell>{group.id}</TableCell>
-                                <TableCell>{group.professor ? group.professor.name : "N/A"}</TableCell>
-                                <TableCell>{group.schedule ? `${group.schedule.day.name} | ${group.schedule.hour.name}` : 'N/A'}</TableCell>
-                                <TableCell className="text-center">{group.active === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</TableCell>
-                                <TableCell>
-                                    <ButtonShow onClick={(e) => {handleShowGroup(group.id)}}>Mostrar</ButtonShow>
-                                    <ButtonEdit onClick={(e) => { openMainModal(2, group.id, group.professor.id, group.schedule.id, group.active===1 ? true : false) }}>Editar</ButtonEdit>
-                                    <ButtonDelete onClick={(e) => { openDeleteModal(group.schedule.id, `${group.schedule.day.name} | ${group.schedule.hour.name}`) }}>Eliminar</ButtonDelete>
-                                </TableCell>
+            <ToastContainer />
+            <DashboardLayout title={'Mostrando grupos en sistema'} auth={props.auth}>
+                <div className="flex justify-end">
+                    <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
+                </div>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>MAESTRO</TableCell>
+                                <TableCell>HORARIO</TableCell>
+                                <TableCell>ACTIVO</TableCell>
+                                <TableCell>ACCIONES</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {groups.map((group) => (
+                                <TableRow key={group.id}>
+                                    <TableCell>{group.id}</TableCell>
+                                    <TableCell>{group.professor ? group.professor.name : "N/A"}</TableCell>
+                                    <TableCell>{group.schedule ? `${group.schedule.day.name} | ${group.schedule.hour.name}` : 'N/A'}</TableCell>
+                                    <TableCell className="text-center">{group.active === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</TableCell>
+                                    <TableCell>
+                                        <ButtonShow onClick={(e) => { handleShowGroup(group.id) }}>Mostrar</ButtonShow>
+                                        <ButtonEdit onClick={(e) => { openMainModal(2, group.id, group.professor.id, group.schedule.id, group.active === 1 ? true : false) }}>Editar</ButtonEdit>
+                                        <ButtonDelete onClick={(e) => { openDeleteModal(group.schedule.id, `${group.schedule.day.name} | ${group.schedule.hour.name}`) }}>Eliminar</ButtonDelete>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </DashboardLayout>
 
 
             <Modal show={mainModal} onClose={closeMainModal}>
@@ -306,6 +308,6 @@ const Group = (props) => {
     )
 }
 
-Group.layout = page => <DashboardLayout children={page} title={'Mostrando grupos en sistema'}></DashboardLayout>
+// Group.layout = page => <DashboardLayout children={page} ></DashboardLayout>
 
 export default Group;

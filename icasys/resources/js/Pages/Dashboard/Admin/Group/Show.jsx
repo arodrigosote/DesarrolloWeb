@@ -32,7 +32,7 @@ const ShowGroup = (props) => {
 
 
 
-    const { group, professors, schedules, students } = usePage().props;
+    const { group, professors, schedules, students,auth } = usePage().props;
 
     const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
     })
@@ -57,7 +57,7 @@ const ShowGroup = (props) => {
     return (
         <>
             <ToastContainer />
-            <DashboardLayout title={`Grupo: ${group.schedule.day.name} | ${group.schedule.hour.name} | ${group.professor.name}`}>
+            <DashboardLayout title={`Grupo: ${group.schedule.day.name} | ${group.schedule.hour.name} | ${group.professor.name}`} auth={auth}>
                 <div className="flex justify-end">
                     {/* <ButtonPrimary>Agregar</ButtonPrimary> */}
                 </div>

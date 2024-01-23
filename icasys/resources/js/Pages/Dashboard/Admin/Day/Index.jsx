@@ -19,7 +19,7 @@ import ButtonCancel from "@/Components/ButtonCancel";
 import SecondaryLink from "@/Components/SecondaryLink";
 
 
-const Index = ({ days, props }) => {
+const Index = ({ days, auth }) => {
 
     const [modal, setModal] = useState(false);
     const [title, setTitle] = useState('');
@@ -114,33 +114,35 @@ const Index = ({ days, props }) => {
     return (
         <>
             <ToastContainer></ToastContainer>
-            <div className="flex justify-between mb-8">
-                <SecondaryLink to={route('horarios.index')}>Ver horarios</SecondaryLink>
-                <ButtonPrimary onClick={() => openModal(1)}>Agregar</ButtonPrimary>
-            </div>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell><span className="font-bolder uppercase">ID</span></TableCell>
-                            <TableCell><h2 className="font-bold uppercase">Nombre</h2></TableCell>
-                            <TableCell><h2 className="font-bold uppercase">Acciones</h2></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {days.map((day) => (
-                            <TableRow key={day.id}>
-                                <TableCell>{day.id}</TableCell>
-                                <TableCell>{day.name}</TableCell>
-                                <TableCell>
-                                    <ButtonEdit onClick={() => openModal(2, day.id, day.name)} className="mr-2">Editar</ButtonEdit>
-                                    <ButtonDelete onClick={() => openDeleteModal(day.id, day.name)}>Eliminar</ButtonDelete>
-                                </TableCell>
+            <DashboardLayout title="Mostrando dias en sistema" auth={auth}>
+                <div className="flex justify-between mb-8">
+                    <SecondaryLink to={route('horarios.index')}>Ver horarios</SecondaryLink>
+                    <ButtonPrimary onClick={() => openModal(1)}>Agregar</ButtonPrimary>
+                </div>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell><span className="font-bolder uppercase">ID</span></TableCell>
+                                <TableCell><h2 className="font-bold uppercase">Nombre</h2></TableCell>
+                                <TableCell><h2 className="font-bold uppercase">Acciones</h2></TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {days.map((day) => (
+                                <TableRow key={day.id}>
+                                    <TableCell>{day.id}</TableCell>
+                                    <TableCell>{day.name}</TableCell>
+                                    <TableCell>
+                                        <ButtonEdit onClick={() => openModal(2, day.id, day.name)} className="mr-2">Editar</ButtonEdit>
+                                        <ButtonDelete onClick={() => openDeleteModal(day.id, day.name)}>Eliminar</ButtonDelete>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </DashboardLayout>
 
             <Head>
                 <title>Mostrar Dias - Admin</title>
@@ -198,6 +200,6 @@ const Index = ({ days, props }) => {
     )
 }
 
-Index.layout = page => <DashboardLayout children={page} title="Mostrando dias en sistema"></DashboardLayout>
+// Index.layout = page => <DashboardLayout children={page} ></DashboardLayout>
 
 export default Index

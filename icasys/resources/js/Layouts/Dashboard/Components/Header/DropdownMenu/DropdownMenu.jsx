@@ -1,32 +1,33 @@
 import React, { useState } from "react";
 import { RiArrowDownSFill } from "react-icons/ri";
-import foto from '../../../../../Assets/Images/yo.jpg'
+import foto from '../../../../../Assets/Images/yo.jpg';
 import NavLink from "@/Components/NavLink";
-import Dropdown from '@/Components/Dropdown';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import ButtonInvisible from "@/Components/ButtonInvisible";
 
-export default function () {
-
+export default function UserProfileMenu({ auth }) {
     const [isMenuOpen, setMenuOpen] = useState(false);
 
     const handleMenuOpen = () => {
         setMenuOpen(!isMenuOpen);
-    }
-
+    };
 
     return (
         <div>
-            <button onClick={handleMenuOpen} className="flex items-center">
-                <img src={foto} alt="" className="w-10 rounded-full" />
+            <ButtonInvisible onClick={handleMenuOpen} className="flex items-center">
+                <Avatar alt={auth.user.name} src={`a`} />
                 <RiArrowDownSFill className="text-lg"></RiArrowDownSFill>
-            </button>
+            </ButtonInvisible>
             <nav className={`${isMenuOpen ? 'absolute' : 'hidden'} transition-all bg-white w-40 right-5 mt-2 rounded-[10px] border border-slate-400 p-2`}>
-                <ul className="block text-right">
-                    <li className="text-right flex justify-end"><NavLink to='' className="w-full justify-end pt-2 pb-2 px-4">Perfil</NavLink></li>
-                    <li className="text-right flex justify-end"><NavLink to='' className="w-full justify-end pt-2 pb-2 px-4">Ajustes</NavLink></li>
-                    <li className="text-right flex justify-end"><NavLink to='' className="w-full justify-end pt-2 pb-2 px-4">Cerrar Sesión</NavLink></li>
-                </ul>
+                <MenuList>
+                    <MenuItem><NavLink to='/perfil' className="">Perfil</NavLink></MenuItem>
+                    <MenuItem><NavLink to='/ajustes' className="">Ajustes</NavLink></MenuItem>
+                    <MenuItem><NavLink to='/cerrar-sesion' className="">Cerrar Sesión</NavLink></MenuItem>
+                </MenuList>
             </nav>
-
         </div>
-    )
+    );
 }

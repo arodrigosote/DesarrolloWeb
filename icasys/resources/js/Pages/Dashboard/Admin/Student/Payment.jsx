@@ -37,7 +37,7 @@ const ShowStudent = () => {
 
     const [modal, setModal] = useState(false);
 
-    const { student, baseUrl, payments } = usePage().props;
+    const { student, baseUrl, payments, auth } = usePage().props;
     // Suponiendo que tienes un array llamado pagos
     const currentDate = new Date();
     const formatterCurretDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
@@ -116,7 +116,7 @@ const ShowStudent = () => {
     return (
         <>
 
-            <DashboardLayout title={`Pagos de: ${student.name}`}>
+            <DashboardLayout title={`Pagos de: ${student.name}`} auth={auth}>
                 {/* <ButtonEdit onClick={pdf}>Download</ButtonEdit> */}
                 <form onSubmit={submit}>
 

@@ -17,6 +17,7 @@ class ProfessorController extends Controller
     {
         return Inertia::render("Dashboard/Admin/Professor/Index", [
             "professors" => Professor::all(),
+            'url' => env('APP_URL'),
         ]);
     }
     public function store(Request $request)
@@ -56,8 +57,8 @@ class ProfessorController extends Controller
             $professor->picture = $rutaDestino . $nombreArchivo;
             $user->profile_pic = $rutaDestino . $nombreArchivo;
         } else {
-            $professor->picture = 'images/professor/user.jpg';
-            $user->profile_pic = 'images/professor/user.jpg';
+            $professor->picture = 'images/professors/user.jpg';
+            $user->profile_pic = 'images/professors/user.jpg';
         }
 
 

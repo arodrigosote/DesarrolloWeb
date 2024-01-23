@@ -30,7 +30,7 @@ import ButtonYellow from "@/Components/ButtonYellow";
 import { router } from '@inertiajs/react'
 
 const ShowStudent = () => {
-    const { student, baseUrl } = usePage().props;
+    const { student, baseUrl, auth } = usePage().props;
 
     const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
 
@@ -41,7 +41,7 @@ const ShowStudent = () => {
     }
     return (
         <>
-            <DashboardLayout title={student.name}>
+            <DashboardLayout title={student.name} auth={auth}>
                 <div className="lg:flex sm:block">
                     <div className="lg:w-[33%] sm:w-[100%] flex">
                         <div className="w-[1%]">

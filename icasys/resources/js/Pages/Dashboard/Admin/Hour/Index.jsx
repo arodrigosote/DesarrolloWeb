@@ -19,13 +19,13 @@ import SecondaryLink from "@/Components/SecondaryLink";
 
 
 
-const Hour = ({ hours }) => {
+const Hour = ({ hours, auth }) => {
 
     const [mainModal, setMainModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
     const nameInput = useRef();
-    const {data, setData, delete:destroy, post, put, processing, errors, reset} = useForm({
+    const { data, setData, delete: destroy, post, put, processing, errors, reset } = useForm({
         id: '',
         name: ''
     })
@@ -34,15 +34,15 @@ const Hour = ({ hours }) => {
         setMainModal(true);
         setOperation(op);
         setData({
-            name:''
+            name: ''
         })
         if (op === 1) {
             setTitle('Añadir hora.');
-        }else{
+        } else {
             setTitle('Editar hora.');
             setData({
                 id: id,
-                name:name
+                name: name
             })
         }
     }
@@ -54,8 +54,8 @@ const Hour = ({ hours }) => {
     const submit = (e) => {
         e.preventDefault();
         if (operation === 1) {
-            post(route('horas.store'),{
-                onSuccess: () => {ok('Hora guardada con éxito')},
+            post(route('horas.store'), {
+                onSuccess: () => { ok('Hora guardada con éxito') },
                 onError: () => {
                     if (errors.name) {
                         reset('name');
@@ -63,9 +63,9 @@ const Hour = ({ hours }) => {
                     }
                 }
             });
-        }else {
-            put(route('horas.update', data.id),{
-                onSuccess: () => {ok('Hora actualizada con éxito')},
+        } else {
+            put(route('horas.update', data.id), {
+                onSuccess: () => { ok('Hora actualizada con éxito') },
                 onError: () => {
                     if (errors.name) {
                         reset('name');
@@ -119,34 +119,36 @@ const Hour = ({ hours }) => {
     return (
         <>
             <ToastContainer></ToastContainer>
-            <div className="flex justify-between mb-8">
-                <SecondaryLink to={route('horarios.index')}>Ver horarios</SecondaryLink>
-                <ButtonPrimary onClick={() => {openMainModal(1)}}>Agregar</ButtonPrimary>
-            </div>
+            <DashboardLayout title={'Mostrando horas en sistema'} auth={auth}>
+                <div className="flex justify-between mb-8">
+                    <SecondaryLink to={route('horarios.index')}>Ver horarios</SecondaryLink>
+                    <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
+                </div>
 
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>NOMBRE</TableCell>
-                            <TableCell>ACCIONES</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {hours.map((hour) => (
-                            <TableRow key={hour.id}>
-                                <TableCell>{hour.id}</TableCell>
-                                <TableCell>{hour.name}</TableCell>
-                                <TableCell>
-                                    <ButtonEdit onClick={() => openMainModal(2, hour.id, hour.name)} className="mr-2">Editar</ButtonEdit>
-                                    <ButtonDelete type="button" onClick={() => {openDeleteModal(hour.id, hour.name)}}>Eliminar</ButtonDelete>
-                                </TableCell>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>NOMBRE</TableCell>
+                                <TableCell>ACCIONES</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {hours.map((hour) => (
+                                <TableRow key={hour.id}>
+                                    <TableCell>{hour.id}</TableCell>
+                                    <TableCell>{hour.name}</TableCell>
+                                    <TableCell>
+                                        <ButtonEdit onClick={() => openMainModal(2, hour.id, hour.name)} className="mr-2">Editar</ButtonEdit>
+                                        <ButtonDelete type="button" onClick={() => { openDeleteModal(hour.id, hour.name) }}>Eliminar</ButtonDelete>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </DashboardLayout>
 
             <Modal show={mainModal} onClose={closeMainModal}>
                 <h2 className="text-3xl font-medium text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
@@ -204,6 +206,6 @@ const Hour = ({ hours }) => {
 
 }
 
-Hour.layout = page => <DashboardLayout children={page} title={'Mostrando horas en sistema'}></DashboardLayout>
+// Hour.layout = page => <DashboardLayout children={page} ></DashboardLayout>
 
 export default Hour;

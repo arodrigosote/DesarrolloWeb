@@ -27,9 +27,10 @@ import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 import ButtonPayment from "@/Components/ButtonPayment";
 import ButtonYellow from "@/Components/ButtonYellow";
+import Avatar from '@mui/material/Avatar';
 
 const Student = () => {
-    const { students, groups, activities, inscriptions, grades, locations, url } = usePage().props;
+    const { students, groups, activities, inscriptions, grades, locations, url, auth } = usePage().props;
     const [mainModal, setMainModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(0);
@@ -246,86 +247,89 @@ const Student = () => {
 
     return (
         <>
-            <div className="flex justify-end">
-                <ButtonPrimary onClick={(e) => openMainModal(1)}>Agregar</ButtonPrimary>
-            </div>
 
-            <div className="container mx-auto p-4">
-                <div className="overflow-x-auto">
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>FOTO</TableCell>
-                                    <TableCell>NOMBRE</TableCell>
-                                    <TableCell>DIA</TableCell>
-                                    <TableCell>HORA</TableCell>
-                                    <TableCell>MAESTRO</TableCell>
-                                    <TableCell>COLEGIATURA</TableCell>
-                                    <TableCell>ACTIVO</TableCell>
-                                    <TableCell>ACCIONES</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {students.map((student) => (
-                                    <TableRow key={student.id}>
-                                        <TableCell>
-                                            <img src={`${url}/storage/${student.profile_pic}`} alt="student_pic" className="max-w-20 max-h-20 rounded-full" />
-                                        </TableCell>
-                                        <TableCell>{student.name}</TableCell>
-                                        <TableCell>{student.group.schedule.day.name}</TableCell>
-                                        <TableCell>{student.group.schedule.hour.name}</TableCell>
-                                        <TableCell>{student.group.professor.name}</TableCell>
-                                        <TableCell>{student.tuition}</TableCell>
-                                        <TableCell>
-                                            {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}
-                                        </TableCell>
-                                        <TableCell>
-                                        <ButtonYellow type='button' className="md:inline-block" onClick={(e) => studetnPayment(student.id)}>Pago</ButtonYellow>
-                                            <ButtonShow type='button' className="md:inline-block" onClick={(e) => showStudent(student.id)}>Mostrar</ButtonShow>
-                                            <ButtonEdit
-                                                onClick={(e) =>
-                                                    openMainModal(
-                                                        2,
-                                                        student.id,
-                                                        student.name,
-                                                        student.group_id,
-                                                        student.active === 1 ? true : false,
-                                                        student.address,
-                                                        student.postal_code,
-                                                        student.phone,
-                                                        student.user_id,
-                                                        student.email,
-                                                        student.school_cycle,
-                                                        student.grade_id,
-                                                        student.activity_id,
-                                                        student.location_id,
-                                                        student.inscription_id,
-                                                        student.birthday,
-                                                        student.firstday,
-                                                        student.curp,
-                                                        student.tutor_id,
-                                                        student.occupation,
-                                                        student.tuition,
-                                                        student.profile_pic,
-                                                        student.credential_pic,
-                                                        student.tutor.name,
-                                                        student.tutor.phone,
-                                                        student.tutor.email,
-                                                        student.tutor.occupation
-                                                    )
-                                                }
-                                                className="md:inline-block"
-                                            >
-                                                Editar
-                                            </ButtonEdit>
-                                        </TableCell>
+            <DashboardLayout title={'Mostrando alumnos inscritos y activos.'} auth={auth}>
+                <div className="flex justify-end">
+                    <ButtonPrimary onClick={(e) => openMainModal(1)}>Agregar</ButtonPrimary>
+                </div>
+
+                <div className="container mx-auto p-4">
+                    <div className="overflow-x-auto">
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>FOTO</TableCell>
+                                        <TableCell>NOMBRE</TableCell>
+                                        <TableCell>DIA</TableCell>
+                                        <TableCell>HORA</TableCell>
+                                        <TableCell>MAESTRO</TableCell>
+                                        <TableCell>COLEGIATURA</TableCell>
+                                        <TableCell>ACTIVO</TableCell>
+                                        <TableCell>ACCIONES</TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    {/* <table className="w-full border-collapse border border-gray-300 text-center">
+                                </TableHead>
+                                <TableBody>
+                                    {students.map((student) => (
+                                        <TableRow key={student.id}>
+                                            <TableCell>
+                                                <Avatar alt={auth.user.name} src={`${url}/storage/${student.profile_pic}`} />
+                                                {/* <img src={`${url}/storage/${student.profile_pic}`} alt="student_pic" className="max-w-20 max-h-20 rounded-full" /> */}
+                                            </TableCell>
+                                            <TableCell>{student.name}</TableCell>
+                                            <TableCell>{student.group.schedule.day.name}</TableCell>
+                                            <TableCell>{student.group.schedule.hour.name}</TableCell>
+                                            <TableCell>{student.group.professor.name}</TableCell>
+                                            <TableCell>{student.tuition}</TableCell>
+                                            <TableCell>
+                                                {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}
+                                            </TableCell>
+                                            <TableCell>
+                                                <ButtonYellow type='button' className="md:inline-block" onClick={(e) => studetnPayment(student.id)}>Pago</ButtonYellow>
+                                                <ButtonShow type='button' className="md:inline-block" onClick={(e) => showStudent(student.id)}>Mostrar</ButtonShow>
+                                                <ButtonEdit
+                                                    onClick={(e) =>
+                                                        openMainModal(
+                                                            2,
+                                                            student.id,
+                                                            student.name,
+                                                            student.group_id,
+                                                            student.active === 1 ? true : false,
+                                                            student.address,
+                                                            student.postal_code,
+                                                            student.phone,
+                                                            student.user_id,
+                                                            student.email,
+                                                            student.school_cycle,
+                                                            student.grade_id,
+                                                            student.activity_id,
+                                                            student.location_id,
+                                                            student.inscription_id,
+                                                            student.birthday,
+                                                            student.firstday,
+                                                            student.curp,
+                                                            student.tutor_id,
+                                                            student.occupation,
+                                                            student.tuition,
+                                                            student.profile_pic,
+                                                            student.credential_pic,
+                                                            student.tutor.name,
+                                                            student.tutor.phone,
+                                                            student.tutor.email,
+                                                            student.tutor.occupation
+                                                        )
+                                                    }
+                                                    className="md:inline-block"
+                                                >
+                                                    Editar
+                                                </ButtonEdit>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        {/* <table className="w-full border-collapse border border-gray-300 text-center">
                         <thead className="bg-gray-200">
                             <tr>
                                 <th className="p-2">FOTO</th>
@@ -396,9 +400,9 @@ const Student = () => {
                             ))}
                         </tbody>
                     </table> */}
+                    </div>
                 </div>
-            </div>
-
+            </DashboardLayout>
 
 
 
@@ -585,6 +589,6 @@ const Student = () => {
     )
 }
 
-Student.layout = page => <DashboardLayout children={page} title={'Mostrando alumnos inscritos y activos.'}></DashboardLayout>
+// Student.layout = page => <DashboardLayout children={page} ></DashboardLayout>
 
 export default Student;

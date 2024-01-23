@@ -37,7 +37,7 @@ import Receipt from "@/Pages/PDF/Receipt";
 
 const ShowReceipts = (props) => {
 
-    const { student, baseUrl, receipts } = usePage().props;
+    const { student, baseUrl, receipts, auth } = usePage().props;
 
     //SECCION PARA RECIBIR NOTIFICACION----------------------------------------------------------------------
     const [toastInfo, setToastInfo] = useState(null);
@@ -60,7 +60,7 @@ const ShowReceipts = (props) => {
     return (
         <>
             <ToastContainer />
-            <DashboardLayout title={`Recibos de: ${student.name}`}>
+            <DashboardLayout title={`Recibos de: ${student.name}`} auth={auth}>
                 <div>
                     <table className="w-full">
                         <thead>
