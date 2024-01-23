@@ -57,6 +57,7 @@ Route::middleware('auth')->group(function () {
     //STUDENTS PAYMENTS
     Route::get("/alumno/{id}/agregar/pagos", [StudentController::class, "showStudentPayment"])->name("alumnos.payment.show");
     Route::post("/alumno/crear/pago", [StudentController::class, "storeStudentPayment"])->name("alumnos.payment");
+    Route::get("/alumno/{id}/mostrar/recibos", [StudentController::class, "showStudentReceipts"])->name("alumnos.receipts");
 });
 
 

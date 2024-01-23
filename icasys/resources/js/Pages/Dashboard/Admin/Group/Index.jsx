@@ -1,6 +1,6 @@
 import DashboardLayout from "@/Layouts/Dashboard/DashboardLayout";
 import { Head, useForm, usePage } from "@inertiajs/react";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ButtonPrimary from "@/Components/ButtonPrimary";
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, Select, FormControl, useForkRef, TextField,
@@ -25,14 +25,19 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import ButtonSecondary from "@/Components/ButtonSecondary";
 import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
+import 'react-toastify/dist/ReactToastify.css';
 
-const Group = () => {
+
+const Group = (props) => {
+
+
+
     const { groups, professors, schedules } = usePage().props;
     const [mainModal, setMainModal] = useState(false);
     // const [active, setActive] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(0);
-    const { data, setData, delete: destroy, post, put, processing, errors, reset } = useForm({
+    const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
         id: '',
         professor_id: '',
         shedule_id: '',
@@ -42,6 +47,8 @@ const Group = () => {
     const professorInput = useRef();
     const scheduleInput = useRef();
     const activeInput = useRef();
+
+
 
     const openMainModal = (op, id, professor_id, schedule_id, active) => {
         setMainModal(true);
@@ -156,8 +163,29 @@ const Group = () => {
         console.log(active)
     }
 
+    const [toastInfo, setToastInfo] = useState(null);
+
+    useEffect(() => {
+      // Verificar si hay información de "toast" y mostrar el "toast" correspondiente
+      if (props.toast) {
+        setToastInfo(props.toast);
+      }
+    }, [props.toast]);
+
+    useEffect(() => {
+      // Mostrar el "toast" cuando se actualice el estado local
+      if (toastInfo) {
+        toast[toastInfo.tipo](toastInfo.mensaje);
+        setToastInfo(null); // Limpiar el estado después de mostrar el "toast"
+      }
+    }, [toastInfo]);
+
+    const handleShowGroup = (id) => {
+        get(route('grupos.show', id))
+    }
     return (
         <>
+            <ToastContainer/>
             <div className="flex justify-end">
                 <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
             </div>
@@ -180,7 +208,7 @@ const Group = () => {
                                 <TableCell>{group.schedule ? `${group.schedule.day.name} | ${group.schedule.hour.name}` : 'N/A'}</TableCell>
                                 <TableCell className="text-center">{group.active === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</TableCell>
                                 <TableCell>
-                                    <ButtonShow>Mostrar</ButtonShow>
+                                    <ButtonShow onClick={(e) => {handleShowGroup(group.id)}}>Mostrar</ButtonShow>
                                     <ButtonEdit onClick={(e) => { openMainModal(2, group.id, group.professor.id, group.schedule.id, group.active===1 ? true : false) }}>Editar</ButtonEdit>
                                     <ButtonDelete onClick={(e) => { openDeleteModal(group.schedule.id, `${group.schedule.day.name} | ${group.schedule.hour.name}`) }}>Eliminar</ButtonDelete>
                                 </TableCell>

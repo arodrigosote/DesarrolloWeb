@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\Professor;
 use App\Models\Schedule;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -71,6 +72,20 @@ class GroupController extends Controller
         }else{
             $group = Group::findOrFail($id);
             $group->delete();
+        }
+    }
+
+    public function show($id){
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        }else{
+            return Inertia::render("Dashboard/Admin/Group/Show", [
+                'group' => Group::with('schedule', 'schedule.hour', 'schedule.day', 'professor')->find($id),
+                'students' => Student::where('group_id', $id)->get(),
+            ]);
         }
     }
 }

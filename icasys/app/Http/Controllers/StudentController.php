@@ -7,7 +7,9 @@ use App\Models\Grade;
 use App\Models\Group;
 use App\Models\Inscription;
 use App\Models\Locations;
+use App\Models\Professor;
 use App\Models\Receipt;
+use App\Models\Schedule;
 use App\Models\Student;
 use App\Models\Studentpayment;
 use App\Models\Tutor;
@@ -15,6 +17,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\File;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Inertia\Inertia;
 
 
@@ -226,48 +231,82 @@ class StudentController extends Controller
 
     public function storeStudentPayment(Request $request)
     {
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            try {
+                // dd($requestData = $request->json());
+                $requestData = $request->json();
 
+                $student = Student::find($request->student_id);
 
-        // dd($requestData = $request->json());
-        $requestData = $request->json();
-
-        $student = Student::find($request->student_id);
-
-        $receipt = Receipt::create([
-            'student_id'=> $request->student_id,
-            'amount' => 0,
-            'date_payment' => $student->created_at,
-            'weeks_number' => 0,
-        ]);
-
-        // Contar elementos con valor true
-        $trueCount = 0;
-        foreach ($requestData as $key => $value) {
-
-            if (strpos($key, "week_topay_number_") === 0){
-                $week_topay_number = $value;
-            }else if (strpos($key, "week_topay_date_") === 0){
-                $week_topay_date = $value;
-            }else if (strpos($key, "payment_date_") === 0){
-                $payment_date = $value;
-            }else if(strpos($key, "payment_check_") === 0 && $value === true){
-                $payment_check = $value;
-                $payment = Studentpayment::create([
-                    'student_id' => $student->id,
-                    'payment_day' => $payment_date,
-                    'week_topay_number' => $week_topay_number,
-                    'week_topay_date' => $week_topay_date,
-                    'receipt_id' =>  $receipt->id,
+                $receipt = Receipt::create([
+                    'student_id' => $request->student_id,
+                    'amount' => 0,
+                    'date_payment' => $student->created_at,
+                    'weeks_number' => 0,
                 ]);
-                $trueCount++;
+
+                // Contar elementos con valor true
+                $trueCount = 0;
+                foreach ($requestData as $key => $value) {
+
+                    if (strpos($key, "week_topay_number_") === 0) {
+                        $week_topay_number = $value;
+                    } else if (strpos($key, "week_topay_date_") === 0) {
+                        $week_topay_date = $value;
+                    } else if (strpos($key, "payment_date_") === 0) {
+                        $payment_date = $value;
+                    } else if (strpos($key, "payment_check_") === 0 && $value === true) {
+                        $payment_check = $value;
+                        $payment = Studentpayment::create([
+                            'student_id' => $student->id,
+                            'payment_day' => $payment_date,
+                            'week_topay_number' => $week_topay_number,
+                            'week_topay_date' => $week_topay_date,
+                            'receipt_id' => $receipt->id,
+                        ]);
+                        $trueCount++;
+                    }
+                }
+
+                $receipt->amount = $student->tuition * $trueCount;
+                $receipt->date_payment = $payment->payment_day;
+                $receipt->weeks_number = $trueCount;
+                $receipt->save();
+
+
+                return Inertia::render('Dashboard/Admin/Student/Receipts', [
+                    'student' => $student,
+                    'baseUrl' => env('APP_URL'),
+                    'receipts' => Receipt::where('student_id', $student->id)->with('student')->orderBy('created_at', 'desc')->get(),
+                ])->with('toast', [
+                            'mensaje' => 'Pagos agregados con éxito.',
+                            'tipo' => 'success',
+                        ]);
+
+            } catch (Throwable $th) {
+                throw $th;
             }
-
         }
+    }
 
-        $receipt->amount  = $student->tuition*$trueCount;
-        $receipt->date_payment  = $payment->payment_day;
-        $receipt->weeks_number  = $trueCount;
-        $receipt->save();
-        return redirect(route('alumnos.payment.show', [$student->id]));
+    public function showStudentReceipts($id)
+    {
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            return Inertia::render('Dashboard/Admin/Student/Receipts', [
+                'student' => Student::find($id),
+                'baseUrl' => env('APP_URL'),
+                'receipts' => Receipt::with('student')->where('student_id', $id)->orderBy('created_at', 'desc')->get(),
+            ]);
+        }
     }
 }

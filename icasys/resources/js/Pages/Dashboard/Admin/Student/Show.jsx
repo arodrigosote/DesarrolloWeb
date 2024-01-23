@@ -27,9 +27,18 @@ import ButtonSecondary from "@/Components/ButtonSecondary";
 import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 import ButtonYellow from "@/Components/ButtonYellow";
+import { router } from '@inertiajs/react'
 
 const ShowStudent = () => {
     const { student, baseUrl } = usePage().props;
+
+    const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
+
+    })
+
+    const handleRecibos = () => {
+        get(route('alumnos.receipts', student.id))
+    }
     return (
         <>
             <DashboardLayout title={student.name}>
@@ -58,6 +67,7 @@ const ShowStudent = () => {
                             <ButtonSecondary className="sm:w-[100%] lg:w-auto">Historia académica</ButtonSecondary>
                             <ButtonSecondary className="sm:w-[100%] lg:w-auto">Formato inscripción</ButtonSecondary>
                             <ButtonEdit className="sm:w-[100%] lg:w-auto">Editar</ButtonEdit>
+                            <ButtonEdit className="sm:w-[100%] lg:w-auto" onClick={handleRecibos}>Recibos</ButtonEdit>
                             <ButtonYellow className="sm:w-[100%] lg:w-auto">Pagos</ButtonYellow>
                             <ButtonSecondary className="sm:w-[100%] lg:w-auto">Credencial</ButtonSecondary>
                         </div>

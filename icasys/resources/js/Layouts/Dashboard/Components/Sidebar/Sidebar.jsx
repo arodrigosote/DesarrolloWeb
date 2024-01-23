@@ -21,7 +21,7 @@ export default function () {
 
                 {/* Logotipo */}
                 <Link href={route('page.home')}>
-                    <div className="text-center py-3 lg:pl-4 lg:flex lg:justify-start lg:items-center border-b-2">
+                    <div className="text-center py-4 lg:pl-4 lg:flex lg:justify-start lg:items-center border-b-2">
                         <img src={icono} alt="" className="w-1/6 mx-auto md:mx-auto lg:mx-0" />
                         <h1 className="uppercase text-gray-200 tracking-[1px] hover:text-white">ICASYS</h1>
                     </div>

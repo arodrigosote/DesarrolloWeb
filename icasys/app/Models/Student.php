@@ -74,9 +74,9 @@ class Student extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function recibos()
+    public function receipts()
     {
-        return $this->hasMany('App\Models\Recibo', 'alumno_id', 'id');
+        return $this->hasMany('App\Models\Receipt', 'student_id', 'id');
     }
 
     /**
