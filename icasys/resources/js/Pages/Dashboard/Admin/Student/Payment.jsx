@@ -124,15 +124,15 @@ const ShowStudent = () => {
                         <ButtonPrimary type='submit' disabled={processing}>Enviar</ButtonPrimary>
                     </div>
                     <div className="xl:flex block justify-around text-center">
-                        <div className="">
+                        <div className="w-full overflow-x-auto">
                             <h2 className="my-4 text-xl">Semanas pagadas</h2>
-                            <div className="w-full overflow-x-auto">
+                            <div className="">
                                 <table className="">
                                     <thead className="">
-                                        <tr>
-                                            <th className="hidden">Número de semana</th>
-                                            <th className="p-4 text-[14px]">Número de semana</th>
-                                            <th className="p-4 text-[14px]">Fecha a pagar</th>
+                                        <tr className="w-16">
+                                            <th className="hidden">Número <br/>de semana</th>
+                                            <th className="p-4 text-[14px]">Número<br/> semana</th>
+                                            <th className="p-4 text-[14px]">Fecha a <br/>pagar</th>
                                             <th className="p-4 text-[14px]">Fecha de pago</th>
                                             <th className="p-4 text-[14px]">Seleccionar</th>
                                         </tr>
@@ -153,7 +153,7 @@ const ShowStudent = () => {
                                                 <td className="">
                                                     <input
                                                         type="number"
-                                                        className="border rounded border-blue-300  text-[12px] text-center mx-auto"
+                                                        className="border rounded border-blue-300 text-[12px] text-center mx-auto w-16"
                                                         name={`week_${payment.week_topay_number}`}
                                                         value={`${payment.week_topay_number}`}
                                                         readOnly
@@ -163,7 +163,7 @@ const ShowStudent = () => {
                                                 <td className="">
                                                     <input
                                                         type="date"
-                                                        className="border rounded border-blue-300  text-[12px] text-center mx-auto"
+                                                        className="border rounded border-blue-300 w-32 text-[12px] text-center mx-auto"
                                                         name={`date_topay${payment.week_topay_number}`}
                                                         value={payment.week_topay_date}
                                                         readOnly
@@ -174,7 +174,7 @@ const ShowStudent = () => {
                                                     <input
                                                         type="date"
                                                         id="fecha"
-                                                        className="border rounded border-blue-300  text-[12px] text-center mx-auto"
+                                                        className="border rounded border-blue-300 w-32 text-[12px] text-center mx-auto"
                                                         name={`date_${payment.week_topay_number}`}
                                                         value={payment.payment_day}
                                                         readOnly
@@ -200,7 +200,7 @@ const ShowStudent = () => {
 
 
                         </div>
-                        <div className="">
+                        <div className="w-full overflow-x-auto">
                             <h2 className="my-4 text-xl">Semanas <strong>no</strong> pagadas</h2>
                             <div className="w-full overflow-x-auto">
                                 <table className="table">
@@ -208,9 +208,9 @@ const ShowStudent = () => {
 
                                         <tr>
                                             <th className="hidden">student_id</th>
-                                            <th className="p-4 text-[14px]">Número de semana</th>
-                                            <th className="p-4 text-[14px]">Fecha a pagar</th>
-                                            <th className="p-4 text-[14px]">Fecha de pago</th>
+                                            <th className="p-4 text-[14px]">Número<br/> semana</th>
+                                            <th className="p-4 text-[14px]">Fecha a<br/> pagar</th>
+                                            <th className="p-4 text-[14px]">Fecha de<br/> pago</th>
                                             <th className="p-4 text-[14px]">Seleccionar</th>
                                         </tr>
                                     </thead>
@@ -231,7 +231,7 @@ const ShowStudent = () => {
                                                 <td>
                                                     <input
                                                         type="number"
-                                                        className="border rounded border-blue-300  text-[12px] text-center mx-auto"
+                                                        className="border rounded border-blue-300  text-[12px] text-center w-16"
                                                         name={`week_topay_number_${dato[0]}`}
                                                         value={data[`week_topay_number_${dato[0]}`]}
                                                         readOnly
@@ -241,7 +241,7 @@ const ShowStudent = () => {
                                                 <td>
                                                     <input
                                                         type="date"
-                                                        className="border rounded border-blue-300  text-[12px] text-center mx-auto"
+                                                        className="border rounded border-blue-300 w-32 text-[12px] text-center mx-auto"
                                                         name={`week_topay_date_${dato[0]}`}
                                                         value={data[`week_topay_date_${dato[0]}`]}
                                                         readOnly
@@ -252,7 +252,7 @@ const ShowStudent = () => {
                                                     <input
                                                         type="date"
                                                         id="date"
-                                                        className="border rounded border-blue-300  text-[12px] text-center mx-auto"
+                                                        className="border rounded border-blue-300 w-32 text-[12px] text-center mx-auto"
                                                         name={`payment_date_${dato[0]}`}
                                                         value={data[`payment_date_${dato[0]}`] || ''}
                                                         onChange={(e) => setData(`payment_date_${dato[0]}`, e.target.value)}
