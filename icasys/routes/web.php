@@ -39,9 +39,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('dias', DayController::class);
     Route::get('/dias', [DayController::class, "index"])->name("day.index");
@@ -58,6 +58,17 @@ Route::middleware('auth')->group(function () {
     Route::get("/alumno/{id}/agregar/pagos", [StudentController::class, "showStudentPayment"])->name("alumnos.payment.show");
     Route::post("/alumno/crear/pago", [StudentController::class, "storeStudentPayment"])->name("alumnos.payment");
     Route::get("/alumno/{id}/mostrar/recibos", [StudentController::class, "showStudentReceipts"])->name("alumnos.receipts");
+
+    //GROUP
+    Route::get("/grupos/{id}/mostrar/materias", [GroupController::class, "showSubjects"])->name("grupos.subjects.show");
+    Route::post("/grupos/agregar/materia", [GroupController::class, "storeSubjects"])->name("grupos.subjects.store");
+    Route::put("/grupos/{id}/actualizar/materia", [GroupController::class, "updateSubjects"])->name("grupos.subjects.update");
+    Route::delete("/grupos/{id}/eliminar/materia", [GroupController::class, "deleteSubjects"])->name("grupos.subjects.delete");
+
+    Route::get("/grupo/materia/{subject_id}/{group_id}", [GroupController::class, "showLessons"])->name("grupos.lessons.show");
+    Route::post("/grupo/materia/clase/guardar", [GroupController::class, "storeLessons"])->name("grupos.lessons.store");
+    Route::put("/grupo/materia/clase/{id}/actualizar", [GroupController::class, "updateLessons"])->name("grupos.lessons.update");
+    Route::delete("/grupo/materia/clase/{id}/eliminar", [GroupController::class, "deleteLessons"])->name("grupos.lessons.delete");
 });
 
 

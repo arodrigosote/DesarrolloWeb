@@ -54,12 +54,18 @@ const ShowGroup = (props) => {
     }, [toastInfo]);
     //------------------------------------------------------------------------------------------
 
+    //SHOW GROUP SUBJECTS ----------------------------------------------------------------------
+    const handleShowSubjects = ($id) => {
+        get(route('grupos.subjects.show', $id))
+    }
+    //------------------------------------------------------------------------------------------
+
     return (
         <>
             <ToastContainer />
             <DashboardLayout title={`Grupo: ${group.schedule.day.name} | ${group.schedule.hour.name} | ${group.professor.name}`} auth={auth}>
                 <div className="flex justify-end">
-                    {/* <ButtonPrimary>Agregar</ButtonPrimary> */}
+                    <ButtonPrimary onClick={(e)=>{handleShowSubjects(group.id)}}>Ver materias</ButtonPrimary>
                 </div>
                 <TableContainer>
                     <Table>
