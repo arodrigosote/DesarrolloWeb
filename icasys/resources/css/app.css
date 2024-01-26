@@ -43,6 +43,9 @@ html, body{
 .bg-yellow{
     background-color: var(--yellow);
 }
+.bg-light{
+    background-color: var(--light);
+}
 
 
 

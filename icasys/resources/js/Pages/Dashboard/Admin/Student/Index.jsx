@@ -250,7 +250,7 @@ const Student = () => {
 
             <DashboardLayout title={'Mostrando alumnos inscritos y activos.'} auth={auth}>
                 <div className="flex justify-end">
-                    <ButtonPrimary onClick={(e) => openMainModal(1)}>Agregar</ButtonPrimary>
+                    <ButtonPrimary onClick={(e) => openMainModal(1)}>Alta</ButtonPrimary>
                 </div>
 
                 <div className="container mx-auto p-4">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\HourController;
 use App\Http\Controllers\PagesController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\StudentclassController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -47,7 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dias', [DayController::class, "index"])->name("day.index");
 
     Route::resource("/horas", HourController::class);
-    Route::get("/horas", [HourController::class,"index"])->name('horas.index');
+    Route::get("/horas", [HourController::class, "index"])->name('horas.index');
 
     Route::resource("/horarios", ScheduleController::class);
     Route::resource("/profesores", ProfessorController::class);
@@ -59,6 +61,10 @@ Route::middleware('auth')->group(function () {
     Route::post("/alumno/crear/pago", [StudentController::class, "storeStudentPayment"])->name("alumnos.payment");
     Route::get("/alumno/{id}/mostrar/recibos", [StudentController::class, "showStudentReceipts"])->name("alumnos.receipts");
 
+    //GRADES
+    Route::put("/grupo/materia/ver-calificaciones/{id}", [StudentclassController::class, "updateGrades"])->name("grupos.grades.update");
+    Route::get("/grupo/materia/ver-calificaciones/{id}", [StudentclassController::class, "showGrades"])->name("grupos.grades");
+
     //GROUP
     Route::get("/grupos/{id}/mostrar/materias", [GroupController::class, "showSubjects"])->name("grupos.subjects.show");
     Route::post("/grupos/agregar/materia", [GroupController::class, "storeSubjects"])->name("grupos.subjects.store");
@@ -69,6 +75,9 @@ Route::middleware('auth')->group(function () {
     Route::post("/grupo/materia/clase/guardar", [GroupController::class, "storeLessons"])->name("grupos.lessons.store");
     Route::put("/grupo/materia/clase/{id}/actualizar", [GroupController::class, "updateLessons"])->name("grupos.lessons.update");
     Route::delete("/grupo/materia/clase/{id}/eliminar", [GroupController::class, "deleteLessons"])->name("grupos.lessons.delete");
+
+    //COURSES
+    Route::get("/admin/cursos", [CourseController::class, "index"])->name("admin.courses");
 });
 
 

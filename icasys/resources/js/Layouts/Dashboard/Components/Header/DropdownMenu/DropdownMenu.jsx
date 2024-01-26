@@ -32,9 +32,9 @@ export default function UserProfileMenu({ auth }) {
 
             </nav> */}
             <Dropdown>
-                    <Dropdown.Trigger>
+                    <Dropdown.Trigger className='bg-transparent'>
                         <span className="inline-flex rounded-md">
-                            <button
+                            <ButtonInvisible
                                 type="button"
                                 className="inline-flex items-center px-3 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                             >
@@ -52,13 +52,13 @@ export default function UserProfileMenu({ auth }) {
                                         clipRule="evenodd"
                                     />
                                 </svg>
-                            </button>
+                            </ButtonInvisible>
                         </span>
                     </Dropdown.Trigger>
 
                     <Dropdown.Content>
-                        <Dropdown.Link href={route('profile.edit')}>Perfil</Dropdown.Link>
-                        <Dropdown.Link href={route('logout')} method="post" as="button">
+                        <Dropdown.Link href={route('profile.edit')} className='text-end'>Perfil</Dropdown.Link>
+                        <Dropdown.Link href={route('logout')} method="post" as="button" className='text-end'>
                             Cerrar sesión
                         </Dropdown.Link>
                     </Dropdown.Content>

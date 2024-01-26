@@ -6,7 +6,7 @@ import DropdownMenu from "./DropdownMenu/DropdownMenu";
 export default function(props){
     return(
         <div className="lg:flex md:flex flex justify-between px-4 py-5 bg-white">
-            <StudentSearchForm></StudentSearchForm>
+            <StudentSearchForm auth={props.auth}></StudentSearchForm>
             <DropdownMenu auth={props.auth}></DropdownMenu>
         </div>
     )

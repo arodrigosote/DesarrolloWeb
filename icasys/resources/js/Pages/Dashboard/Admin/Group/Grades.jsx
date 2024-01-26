@@ -27,52 +27,53 @@ import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonYellow from "@/Components/ButtonYellow";
+import { Inertia } from '@inertiajs/inertia';
 
 
-const ShowSubjectsGroup = (props) => {
+const ShowLessonsGroup = (props) => {
 
-    const { subjects, auth, group, subjectgroup, lessons } = usePage().props;
+    const { grades, auth, lesson} = usePage().props;
     const [mainModal, setMainModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
     const idInput = useRef();
-    const nameInput = useRef();
-    const descriptionInput = useRef();
-    const dateInput = useRef();
-    const subjectgroup_idInput = useRef();
-    const group_idInput = useRef();
+    const student_idInput = useRef();
+    const class_subject_group_idInput = useRef();
+    const attendanceInput = useRef();
+    const gradeInput = useRef();
+    const noteInput = useRef();
     const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
         id: '',
-        name: '',
-        description: '',
-        date: '',
-        subjectgroup_id: '',
-        group_id:'',
+        student_id: '',
+        class_subject_group_id: '',
+        attendance: false,
+        grade: '',
+        note:'',
     })
 
     //HANDLE MODAL------------------------------------------------------------------------------
-    const openMainModal = (op, id, name, description, date, subjectgroup_id, group_id) => {
+    const openMainModal = (op, id, student_id, class_subject_group_id, attendance, grade, note) => {
         setMainModal(true);
         setOperation(op);
         setData({
             id: '',
-            name: '',
-            description: '',
-            date: '',
-            subjectgroup_id:subjectgroup.id,
-            group_id:group.id,
+            student_id: '',
+            class_subject_group_id: '',
+            attendance: false,
+            grade: '',
+            note:'',
         })
         if (op === 1) {
             setTitle('Añadir clase');
         } else {
-            setTitle('Editar clase');
+            setTitle('Editar calificación');
             setData({
                 id: id,
-                name: name,
-                description: description,
-                date: date,
-                subjectgroup_id: subjectgroup_id,
-                group_id:group_id,
+                student_id: student_id,
+                class_subject_group_id: class_subject_group_id,
+                attendance: attendance,
+                grade: grade,
+                note:note,
             })
         }
     }
@@ -85,56 +86,20 @@ const ShowSubjectsGroup = (props) => {
     const submit = (e) => {
         e.preventDefault();
         if (operation === 1) {
-            post(route('grupos.lessons.store'), {
-                onSuccess: () => { ok('Clase creada con éxito') },
-                onError: () => {
-                    if(errors.id){reset('id'); idInput.current.focus();}
-                    if(errors.name){reset('name'); nameInput.current.focus();}
-                    if(errors.description){reset('description'); descriptionInput.current.focus();}
-                    if(errors.date){reset('date'); dateInput.current.focus();}
-                    if(errors.subjectgroup_id){reset('subjectgroup_id'); subjectgroup_idInput.current.focus();}
-                    if(errors.group_id){reset('group_id'); group_idInput.current.focus();}
-                }
-            });
+
         } else {
-            put(route('grupos.lessons.update', data.id), {
-                onSuccess: () => { ok('Clase editada con éxito') },
+            put(route('grupos.grades.update', data.id), {
+                onSuccess: () => { ok('Calificación guardada') },
                 onError: () => {
-                    if(errors.id){reset('id'); idInput.current.focus();}
-                    if(errors.name){reset('name'); nameInput.current.focus();}
-                    if(errors.description){reset('description'); descriptionInput.current.focus();}
-                    if(errors.date){reset('date'); dateInput.current.focus();}
-                    if(errors.subjectgroup_id){reset('subjectgroup_id'); subjectgroup_idInput.current.focus();}
-                    if(errors.group_id){reset('group_id'); group_idInput.current.focus();}
+                    if (errors.id){reset('id'); idInput.current.focus();}
+                    if (errors.student_id){reset('student_id'); student_idInput.current.focus();}
+                    if (errors.class_subject_group_id){reset('class_subject_group_id'); class_subject_group_idInput.current.focus();}
+                    if (errors.attendance){reset('attendance'); attendanceInput.current.focus();}
+                    if (errors.grade){reset('grade'); gradeInput.current.focus();}
+                    if (errors.note){reset('note'); noteInput.current.focus();}
                 }
             });
         }
-    }
-    //------------------------------------------------------------------------------------------
-
-    //HANDLE DELETE MODAL-----------------------------------------------------------------------
-    const [deleteModal, setDeleteModal] = useState(false);
-    const openDeleteModal = (lesson_id, name) => {
-        setDeleteModal(true);
-        setData({
-            id: lesson_id,
-            name:name,
-        })
-    }
-    const closeDeleteModal = () => {
-        setDeleteModal(false);
-    }
-    const deleteSubject = (e) => {
-        e.preventDefault();
-        destroy(route('grupos.lessons.delete', data.id), {
-            preserveScroll: true,
-            onSuccess: () => { ok('Clase eliminada con éxito.') },
-            onError: (error) => {
-                console.error(error); // Log the error for debugging
-                errorModal('Error al eliminar la clase.');
-            },
-            onFinish: reset(),
-        });
     }
     //------------------------------------------------------------------------------------------
 
@@ -142,13 +107,11 @@ const ShowSubjectsGroup = (props) => {
     const ok = (message) => {
         reset();
         closeMainModal();
-        closeDeleteModal();
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
     };
     const errorModal = (message) => {
         reset();
         closeMainModal();
-        closeDeleteModal();
         Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
     };
     //------------------------------------------------------------------------------------------
@@ -171,44 +134,38 @@ const ShowSubjectsGroup = (props) => {
     //------------------------------------------------------------------------------------------
 
     //HANDLE FUNTIONS TO MANAGE EDIT, SHOW, AND DELETE -----------------------------------------
-    // const handleShowLessons = (subjectgroup, group) => {
-    //     get(route)
-    // }
+
     //------------------------------------------------------------------------------------------
 
     return (
         <>
             <ToastContainer />
-            <DashboardLayout title={`Clase: ${subjectgroup.subject.name}`} auth={auth}>
+            <DashboardLayout title={`Calificaciones: ${lesson.name}, ${lesson.subjectgroup.subject.name}`} auth={auth}>
                 <div className="flex justify-end">
-                    <ButtonSecondary onClick={() => { openMainModal(1) }}>Agregar</ButtonSecondary>
+                    {/* <ButtonSecondary onClick={() => { openMainModal(1) }}>Agregar</ButtonSecondary> */}
                 </div>
                 <TableContainer>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell>NOMBRE</TableCell>
-                                <TableCell>DESCRIPTION</TableCell>
-                                <TableCell>FECHA</TableCell>
+                                <TableCell>ASISTENCIA</TableCell>
+                                <TableCell>CALIFICACIÓN</TableCell>
+                                <TableCell>NOTA</TableCell>
                                 <TableCell>ACCIONES</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {lessons.map((lesson) => (
-                                <TableRow key={lesson.id}>
-                                    <TableCell>{lesson.name}</TableCell>
-                                    <TableCell>{lesson.description}</TableCell>
-                                    <TableCell>{lesson.date}</TableCell>
+                            {grades.map((grade) => (
+                                <TableRow key={grade.id}>
+                                    <TableCell>{grade.student.name}</TableCell>
+                                    <TableCell>{grade.attendance === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</TableCell>
+                                    <TableCell>{grade.grade || 'N/A'}</TableCell>
+                                    <TableCell>{grade.note || 'N/A'}</TableCell>
                                     <TableCell>
-                                        <ButtonPrimary onClick={()=>{handleShowLessons(subject.group_id, subject.id)}}>
-                                            Calificaciones
-                                        </ButtonPrimary>
-                                        <ButtonEdit onClick={() => openMainModal(2, lesson.id, lesson.name, lesson.description, lesson.date, lesson.subjectgroup_id, lesson.group_id)}>
+                                        <ButtonEdit onClick={(e) => openMainModal(2, grade.id, grade.student_id, grade.class_subject_group_id, grade.attendance === 1 ? true : false, grade.grade, grade.note)}>
                                             Editar
                                         </ButtonEdit>
-                                        <ButtonDelete onClick={() => openDeleteModal(lesson.id, lesson.name)}>
-                                            Delete
-                                        </ButtonDelete>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -225,25 +182,32 @@ const ShowSubjectsGroup = (props) => {
 
                 <form onSubmit={submit} className=" pl-6 pr-6 pb-6 ">
                     <div className="mt-6">
-                        <InputLabel htmlFor='name' value='Nombre'></InputLabel>
-                        <TextInput id='name' name='name' ref={nameInput} value={data.name || ''} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
+                        <InputLabel htmlFor='student_id' value='Alumno'></InputLabel>
+                        <TextInput readOnly id='student_id' name='student_id' ref={student_idInput} value={data.student_id || ''} required='required' onChange={(e) => setData('student_id', e.target.value)}></TextInput>
                         <InputError message={errors.make}></InputError>
 
-                        <InputLabel htmlFor='description' value='Descripción'></InputLabel>
-                        <TextField multiline className="w-full" rows={4} id="description" name="description" ref={descriptionInput} value={data.description || ''} onChange={(e)=>setData('description', e.target.value)} />
+                        <InputLabel htmlFor='class_subject_group_id' value='Clase'></InputLabel>
+                        <TextInput readOnly id='class_subject_group_id' name='class_subject_group_id' ref={class_subject_group_idInput} value={data.class_subject_group_id || ''} required='required' onChange={(e) => setData('class_subject_group_id', e.target.value)}></TextInput>
                         <InputError message={errors.make}></InputError>
 
-                        <InputLabel htmlFor='date' value='Fecha: ' />
-                        <TextInput className='' type='date' id='date' name='date' ref={dateInput} value={data.date || ''} onChange={(e) => setData("date", e.target.value)} />
+                        <InputLabel htmlFor='attendance' value='Asistencia ' />
+                        <Switch
+                            id="attendance"
+                            name="attendance"
+                            checked={data.attendance}
+                            // value={active ? 1 : 0}
+                            onChange={(e) => setData("attendance", e.target.checked)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                        />
                         <InputError message={errors.make} />
 
-                        <InputLabel htmlFor='subjectgroup_id' value='Materia: ' className="mt-2"/>
-                        <TextInput className='' readOnly id='subjectgroup_id' name='subjectgroup_id' ref={subjectgroup_idInput} value={subjectgroup.id} onChange={(e) => setData("subjectgroup_id", e.target.value)} />
+                        <InputLabel htmlFor='grade' value='Calificación: ' />
+                        <TextInput className='' type='number' id='grade' name='grade' ref={gradeInput} value={data.grade || ''} onChange={(e) => setData("grade", e.target.value)} />
                         <InputError message={errors.make} />
 
-                        <InputLabel htmlFor='group_id' value='Grupo: ' className="mt-2"/>
-                        <TextInput className='' readOnly id='subjectgroup_id' name='subjectgroup_id' ref={subjectgroup_idInput} value={group.id} onChange={(e) => setData("subjectgroup_id", e.target.value)} />
-                        <InputError message={errors.make} />
+                        <InputLabel htmlFor='note' value='Nota'></InputLabel>
+                        <TextField multiline className="w-full" rows={4} id="note" name="note" ref={noteInput} value={data.note || ''} onChange={(e) => setData('note', e.target.value)} />
+                        <InputError message={errors.make}></InputError>
                     </div>
                     <div className="mt-6">
 
@@ -256,30 +220,6 @@ const ShowSubjectsGroup = (props) => {
                 </form>
             </Modal>
 
-            <Modal show={deleteModal} onClose={closeDeleteModal}>
-                <div className="p-6">
-                    <h2 className="text-3xl font-medium text-primary font-extrabold text-center">
-                        ¿Estás seguro que quieres eliminar la materia "{data.name}"?
-                    </h2>
-                </div>
-                <form onSubmit={deleteSubject} className="p-6">
-
-                    <TextInput
-                        id="id"
-                        name='id'
-                        defaultValue={data.id}
-                        style={{ display: 'none' }}
-                    />
-                    <div className="flex justify-end items-center">
-                        <ButtonCancel type='button' onClick={closeDeleteModal} className="">Cancelar</ButtonCancel>
-                        <ButtonDelete className="ml-3" disabled={processing}>
-                            Borrar Clase
-                        </ButtonDelete>
-                    </div>
-                </form>
-            </Modal>
-
-
             <Head>
                 <title>Clases</title>
             </Head>
@@ -289,4 +229,4 @@ const ShowSubjectsGroup = (props) => {
 
 // ShowGroup.layout = page => <DashboardLayout children={page} title={'Mostrando grupos en sistema'}></DashboardLayout>
 
-export default ShowSubjectsGroup;
+export default ShowLessonsGroup;

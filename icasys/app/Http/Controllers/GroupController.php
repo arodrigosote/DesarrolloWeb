@@ -232,4 +232,5 @@ class GroupController extends Controller
             $classsubjectgroup->delete();
         }
     }
+
 }

@@ -14,7 +14,7 @@ export default function ({auth, children, title }) {
     return (
         <div className="min-h-screen grid grid-cols-1 lg:grid-cols-7">
 
-            <Sidebar></Sidebar>
+            <Sidebar auth={auth}></Sidebar>
 
             {/* content */}
             <div className="col-span-6 bg-slate-100">

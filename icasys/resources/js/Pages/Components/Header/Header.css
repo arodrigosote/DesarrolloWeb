@@ -91,7 +91,7 @@
         display: none;
     }
     .nav{
-        display: none;
+        display: none !important;
     }
     .header{
         justify-content: space-between;
@@ -105,16 +105,17 @@
 
     .movile-nav{
         display: block;
+        position: fixed;
         justify-content: center;
         text-align: center;
-        background-color: var(--more-light);
+        background-color: var(--secondary);
         padding-top: 18px;
         padding-bottom: 18px;
-        box-shadow: 2px 2px 2px 2px rgba(0.2, 0.2, 0.2, 0.2); /* Definición de la sombra */
-        position: absolute;
+        /* box-shadow: 2px 2px 2px 2px rgba(0.2, 0.2, 0.2, 0.2); Definición de la sombra */
         top: 70px;
         left: 100%;
-        width: 100%;
+        width: 800px;
+        height: fit-content;
         transition: 0.3s;
     }
 

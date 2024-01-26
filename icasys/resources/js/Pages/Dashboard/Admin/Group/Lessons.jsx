@@ -27,6 +27,7 @@ import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonYellow from "@/Components/ButtonYellow";
+import { Inertia } from '@inertiajs/inertia';
 
 
 const ShowSubjectsGroup = (props) => {
@@ -46,8 +47,8 @@ const ShowSubjectsGroup = (props) => {
         name: '',
         description: '',
         date: '',
-        subjectgroup_id: '',
-        group_id:'',
+        subjectgroup_id: subjectgroup.id,
+        group_id:group.id,
     })
 
     //HANDLE MODAL------------------------------------------------------------------------------
@@ -59,8 +60,8 @@ const ShowSubjectsGroup = (props) => {
             name: '',
             description: '',
             date: '',
-            subjectgroup_id:subjectgroup.id,
-            group_id:group.id,
+            subjectgroup_id: subjectgroup.id,
+            group_id: group.id,
         })
         if (op === 1) {
             setTitle('Añadir clase');
@@ -72,7 +73,7 @@ const ShowSubjectsGroup = (props) => {
                 description: description,
                 date: date,
                 subjectgroup_id: subjectgroup_id,
-                group_id:group_id,
+                group_id: group_id,
             })
         }
     }
@@ -88,24 +89,24 @@ const ShowSubjectsGroup = (props) => {
             post(route('grupos.lessons.store'), {
                 onSuccess: () => { ok('Clase creada con éxito') },
                 onError: () => {
-                    if(errors.id){reset('id'); idInput.current.focus();}
-                    if(errors.name){reset('name'); nameInput.current.focus();}
-                    if(errors.description){reset('description'); descriptionInput.current.focus();}
-                    if(errors.date){reset('date'); dateInput.current.focus();}
-                    if(errors.subjectgroup_id){reset('subjectgroup_id'); subjectgroup_idInput.current.focus();}
-                    if(errors.group_id){reset('group_id'); group_idInput.current.focus();}
+                    if (errors.id) { reset('id'); idInput.current.focus(); }
+                    if (errors.name) { reset('name'); nameInput.current.focus(); }
+                    if (errors.description) { reset('description'); descriptionInput.current.focus(); }
+                    if (errors.date) { reset('date'); dateInput.current.focus(); }
+                    if (errors.subjectgroup_id) { reset('subjectgroup_id'); subjectgroup_idInput.current.focus(); }
+                    if (errors.group_id) { reset('group_id'); group_idInput.current.focus(); }
                 }
             });
         } else {
             put(route('grupos.lessons.update', data.id), {
                 onSuccess: () => { ok('Clase editada con éxito') },
                 onError: () => {
-                    if(errors.id){reset('id'); idInput.current.focus();}
-                    if(errors.name){reset('name'); nameInput.current.focus();}
-                    if(errors.description){reset('description'); descriptionInput.current.focus();}
-                    if(errors.date){reset('date'); dateInput.current.focus();}
-                    if(errors.subjectgroup_id){reset('subjectgroup_id'); subjectgroup_idInput.current.focus();}
-                    if(errors.group_id){reset('group_id'); group_idInput.current.focus();}
+                    if (errors.id) { reset('id'); idInput.current.focus(); }
+                    if (errors.name) { reset('name'); nameInput.current.focus(); }
+                    if (errors.description) { reset('description'); descriptionInput.current.focus(); }
+                    if (errors.date) { reset('date'); dateInput.current.focus(); }
+                    if (errors.subjectgroup_id) { reset('subjectgroup_id'); subjectgroup_idInput.current.focus(); }
+                    if (errors.group_id) { reset('group_id'); group_idInput.current.focus(); }
                 }
             });
         }
@@ -118,7 +119,7 @@ const ShowSubjectsGroup = (props) => {
         setDeleteModal(true);
         setData({
             id: lesson_id,
-            name:name,
+            name: name,
         })
     }
     const closeDeleteModal = () => {
@@ -171,15 +172,15 @@ const ShowSubjectsGroup = (props) => {
     //------------------------------------------------------------------------------------------
 
     //HANDLE FUNTIONS TO MANAGE EDIT, SHOW, AND DELETE -----------------------------------------
-    // const handleShowLessons = (subjectgroup, group) => {
-    //     get(route)
-    // }
+    const handleShowGrades = (lessonId) => {
+        get(route('grupos.grades', lessonId));
+    }
     //------------------------------------------------------------------------------------------
 
     return (
         <>
             <ToastContainer />
-            <DashboardLayout title={`Clase: ${subjectgroup.subject.name}`} auth={auth}>
+            <DashboardLayout title={`Clases: ${subjectgroup.subject.name}`} auth={auth}>
                 <div className="flex justify-end">
                     <ButtonSecondary onClick={() => { openMainModal(1) }}>Agregar</ButtonSecondary>
                 </div>
@@ -188,7 +189,7 @@ const ShowSubjectsGroup = (props) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>NOMBRE</TableCell>
-                                <TableCell>DESCRIPTION</TableCell>
+                                <TableCell>DESCRIPCIÓN</TableCell>
                                 <TableCell>FECHA</TableCell>
                                 <TableCell>ACCIONES</TableCell>
                             </TableRow>
@@ -200,13 +201,19 @@ const ShowSubjectsGroup = (props) => {
                                     <TableCell>{lesson.description}</TableCell>
                                     <TableCell>{lesson.date}</TableCell>
                                     <TableCell>
-                                        <ButtonPrimary onClick={()=>{handleShowLessons(subject.group_id, subject.id)}}>
+                                        {/* <form onSubmit={handleShowGrades(lesson.id)}>
+                                            <ButtonPrimary>
+                                                Calificaciones
+                                            </ButtonPrimary>
+                                        </form> */}
+                                        <ButtonPrimary onClick={() => handleShowGrades(lesson.id)}>
                                             Calificaciones
                                         </ButtonPrimary>
-                                        <ButtonEdit onClick={() => openMainModal(2, lesson.id, lesson.name, lesson.description, lesson.date, lesson.subjectgroup_id, lesson.group_id)}>
+
+                                        <ButtonEdit onClick={(e) => openMainModal(2, lesson.id, lesson.name, lesson.description, lesson.date, lesson.subjectgroup_id, lesson.group_id)}>
                                             Editar
                                         </ButtonEdit>
-                                        <ButtonDelete onClick={() => openDeleteModal(lesson.id, lesson.name)}>
+                                        <ButtonDelete onClick={(e) => openDeleteModal(lesson.id, lesson.name)}>
                                             Delete
                                         </ButtonDelete>
                                     </TableCell>
@@ -230,19 +237,19 @@ const ShowSubjectsGroup = (props) => {
                         <InputError message={errors.make}></InputError>
 
                         <InputLabel htmlFor='description' value='Descripción'></InputLabel>
-                        <TextField multiline className="w-full" rows={4} id="description" name="description" ref={descriptionInput} value={data.description || ''} onChange={(e)=>setData('description', e.target.value)} />
+                        <TextField multiline className="w-full" rows={4} id="description" name="description" ref={descriptionInput} value={data.description || ''} onChange={(e) => setData('description', e.target.value)} />
                         <InputError message={errors.make}></InputError>
 
                         <InputLabel htmlFor='date' value='Fecha: ' />
                         <TextInput className='' type='date' id='date' name='date' ref={dateInput} value={data.date || ''} onChange={(e) => setData("date", e.target.value)} />
                         <InputError message={errors.make} />
 
-                        <InputLabel htmlFor='subjectgroup_id' value='Materia: ' className="mt-2"/>
-                        <TextInput className='' readOnly id='subjectgroup_id' name='subjectgroup_id' ref={subjectgroup_idInput} value={subjectgroup.id} onChange={(e) => setData("subjectgroup_id", e.target.value)} />
+                        <InputLabel htmlFor='subjectgroup_id' value='Materia: ' className="mt-2" />
+                        <TextInput className='' readOnly id='subjectgroup_id' name='subjectgroup_id' ref={subjectgroup_idInput} value={data.subjectgroup_id} onChange={(e) => setData("subjectgroup_id", e.target.value)} />
                         <InputError message={errors.make} />
 
-                        <InputLabel htmlFor='group_id' value='Grupo: ' className="mt-2"/>
-                        <TextInput className='' readOnly id='subjectgroup_id' name='subjectgroup_id' ref={subjectgroup_idInput} value={group.id} onChange={(e) => setData("subjectgroup_id", e.target.value)} />
+                        <InputLabel htmlFor='group_id' value='Grupo: ' className="mt-2" />
+                        <TextInput className='' readOnly id='subjectgroup_id' name='subjectgroup_id' ref={subjectgroup_idInput} value={data.group_id} onChange={(e) => setData("subjectgroup_id", e.target.value)} />
                         <InputError message={errors.make} />
                     </div>
                     <div className="mt-6">
