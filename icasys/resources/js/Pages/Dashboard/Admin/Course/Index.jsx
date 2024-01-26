@@ -20,28 +20,90 @@ import SecondaryLink from "@/Components/SecondaryLink";
 
 
 const Course = ({ auth }) => {
-    const {courses} = usePage().props;
+    const { courses } = usePage().props;
     const [modal, setModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
-    const nameInput = useRef();
+    const idInput = useRef();
+    const titleInput = useRef();
+    const descriptionInput = useRef();
+    const short_descriptionInput = useRef();
+    const slugInput = useRef();
+    const difficulty_idInput = useRef();
+    const professor_idInput = useRef();
+    const category_idInput = useRef();
+    const stateInput = useRef();
+    const priceInput = useRef();
+    const target_learningInput = useRef();
+    const target_audienceInput = useRef();
+    const houresInput = useRef();
+    const files_includedInput = useRef();
+    const requirementsInput = useRef();
+    const imageInput = useRef();
+    const videoInput = useRef();
     const { data, setData, delete: destroy, post, put, processing, errors, reset } = useForm({
         id: '',
-        name: ''
+        title: '',
+        description: '',
+        short_description: '',
+        slug: '',
+        difficulty_id: '',
+        professor_id: '',
+        category_id: '',
+        state: '',
+        price: '',
+        target_learning: '',
+        target_audience: '',
+        houres: '',
+        files_included: '',
+        requirements: '',
+        image: '',
+        video: '',
     });
-    const openModal = (op, id, name) => {
+    const openModal = (op, id, title, description, short_description, slug, difficulty_id, professor_id, category_id, state, price, target_learning, target_audience, houres, files_included, requirements, image, video) => {
         setModal(true);
         setOperation(op);
         setData({
-            name: ''
+            id: '',
+            title: '',
+            description: '',
+            short_description: '',
+            slug: '',
+            difficulty_id: '',
+            professor_id: '',
+            category_id: '',
+            state: '',
+            price: '',
+            target_learning: '',
+            target_audience: '',
+            houres: '',
+            files_included: '',
+            requirements: '',
+            image: '',
+            video: '',
         })
         if (op === 1) {
-            setTitle('Añadir dia');
+            setTitle('Añadir curso');
         } else {
-            setTitle('Editar día');
+            setTitle('Editar curso');
             setData({
                 id: id,
-                name: name
+                title: title,
+                description: description,
+                short_description: short_description,
+                slug: slug,
+                difficulty_id: difficulty_id,
+                professor_id: professor_id,
+                category_id: category_id,
+                state: state,
+                price: price,
+                target_learning: target_learning,
+                target_audience: target_audience,
+                houres: houres,
+                files_included: files_included,
+                requirements: requirements,
+                image: image,
+                video: video,
             })
         }
     }
@@ -52,23 +114,49 @@ const Course = ({ auth }) => {
     const save = (e) => {
         e.preventDefault();
         if (operation === 1) {
-            post(route('dias.store'), {
-                onSuccess: () => { ok('Día guardado con éxito') },
+            post(route('admin.course.store'), {
+                onSuccess: () => { ok('Curso creado con éxito') },
                 onError: () => {
-                    if (errors.name) {
-                        reset('name');
-                        nameInput.current.focus();
-                    }
+                    if (errors.name) { reset('id'); idInput.current.focus(); }
+                    if (errors.name) { reset('title'); titleInput.current.focus(); }
+                    if (errors.name) { reset('description'); descriptionInput.current.focus(); }
+                    if (errors.name) { reset('short_description'); short_descriptionInput.current.focus(); }
+                    if (errors.name) { reset('slug'); slugInput.current.focus(); }
+                    if (errors.name) { reset('difficulty_id'); difficulty_idInput.current.focus(); }
+                    if (errors.name) { reset('professor_id'); professor_idInput.current.focus(); }
+                    if (errors.name) { reset('category_id'); category_idInput.current.focus(); }
+                    if (errors.name) { reset('state'); stateInput.current.focus(); }
+                    if (errors.name) { reset('price'); priceInput.current.focus(); }
+                    if (errors.name) { reset('target_learning'); target_learningInput.current.focus(); }
+                    if (errors.name) { reset('target_audience'); target_audienceInput.current.focus(); }
+                    if (errors.name) { reset('houres'); houresInput.current.focus(); }
+                    if (errors.name) { reset('files_included'); files_includedInput.current.focus(); }
+                    if (errors.name) { reset('requirements'); requirementsInput.current.focus(); }
+                    if (errors.name) { reset('image'); imageInput.current.focus(); }
+                    if (errors.name) { reset('video'); videoInput.current.focus(); }
                 }
             });
         } else {
-            put(route('dias.update', data.id), {
-                onSuccess: () => { ok('Día editado con éxito') },
+            put(route('admin.course.store', data.id), {
+                onSuccess: () => { ok('Curso editado con éxito') },
                 onError: () => {
-                    if (errors.name) {
-                        reset('name');
-                        nameInput.current.focus();
-                    }
+                    if (errors.name) { reset('id'); idInput.current.focus(); }
+                    if (errors.name) { reset('title'); titleInput.current.focus(); }
+                    if (errors.name) { reset('description'); descriptionInput.current.focus(); }
+                    if (errors.name) { reset('short_description'); short_descriptionInput.current.focus(); }
+                    if (errors.name) { reset('slug'); slugInput.current.focus(); }
+                    if (errors.name) { reset('difficulty_id'); difficulty_idInput.current.focus(); }
+                    if (errors.name) { reset('professor_id'); professor_idInput.current.focus(); }
+                    if (errors.name) { reset('category_id'); category_idInput.current.focus(); }
+                    if (errors.name) { reset('state'); stateInput.current.focus(); }
+                    if (errors.name) { reset('price'); priceInput.current.focus(); }
+                    if (errors.name) { reset('target_learning'); target_learningInput.current.focus(); }
+                    if (errors.name) { reset('target_audience'); target_audienceInput.current.focus(); }
+                    if (errors.name) { reset('houres'); houresInput.current.focus(); }
+                    if (errors.name) { reset('files_included'); files_includedInput.current.focus(); }
+                    if (errors.name) { reset('requirements'); requirementsInput.current.focus(); }
+                    if (errors.name) { reset('image'); imageInput.current.focus(); }
+                    if (errors.name) { reset('video'); videoInput.current.focus(); }
                 }
             });
         }
@@ -115,7 +203,37 @@ const Course = ({ auth }) => {
         <>
             <ToastContainer></ToastContainer>
             <DashboardLayout title="Mostrando cursos en sistema" auth={auth}>
+                <div>
 
+                </div>
+
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>IMAGEN</TableCell>
+                                <TableCell>TITULO</TableCell>
+                                <TableCell>DESCRIPCIÓN CORTA</TableCell>
+                                <TableCell>CATEGORÍA</TableCell>
+                                <TableCell>ESTADO</TableCell>
+                                <TableCell>PRECIO</TableCell>
+                                <TableCell>ACCIONES</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {courses.map((course) => (
+                                <Tablerow key={course.id}>
+                                    <TableCell>{course.image}</TableCell>
+                                    <TableCell>{course.title}</TableCell>
+                                    <TableCell>{course.short_description}</TableCell>
+                                    <TableCell>{course.coursecategory.name}</TableCell>
+                                    <TableCell>{course.state}</TableCell>
+                                    <TableCell>{course.price}</TableCell>
+                                </Tablerow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </DashboardLayout>
 
             <Head>
@@ -130,8 +248,14 @@ const Course = ({ auth }) => {
 
                 <form onSubmit={save} className=" pl-6 pr-6 pb-6 ">
                     <div className="mt-6">
-                        <InputLabel htmlFor='name' value='Nombre'></InputLabel>
-                        <TextInput id='name' name='name' ref={nameInput} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
+                        <InputLabel htmlFor='title' value='Título'></InputLabel>
+                        <TextInput id='title' name='title' ref={titleInput} value={data.title} required='required' onChange={(e) => setData('title', e.target.value)}></TextInput>
+                        <InputError message={errors.make}></InputError>
+
+
+
+                        <InputLabel htmlFor='short_description' value='Descripión corta'></InputLabel>
+                        <TextInput id='short_description' name='short_description' ref={short_descriptionInput} value={data.short_description} required='required' onChange={(e) => setData('short_description', e.target.value)}></TextInput>
                         <InputError message={errors.make}></InputError>
                     </div>
                     <div className="mt-6">

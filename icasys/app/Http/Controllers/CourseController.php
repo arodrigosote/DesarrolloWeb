@@ -19,7 +19,7 @@ class CourseController extends Controller
             ]);
         } else {
             return Inertia::render("Dashboard/Admin/Course/Index", [
-                "courses" => Course::all(),
+                "courses" => Course::with('coursecategory')->get(),
             ]);
         }
     }
