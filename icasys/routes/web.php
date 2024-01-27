@@ -78,6 +78,8 @@ Route::middleware('auth')->group(function () {
 
     //COURSES
     Route::get("/admin/cursos", [CourseController::class, "index"])->name("admin.courses");
+    Route::post("/admin/cursos/crear", [CourseController::class, "store"])->name("admin.courses.store");
+    Route::put("/admin/cursos/actualizar/{id}", [CourseController::class, "update"])->name("admin.courses.update");
 });
 
 

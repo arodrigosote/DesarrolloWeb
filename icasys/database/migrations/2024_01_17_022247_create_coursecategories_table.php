@@ -24,6 +24,19 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->timestamps();
         });
+
+        DB::table('coursecategories')->insert([
+            ['name' => 'programación'],
+            ['name' => 'diseño-gráfico'],
+            ['name' => 'edición de audio'],
+            ['name' => 'edición de video'],
+            ['name' => 'marketing'],
+            ['name' => 'ventas'],
+            ['name' => 'desarrollo-web'],
+            ['name' => 'ofimática'],
+            ['name' => 'introducción-a-la-computación'],
+            ['name' => 'redes-sociales'],
+        ]);
     }
 
     /**

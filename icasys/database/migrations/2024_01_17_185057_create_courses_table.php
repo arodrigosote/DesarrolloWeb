@@ -38,12 +38,12 @@ return new class extends Migration
                 ->on('coursecategories')
                 ->onUpdate('cascade')
                 ->onDelete('set null');
-            $table->string('state')->default('draft');
+            $table->boolean('state')->default(0);
             $table->double('price');
             $table->text('target_learning')->nullable();
             $table->mediumText('target_audience')->nullable();
             $table->integer('houres');
-            $table->mediumText('files_included')->nullable();
+            // $table->mediumText('files_included')->nullable();
             $table->mediumText('requirements')->nullable();
             $table->string('image')->nullable();
             $table->string('video')->nullable();
