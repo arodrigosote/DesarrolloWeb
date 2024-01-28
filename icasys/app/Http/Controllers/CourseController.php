@@ -131,6 +131,24 @@ class CourseController extends Controller
             }
 
             $course->save();
+
+            return Inertia::render("Dashboard/Admin/Course/Index", [
+                "courses" => Course::with('coursecategory')->get(),
+                'difficulties' => Coursedifficulty::all(),
+                'professors' => Professor::all(),
+                'categories' => Coursecategory::all(),
+                'url' => env('APP_URL'),
+            ])->with('toast', [
+                'mensaje' => 'Curso actualizado.',
+                'tipo' => 'success',
+            ]);;
         }
+    }
+
+    public function show($id){
+        return Inertia::render("Dashboard/Admin/Course/Show", [
+            'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id),
+            'url' => env('APP_URL'),
+        ]);
     }
 }

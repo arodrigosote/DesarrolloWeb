@@ -7,13 +7,14 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Switch
+    Switch,
+    makeStyles
 } from '@mui/material';
 import { RiCircleFill } from "react-icons/ri";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import ButtonPrimary from "@/Components/ButtonPrimary";
-import { RiEditBoxLine, RiDeleteBin6Fill } from "react-icons/ri";
+import { RiEditBoxLine, RiDeleteBin6Fill, RiArrowDownSFill } from "react-icons/ri";
 import { Inertia } from '@inertiajs/inertia';
 import Modal from "@/Components/Modal";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -27,13 +28,13 @@ import ButtonCancel from "@/Components/ButtonCancel";
 import SecondaryLink from "@/Components/SecondaryLink";
 import Avatar from '@mui/material/Avatar';
 import Image from "@/Components/Image";
-import { CImage } from "@coreui/react";
+import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CImage } from "@coreui/react";
 import { router } from '@inertiajs/react'
 import ButtonSecondary from "@/Components/ButtonSecondary";
 
 
 const Course = ({ auth }) => {
-    const { courses, difficulties, professors, categories, url, toastt } = usePage().props;
+    const { course, url, toastt } = usePage().props;
     const [modal, setModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
@@ -54,7 +55,7 @@ const Course = ({ auth }) => {
     const requirementsInput = useRef();
     const imageInput = useRef();
     const videoInput = useRef();
-    const { data, setData, delete: destroy, post, get, put, processing, progress, errors, reset } = useForm({
+    const { data, setData, delete: destroy, post, put, processing, progress, errors, reset } = useForm({
         id: '',
         title: '',
         description: '',
@@ -240,51 +241,43 @@ const Course = ({ auth }) => {
         }
     }, [toastInfo]);
 
+
+
     return (
         <>
             <ToastContainer></ToastContainer>
-            <DashboardLayout title="Mostrando cursos en sistema" auth={auth}>
-                <div className="flex justify-end mb-4" onClick={(e) => { openModal(1) }}>
-                    <ButtonPrimary>Agregar</ButtonPrimary>
+            <DashboardLayout title={`${course.title}`} auth={auth}>
+                <div className="lg:flex">
+                    <div className="lg:w-[40%] pr-3 text-center flex justify-center md:mb-8">
+                        <CImage rounded thumbnail src={`${url}/storage/${course.image}`} width={400} height={400} alt={course.name} />
+                    </div>
+                    <div>
+                        <h1 className=""><strong className="text-primary">Titulo: </strong> {course.title}</h1>
+                        <h1 className=""><strong className="text-primary">Descripción corta: </strong> {course.short_description}</h1>
+                        <h1 className=""><strong className="text-primary">Profesor: </strong> {course.professor.name}</h1>
+                        <h1 className=""><strong className="text-primary">Categoría: </strong> {course.coursecategory.name}</h1>
+                        <h1 className=""><strong className="text-primary">Dificultad: </strong> {course.coursedifficulty.name}</h1>
+                        <h1 className=""><strong className="text-primary">Precio: </strong> {course.price} pesos</h1>
+                        <h1 className="flex"><strong className="text-primary">Activo: </strong> {course.state === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</h1>
+                    </div>
                 </div>
-
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>IMAGEN</TableCell>
-                                <TableCell>TITULO</TableCell>
-                                <TableCell>DESCRIPCIÓN CORTA</TableCell>
-                                <TableCell>CATEGORÍA</TableCell>
-                                <TableCell>ESTADO</TableCell>
-                                <TableCell>PRECIO</TableCell>
-                                <TableCell>ACCIONES</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {courses.map((course) => (
-                                <TableRow key={course.id}>
-                                    <TableCell>
-                                        <CImage rounded thumbnail src={`${url}/storage/${course.image}`} width={200} height={200} alt={course.name} />
-                                    </TableCell>
-                                    <TableCell>{course.title}</TableCell>
-                                    <TableCell>{course.short_description}</TableCell>
-                                    <TableCell>{course.coursecategory.name}</TableCell>
-                                    <TableCell>{course.state === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}</TableCell>
-                                    <TableCell>{course.price}</TableCell>
-                                    <TableCell>
-                                        <ButtonSecondary onClick={(e) => { handleShow(course.id) }}>
-                                            Mostrar
-                                        </ButtonSecondary>
-                                        <ButtonEdit onClick={(e) => { openModal(2, course.id, course.title, course.description, course.short_description, course.slug, course.difficulty_id, course.professor_id, course.category_id, course.state === 1 ? true : false, course.price, course.target_learning, course.target_audience, course.houres, course.requirements, '', course.video) }}>
-                                            Editar
-                                        </ButtonEdit>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <div className="mt-8">
+                    <h1 className="text-secondary font-bold text-xl">Descripción</h1>
+                    <p>{course.description}</p>
+                </div>
+                <div className="mt-11">
+                    <h1 className="text-secondary font-bold text-xl mb-6">Módulos y lecciones</h1>
+                    <CAccordion className="">
+                        <CAccordionItem className="bg-primary text-white align-middle items-center flex">
+                            <CAccordionHeader>Titulo</CAccordionHeader>
+                            <CAccordionBody>Contenido</CAccordionBody>
+                        </CAccordionItem>
+                        <CAccordionItem>
+                            <CAccordionHeader>Titulo</CAccordionHeader>
+                            <CAccordionBody>Contenido</CAccordionBody>
+                        </CAccordionItem>
+                    </CAccordion>
+                </div>
             </DashboardLayout>
 
             <Head>
@@ -292,7 +285,7 @@ const Course = ({ auth }) => {
                 <meta name="Days Index" content="It shows created days" />
             </Head>
 
-            <Dialog open={modal} onClose={closeModal} maxWidth="md" fullWidth>
+            {/* <Dialog open={modal} onClose={closeModal} maxWidth="md" fullWidth>
                 <form onSubmit={save} className="p-6" encType="multipart/form-data" method="POST">
                     <DialogTitle className="">
                         <span className="text-2xl text-primary font-bold">{title}</span>
@@ -454,7 +447,7 @@ const Course = ({ auth }) => {
                         </ButtonDelete>
                     </div>
                 </form>
-            </Modal>
+            </Modal> */}
         </>
     )
 }
