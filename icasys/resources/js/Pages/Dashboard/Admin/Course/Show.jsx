@@ -8,13 +8,15 @@ import {
     DialogContent,
     DialogActions,
     Switch,
-    makeStyles
+    makeStyles,
+    MenuList,
+    Typography,
 } from '@mui/material';
 import { RiCircleFill } from "react-icons/ri";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import ButtonPrimary from "@/Components/ButtonPrimary";
-import { RiEditBoxLine, RiDeleteBin6Fill, RiArrowDownSFill } from "react-icons/ri";
+import { RiEditBoxLine, RiDeleteBin6Fill, RiArrowDownSFill, RiDeleteBinFill, RiEditBoxFill } from "react-icons/ri";
 import { Inertia } from '@inertiajs/inertia';
 import Modal from "@/Components/Modal";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -31,11 +33,18 @@ import Image from "@/Components/Image";
 import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CImage } from "@coreui/react";
 import { router } from '@inertiajs/react'
 import ButtonSecondary from "@/Components/ButtonSecondary";
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 
 const Course = ({ auth }) => {
-    const { course, url, toastt } = usePage().props;
+    const { course, url, toastt, difficulties, professors, categories, modules, lessons } = usePage().props;
     const [modal, setModal] = useState(false);
+    const [courseModal, setCourseModal] = useState(false);
+    const [moduleModal, setModuleModal] = useState(false);
+    const [lessonModal, setLessonModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
     const idInput = useRef();
@@ -55,6 +64,14 @@ const Course = ({ auth }) => {
     const requirementsInput = useRef();
     const imageInput = useRef();
     const videoInput = useRef();
+    const course_idInput = useRef();
+    const nameInput = useRef();
+    const module_idInput = useRef();
+    const lesson_numberInput = useRef();
+    const contentInput = useRef();
+    const content_houresInput = useRef();
+    const content_minutesInput = useRef();
+    const resources_urlInput = useRef();
     const { data, setData, delete: destroy, post, put, processing, progress, errors, reset } = useForm({
         id: '',
         title: '',
@@ -72,9 +89,19 @@ const Course = ({ auth }) => {
         requirements: '',
         image: '',
         video: '',
+
+        course_id: course.id,
+        name: '',
+
+        module_id: '',
+        lesson_number: '',
+        content: '',
+        content_houres: '',
+        content_minutes: '',
+        resources_url: '',
     });
-    const openModal = (op, id, title, description, short_description, slug, difficulty_id, professor_id, category_id, state, price, target_learning, target_audience, houres, requirements, image, video) => {
-        setModal(true);
+    const openCourseModal = (op, id, title, description, short_description, slug, difficulty_id, professor_id, category_id, state, price, target_learning, target_audience, houres, requirements, image, video) => {
+        setCourseModal(true);
         setOperation(op);
         setData({
             id: '',
@@ -118,11 +145,11 @@ const Course = ({ auth }) => {
             })
         }
     }
-    const closeModal = () => {
-        setModal(false);
+    const closeCourseModal = () => {
+        setCourseModal(false);
     }
 
-    const save = (e) => {
+    const submitCourse = (e) => {
         e.preventDefault();
 
         if (operation === 1) {
@@ -174,6 +201,16 @@ const Course = ({ auth }) => {
         }
     }
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setData('image', file); // Actualiza el estado solo con el archivo de imagen
+    };
+
+    const handleVideoChange = (e) => {
+        const file = e.target.files[0];
+        setData('video', file); // Actualiza el estado solo con el archivo de video
+    };
+
     const [deleteModal, setDeleteModal] = useState(false);
 
     const openDeleteModal = (dayID, name) => {
@@ -201,28 +238,141 @@ const Course = ({ auth }) => {
         });
     }
 
+    //MODULES FUNCTIONS ----------------------------------------------------------------------
+    const openModuleModal = (op, id, name, short_description) => {
+        setModuleModal(true);
+        setOperation(op);
+        setData({
+            id: '',
+            course_id: course.id,
+            name: '',
+            short_description: '',
+        })
+        if (op === 1) {
+            setTitle('Añadir módulo');
+        } else {
+            setTitle('Editar módulo');
+            setData({
+                id: id,
+                course_id: course.id,
+                name: name,
+                short_description: short_description,
+            })
+        }
+    }
+    const closeModuleModal = () => {
+        setModuleModal(false);
+    }
+    const submitModal = (e) => {
+        e.preventDefault();
+        if (operation === 1) {
+            post(route('admin.modules.store'), {
+                onSuccess: () => { ok('Módulo agregado con éxito.') },
+                onError: () => {
+                    if (errors.id) { reset('id'); idInput.current.focus(); }
+                    if (errors.course_id) { reset('course_id'); course_idInput.current.focus(); }
+                    if (errors.name) { reset('name'); nameInput.current.focus(); }
+                    if (errors.short_description) { reset('short_description'); short_descriptionInput.current.focus(); }
+                }
+            })
+        } else {
+            put(route('admin.modules.update', data.id), {
+                onSuccess: () => { ok('Módulo editado con éxito.') },
+                onError: () => {
+                    if (errors.id) { reset('id'); idInput.current.focus(); }
+                    if (errors.course_id) { reset('course_id'); course_idInput.current.focus(); }
+                    if (errors.name) { reset('name'); nameInput.current.focus(); }
+                    if (errors.short_description) { reset('short_description'); short_descriptionInput.current.focus(); }
+                }
+            })
+        }
+    }
+    //----------------------------------------------------------------------------------------
+    //LESSON FUNCTIONS ----------------------------------------------------------------------
+    const openLessonModal = (op, module_id, id, lesson_number, name, content, content_houres, content_minutes, resources_url, image, video) => {
+        setLessonModal(true);
+        setOperation(op);
+        setData({
+            id: '',
+            module_id: module_id,
+            lesson_number: '',
+            name: '',
+            content: '',
+            content_houres: '',
+            content_minutes: '',
+            resources_url: '',
+            image: '',
+            video: '',
+        })
+        if (op === 1) {
+            setTitle('Añadir lección');
+        } else {
+            setTitle('Editar lección');
+            setData({
+                id: id,
+                module_id: module_id,
+                lesson_number: lesson_number,
+                name: name,
+                content: content,
+                content_houres: content_houres,
+                content_minutes: content_minutes,
+                resources_url: resources_url,
+                image: image,
+                video: video,
+            })
+        }
+    }
+    const closeLessonModal = () => {
+        setLessonModal(false);
+    }
+    const submitLesson = (e) => {
+        e.preventDefault();
+        if (operation === 1) {
+            post(route('admin.lesson.store'), {
+                onSuccess: () => { ok('Lección agregada con éxito.') },
+                onError: () => {
+                    if (errors.id) { reset('id'); idInput.current.focus(); }
+                    if (errors.module_id) { reset('module_id'); module_idInput.current.focus(); }
+                    if (errors.lesson_number) { reset('lesson_number'); lesson_numberInput.current.focus(); }
+                    if (errors.name) { reset('name'); nameInput.current.focus(); }
+                    if (errors.content) { reset('content'); contentInput.current.focus(); }
+                    if (errors.content_houres) { reset('content_houres'); content_houresInput.current.focus(); }
+                    if (errors.content_minutes) { reset('content_minutes'); content_minutesInput.current.focus(); }
+                    if (errors.resources_url) { reset('resources_url'); resources_urlInput.current.focus(); }
+                    if (errors.image) { reset('image'); imageInput.current.focus(); }
+                    if (errors.video) { reset('video'); videoInput.current.focus(); }
+                }
+            })
+        } else {
+            post(route('admin.lesson.update', data.id), {
+                onSuccess: () => { ok('Lección editada con éxito.') },
+                onError: () => {
+                    if (errors.id) { reset('id'); idInput.current.focus(); }
+                    if (errors.module_id) { reset('module_id'); module_idInput.current.focus(); }
+                    if (errors.lesson_number) { reset('lesson_number'); lesson_numberInput.current.focus(); }
+                    if (errors.name) { reset('name'); nameInput.current.focus(); }
+                    if (errors.content) { reset('content'); contentInput.current.focus(); }
+                    if (errors.content_houres) { reset('content_houres'); content_houresInput.current.focus(); }
+                    if (errors.content_minutes) { reset('content_minutes'); content_minutesInput.current.focus(); }
+                    if (errors.resources_url) { reset('resources_url'); resources_urlInput.current.focus(); }
+                    if (errors.image) { reset('image'); imageInput.current.focus(); }
+                    if (errors.video) { reset('video'); videoInput.current.focus(); }
+                }
+            })
+        }
+    }
+    //----------------------------------------------------------------------------------------
+
 
     const ok = (message) => {
         reset();
-        closeModal();
+        closeCourseModal();
+        closeModuleModal();
+        closeLessonModal();
         closeDeleteModal();
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
     };
 
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setData('image', file); // Actualiza el estado solo con el archivo de imagen
-    };
-
-    const handleVideoChange = (e) => {
-        const file = e.target.files[0];
-        setData('video', file); // Actualiza el estado solo con el archivo de video
-    };
-
-    const handleShow = (id) => {
-        get(route('admin.courses.show', id))
-    }
 
     const [toastInfo, setToastInfo] = useState(null);
 
@@ -247,6 +397,14 @@ const Course = ({ auth }) => {
         <>
             <ToastContainer></ToastContainer>
             <DashboardLayout title={`${course.title}`} auth={auth}>
+                <div className="mb-7 flex justify-end">
+                    <ButtonEdit onClick={(e) => { openCourseModal(2, course.id, course.title, course.description, course.short_description, course.slug, course.difficulty_id, course.professor_id, course.category_id, course.state === 1 ? true : false, course.price, course.target_learning, course.target_audience, course.houres, course.requirements, '', course.video) }}>
+                        Editar
+                    </ButtonEdit>
+                    <ButtonSecondary onClick={() => { openModuleModal(1) }}>
+                        Agregar módulo
+                    </ButtonSecondary>
+                </div>
                 <div className="lg:flex">
                     <div className="lg:w-[40%] pr-3 text-center flex justify-center md:mb-8">
                         <CImage rounded thumbnail src={`${url}/storage/${course.image}`} width={400} height={400} alt={course.name} />
@@ -261,22 +419,48 @@ const Course = ({ auth }) => {
                         <h1 className="flex"><strong className="text-primary">Activo: </strong> {course.state === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</h1>
                     </div>
                 </div>
-                <div className="mt-8">
+                <div className="mt-4">
                     <h1 className="text-secondary font-bold text-xl">Descripción</h1>
                     <p>{course.description}</p>
                 </div>
                 <div className="mt-11">
                     <h1 className="text-secondary font-bold text-xl mb-6">Módulos y lecciones</h1>
-                    <CAccordion className="">
-                        <CAccordionItem className="bg-primary text-white align-middle items-center flex">
-                            <CAccordionHeader>Titulo</CAccordionHeader>
-                            <CAccordionBody>Contenido</CAccordionBody>
-                        </CAccordionItem>
-                        <CAccordionItem>
-                            <CAccordionHeader>Titulo</CAccordionHeader>
-                            <CAccordionBody>Contenido</CAccordionBody>
-                        </CAccordionItem>
-                    </CAccordion>
+                    {modules.map((module) => (
+                        <Accordion key={module.id}>
+                            <AccordionSummary
+                                expandIcon={<RiArrowDownSFill />}
+                                aria-controls="panel1-content"
+                                id="panel1-header"
+                            >
+                                <Typography sx={{ width: '15%', flexShrink: 0 }}>
+                                    {module.name}
+                                </Typography>
+                                <Typography sx={{ color: 'text.secondary' }}>{module.short_description}</Typography>
+
+                            </AccordionSummary>
+                            <AccordionDetails sx={{ paddingBottom: 0, paddingTop: 0, flexShrink: 0 }}>
+                                {lessons.map((lesson) => (
+                                    lesson.module_id === module.id ? (
+                                        <MenuItem key={lesson.id} sx={{display:'flex', justifyContent:'space-between'}}>
+                                            <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <CImage rounded className="mr-4" thumbnail src={`${url}/storage/${lesson.image}`} width={100} height={100} alt={lesson.name} />
+                                                {`${lesson.lesson_number}.   `}
+                                                {lesson.name}
+                                            </Typography>
+                                            <Typography>
+                                                <ButtonEdit><RiEditBoxFill className="text-white"/></ButtonEdit>
+                                                <ButtonDelete><RiDeleteBinFill className="text-white"/></ButtonDelete>
+                                            </Typography>
+                                        </MenuItem>
+                                    ) : null
+                                ))}
+                            </AccordionDetails>
+                            <AccordionActions sx={{ paddingBottom: 2, paddingTop: 0, flexShrink: 0 }}>
+                                <ButtonEdit onClick={(e)=>{openModuleModal(2, module.id, module.name, module.short_description)}}>Editar módulo</ButtonEdit>
+                                <ButtonSecondary onClick={(e) => { openLessonModal(1, module.id) }}>Agregar lección</ButtonSecondary>
+                            </AccordionActions>
+                        </Accordion>
+                    ))}
                 </div>
             </DashboardLayout>
 
@@ -285,8 +469,104 @@ const Course = ({ auth }) => {
                 <meta name="Days Index" content="It shows created days" />
             </Head>
 
-            {/* <Dialog open={modal} onClose={closeModal} maxWidth="md" fullWidth>
-                <form onSubmit={save} className="p-6" encType="multipart/form-data" method="POST">
+            <Modal show={moduleModal} onClose={closeModuleModal}>
+                <h2 className="text-3xl font-medium text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
+                    {title}
+                </h2>
+
+                <form onSubmit={submitModal} className="p-6">
+                    <InputLabel htmlFor='course_id' value='Curso: ' />
+                    <TextInput className='h-36 mt-2' readOnly id='course_id' name='course_id' ref={course_idInput} value={data.course_id || ''} onChange={(e) => setData("course_id", e.target.value)} />
+                    <InputError message={errors.course_id} />
+
+                    <InputLabel htmlFor='name' value='Nombre: ' />
+                    <TextInput className='h-36 mt-2' id='name' name='name' ref={nameInput} value={data.name || ''} onChange={(e) => setData("name", e.target.value)} />
+                    <InputError message={errors.name} />
+
+                    <InputLabel htmlFor='short_description' value='Descripción corta: ' />
+                    <TextInput className='h-36 mt-2' id='short_description' name='short_description' ref={short_descriptionInput} value={data.short_description || ''} onChange={(e) => setData("short_description", e.target.value)} />
+                    <InputError message={errors.short_description} />
+
+                    <div className="flex justify-end mt-6">
+                        <ButtonCancel type='button' onClick={closeModuleModal} className="mr-2" disabled={processing}>Cancelar</ButtonCancel>
+                        <ButtonPrimary type='submit' disabled={processing}>Enviar</ButtonPrimary>
+                    </div>
+                </form>
+            </Modal>
+
+            <Modal show={lessonModal} onClose={closeLessonModal}>
+                <h2 className="text-3xl font-medium text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
+                    {title}
+                </h2>
+
+                <form onSubmit={submitLesson} className="p-6">
+                    <InputLabel htmlFor='module_id' value='Módulo: ' />
+                    <TextInput className='h-36 mt-2' readOnly id='module_id' name='module_id' ref={module_idInput} value={data.module_id || ''} onChange={(e) => setData("module_id", e.target.value)} />
+                    <InputError message={errors.module_id} />
+
+                    <InputLabel htmlFor='lesson_number' value='Número de lección: ' />
+                    <TextInput className='h-36 mt-2' type='number' id='lesson_number' name='lesson_number' ref={lesson_numberInput} value={data.lesson_number || ''} onChange={(e) => setData("lesson_number", e.target.value)} />
+                    <InputError message={errors.lesson_number} />
+
+                    <InputLabel htmlFor='name' value='Nombre: ' />
+                    <TextInput className='h-36 mt-2' id='name' name='name' ref={nameInput} value={data.name || ''} onChange={(e) => setData("name", e.target.value)} />
+                    <InputError message={errors.name} />
+
+                    <InputLabel htmlFor='content' value='Contenido: ' />
+                    <TextField multiline rows={4} className='h-36 mt-2 w-full' id='content' name='content' ref={contentInput} value={data.content || ''} onChange={(e) => setData("content", e.target.value)} />
+                    <InputError message={errors.content} />
+
+                    <InputLabel htmlFor='content_houres' value='Horas de lección: ' />
+                    <TextInput className='h-36 mt-2' type='number' id='content_houres' name='content_houres' ref={content_houresInput} value={data.content_houres || ''} onChange={(e) => setData("content_houres", e.target.value)} />
+                    <InputError message={errors.content_houres} />
+
+                    <InputLabel htmlFor='content_minutes' value='Minutos de lección: ' />
+                    <TextInput className='h-36 mt-2' type='number' id='content_minutes' name='content_minutes' ref={content_minutesInput} value={data.content_minutes || ''} onChange={(e) => setData("content_minutes", e.target.value)} />
+                    <InputError message={errors.content_minutes} />
+
+                    <InputLabel htmlFor='resources_url' value='Enlace a recursos: ' />
+                    <TextInput className='h-36 mt-2' id='resources_url' name='resources_url' ref={resources_urlInput} value={data.resources_url || ''} onChange={(e) => setData("resources_url", e.target.value)} />
+                    <InputError message={errors.content_minutes} />
+
+                    <InputLabel htmlFor="image">Foto de lección:</InputLabel>
+                    <TextField
+                        type="file"
+                        accept="image/*"
+                        id="image"
+                        name="image"
+                        className="w-full"
+                        onChange={handleImageChange}
+                    />
+                    <InputError message={errors.image} />
+
+
+                    <InputLabel htmlFor="video">Video de lección:</InputLabel>
+                    <TextField
+                        type="file"
+                        accept="video/*"
+                        id="video"
+                        name="video"
+                        className="w-full"
+                        onChange={handleVideoChange}
+                    />
+                    <InputError message={errors.video} />
+                    <div className="w-full">
+                        {progress && (
+                            <progress value={progress.percentage} className="w-full text-black" max="100">
+                                {progress.percentage}%
+                            </progress>
+                        )}
+                    </div>
+
+                    <div className="flex justify-end mt-6">
+                        <ButtonCancel type='button' onClick={closeLessonModal} className="mr-2" disabled={processing}>Cancelar</ButtonCancel>
+                        <ButtonPrimary type='submit' disabled={processing}>Enviar</ButtonPrimary>
+                    </div>
+                </form>
+            </Modal>
+
+            <Dialog open={courseModal} onClose={closeCourseModal} maxWidth="md" fullWidth>
+                <form onSubmit={submitCourse} className="p-6" encType="multipart/form-data" method="POST">
                     <DialogTitle className="">
                         <span className="text-2xl text-primary font-bold">{title}</span>
                     </DialogTitle>
@@ -418,7 +698,7 @@ const Course = ({ auth }) => {
                     </DialogContent>
                     <DialogActions>
                         <div className="flex justify-end items-center mt-4">
-                            <ButtonCancel type='button' onClick={closeModal} disabled={processing}>Cancelar</ButtonCancel>
+                            <ButtonCancel type='button' onClick={closeCourseModal} disabled={processing}>Cancelar</ButtonCancel>
                             <ButtonPrimary className="ml-3" disabled={processing}>Enviar</ButtonPrimary>
                         </div>
                     </DialogActions>
@@ -447,7 +727,7 @@ const Course = ({ auth }) => {
                         </ButtonDelete>
                     </div>
                 </form>
-            </Modal> */}
+            </Modal>
         </>
     )
 }

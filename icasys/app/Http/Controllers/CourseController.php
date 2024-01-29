@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Coursecategory;
 use App\Models\Coursedifficulty;
+use App\Models\Lesson;
+use App\Models\Module;
 use App\Models\Professor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -15,7 +17,8 @@ class CourseController extends Controller
 {
     //
 
-    public function index(){
+    public function index()
+    {
         if (Gate::denies("isAdmin")) {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',
@@ -32,29 +35,28 @@ class CourseController extends Controller
         }
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         if (Gate::denies("isAdmin")) {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',
                 'tipo' => 'error',
             ]);
         } else {
-            // request()->validate(Course::$rules);
-            // dd($request);
             $course = Course::create([
-                'title'  => $request->title,
-                'description'  => $request->description,
-                'short_description'  => $request->short_description,
-                'slug'  => $request->slug,
-                'difficulty_id'  => $request->difficulty_id,
-                'professor_id'  => $request->professor_id,
-                'category_id'  => $request->category_id,
-                'price'  => $request->price,
-                'target_learning'  => $request->target_learning,
-                'target_audience'  => $request->target_audience,
-                'houres'  => $request->houres,
-                'files_included'  => $request->files_included,
-                'requirements'  => $request->requirements,
+                'title' => $request->title,
+                'description' => $request->description,
+                'short_description' => $request->short_description,
+                'slug' => $request->slug,
+                'difficulty_id' => $request->difficulty_id,
+                'professor_id' => $request->professor_id,
+                'category_id' => $request->category_id,
+                'price' => $request->price,
+                'target_learning' => $request->target_learning,
+                'target_audience' => $request->target_audience,
+                'houres' => $request->houres,
+                'files_included' => $request->files_included,
+                'requirements' => $request->requirements,
             ]);
 
             if ($request->hasFile('image')) {
@@ -72,12 +74,12 @@ class CourseController extends Controller
                 $moverArchivo = $file->storeAs($rutaDestino, $nombreArchivo, 'storage'); // Usar el disco 'storage'
                 $course->video = $rutaDestino . $nombreArchivo;
             }
-
             $course->save();
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         if (Gate::denies("isAdmin")) {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',
@@ -124,9 +126,9 @@ class CourseController extends Controller
                 $course->video = $rutaDestino . $nombreArchivo;
             }
 
-            if($request->state == false){
+            if ($request->state == false) {
                 $course->state = false;
-            }elseif($request->state == true){
+            } elseif ($request->state == true) {
                 $course->state = true;
             }
 
@@ -139,16 +141,35 @@ class CourseController extends Controller
                 'categories' => Coursecategory::all(),
                 'url' => env('APP_URL'),
             ])->with('toast', [
-                'mensaje' => 'Curso actualizado.',
-                'tipo' => 'success',
-            ]);;
+                        'mensaje' => 'Curso actualizado.',
+                        'tipo' => 'success',
+                    ]);
+            ;
         }
     }
 
-    public function show($id){
-        return Inertia::render("Dashboard/Admin/Course/Show", [
-            'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id),
-            'url' => env('APP_URL'),
-        ]);
+    public function show($id)
+    {
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            return Inertia::render("Dashboard/Admin/Course/Show", [
+                'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id),
+                'difficulties' => Coursedifficulty::all(),
+                'professors' => Professor::all(),
+                'categories' => Coursecategory::all(),
+                'modules' => Module::where('course_id', $id)->get(),
+
+                'lessons' => Lesson::whereHas('module', function ($query) use ($id) {
+                    $query->where('course_id', $id);
+                })->get(),
+
+
+                'url' => env('APP_URL'),
+            ]);
+        }
     }
 }

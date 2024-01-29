@@ -21,8 +21,8 @@ return new class extends Migration
             $table->unsignedSmallInteger('lesson_number');
             $table->string('name');
             $table->text('content');
-            $table->string('image');
-            $table->string('video');
+            $table->string('image')->nullable();
+            $table->string('video')->nullable();
             $table->unsignedSmallInteger('content_houres');
             $table->unsignedSmallInteger('content_minutes');
             $table->string('resources_url');
