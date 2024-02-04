@@ -441,22 +441,22 @@ const Course = ({ auth }) => {
                             <AccordionDetails sx={{ paddingBottom: 0, paddingTop: 0, flexShrink: 0 }}>
                                 {lessons.map((lesson) => (
                                     lesson.module_id === module.id ? (
-                                        <MenuItem key={lesson.id} sx={{display:'flex', justifyContent:'space-between'}}>
+                                        <MenuItem key={lesson.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                                 <CImage rounded className="mr-4" thumbnail src={`${url}/storage/${lesson.image}`} width={100} height={100} alt={lesson.name} />
                                                 {`${lesson.lesson_number}.   `}
                                                 {lesson.name}
                                             </Typography>
                                             <Typography>
-                                                <ButtonEdit><RiEditBoxFill className="text-white"/></ButtonEdit>
-                                                <ButtonDelete><RiDeleteBinFill className="text-white"/></ButtonDelete>
+                                                <ButtonEdit onClick={(e) => { openLessonModal(2, lesson.module_id, lesson.id, lesson.number, lesson.name, lesson.content, lesson.content_houres, lesson.content_minutes, lesson.resources_url, lesson.image, lesson.video) }}><RiEditBoxFill className="text-white" /></ButtonEdit>
+                                                <ButtonDelete><RiDeleteBinFill className="text-white" /></ButtonDelete>
                                             </Typography>
                                         </MenuItem>
                                     ) : null
                                 ))}
                             </AccordionDetails>
                             <AccordionActions sx={{ paddingBottom: 2, paddingTop: 0, flexShrink: 0 }}>
-                                <ButtonEdit onClick={(e)=>{openModuleModal(2, module.id, module.name, module.short_description)}}>Editar módulo</ButtonEdit>
+                                <ButtonEdit onClick={(e) => { openModuleModal(2, module.id, module.name, module.short_description) }}>Editar módulo</ButtonEdit>
                                 <ButtonSecondary onClick={(e) => { openLessonModal(1, module.id) }}>Agregar lección</ButtonSecondary>
                             </AccordionActions>
                         </Accordion>
@@ -494,12 +494,13 @@ const Course = ({ auth }) => {
                 </form>
             </Modal>
 
-            <Modal show={lessonModal} onClose={closeLessonModal}>
-                <h2 className="text-3xl font-medium text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
-                    {title}
-                </h2>
-
+            <Dialog open={lessonModal} onClose={closeLessonModal} maxWidth="md" fullWidth>
                 <form onSubmit={submitLesson} className="p-6">
+                    <DialogTitle className="">
+                        <span className="text-2xl text-primary font-bold">{title}</span>
+                    </DialogTitle>
+
+
                     <InputLabel htmlFor='module_id' value='Módulo: ' />
                     <TextInput className='h-36 mt-2' readOnly id='module_id' name='module_id' ref={module_idInput} value={data.module_id || ''} onChange={(e) => setData("module_id", e.target.value)} />
                     <InputError message={errors.module_id} />
@@ -558,12 +559,15 @@ const Course = ({ auth }) => {
                         )}
                     </div>
 
-                    <div className="flex justify-end mt-6">
-                        <ButtonCancel type='button' onClick={closeLessonModal} className="mr-2" disabled={processing}>Cancelar</ButtonCancel>
-                        <ButtonPrimary type='submit' disabled={processing}>Enviar</ButtonPrimary>
-                    </div>
+
+                    <DialogActions>
+                        <div className="flex justify-end mt-6">
+                            <ButtonCancel type='button' onClick={closeLessonModal} className="mr-2" disabled={processing}>Cancelar</ButtonCancel>
+                            <ButtonPrimary type='submit' disabled={processing}>Enviar</ButtonPrimary>
+                        </div>
+                    </DialogActions>
                 </form>
-            </Modal>
+            </Dialog>
 
             <Dialog open={courseModal} onClose={closeCourseModal} maxWidth="md" fullWidth>
                 <form onSubmit={submitCourse} className="p-6" encType="multipart/form-data" method="POST">
