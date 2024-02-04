@@ -80,16 +80,21 @@ const styles = StyleSheet.create({
 
     box:{
         flexDirection: 'row',
-        border: '1px solid red',
+        // border: '1px solid red',
         justifyContent: 'space-between',
         width: '90%',
         marginHorizontal: '15px'
     },
-    box_content:{
+    box_left:{
         border: '1 solid black',
         flexDirection: 'row',
-        width:'40%'
-    }
+        width:'70%'
+    },
+    box_right:{
+        border: '1 solid black',
+        flexDirection: 'row',
+        width:'28%'
+    },
 });
 
 const Receipt = ({ receipt, student, payments }) => {
@@ -120,19 +125,19 @@ const Receipt = ({ receipt, student, payments }) => {
                 </View>
 
                 <View style={styles.box}>
-                    <View style={styles.box_content}>
+                    <View style={styles.box_left}>
                         <Text style={styles.title_text}>DATOS DEL ALUMNO:</Text>
                     </View>
-                    <View style={styles.box_content}>
+                    <View style={styles.box_right}>
                         <Text style={styles.title_text}>FOLIO: </Text>
                         <Text style={styles.title_text}>{receipt.id}</Text>
                     </View>
                 </View>
                 <View style={styles.box}>
-                    <View style={styles.box_content}>
+                    <View style={styles.box_left}>
                         <Text style={styles.title_text}>{student.name}</Text>
                     </View>
-                    <View style={styles.box_content}>
+                    <View style={styles.box_right}>
                         <Text style={styles.title_text}>FOLIO: </Text>
                         <Text style={styles.title_text}>{receipt.id}</Text>
                     </View>
