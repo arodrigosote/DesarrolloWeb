@@ -223,7 +223,6 @@ class StudentController extends Controller
                 'student' => Student::find($id),
                 'baseUrl' => env('APP_URL'),
                 'payments' => Studentpayment::where('student_id', $id)->get(),
-
             ]);
         }
     }
@@ -280,9 +279,9 @@ class StudentController extends Controller
 
 
                 return Inertia::render('Dashboard/Admin/Student/Receipts', [
-                    'student' => $student,
+                    'student' => Student::with('group', 'group.schedule', 'group.schedule.day', 'group.schedule.hour')->find($student->id),
                     'baseUrl' => env('APP_URL'),
-                    'receipts' => Receipt::where('student_id', $student->id)->with('student')->orderBy('created_at', 'desc')->get(),
+                    'receipts' => Receipt::with('student', 'studentpayments')->where('student_id', $student->id)->orderBy('created_at', 'desc')->get(),
                 ])->with('toast', [
                             'mensaje' => 'Pagos agregados con éxito.',
                             'tipo' => 'success',
@@ -303,9 +302,9 @@ class StudentController extends Controller
             ]);
         } else {
             return Inertia::render('Dashboard/Admin/Student/Receipts', [
-                'student' => Student::find($id),
+                'student' => Student::with('group', 'group.schedule', 'group.schedule.day', 'group.schedule.hour')->find($id),
                 'baseUrl' => env('APP_URL'),
-                'receipts' => Receipt::with('student')->where('student_id', $id)->orderBy('created_at', 'desc')->get(),
+                'receipts' => Receipt::with('student', 'studentpayments')->where('student_id', $id)->orderBy('created_at', 'desc')->get(),
             ]);
         }
     }

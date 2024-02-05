@@ -19,6 +19,6 @@ class Receipt extends Model
      */
     public function studentpayments()
     {
-        return $this->hasMany('App\Models\Studentpayments', 'receipt_id', 'id');
+        return $this->hasMany('App\Models\Studentpayment', 'receipt_id', 'id');
     }
 }

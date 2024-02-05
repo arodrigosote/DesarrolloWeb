@@ -80,7 +80,7 @@ const ShowReceipts = (props) => {
                                     <td className="border rounded text-xs text-center mx-auto my-auto">{receipt.weeks_number}</td>
                                     <td className="border rounded text-xs text-center mx-auto my-auto">{receipt.amount}</td>
                                     <td className="border rounded text-xs text-center mx-auto my-auto">
-                                        <PDFDownloadLink document={<Receipt student={student} receipt={receipt}/>} fileName={`Recibo - ${receipt.student.name} - ${receipt.date_payment}`}>
+                                        <PDFDownloadLink document={<Receipt student={student} payments={receipt.studentpayments} schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`} receipt={receipt}/>} fileName={`Recibo - ${receipt.student.name} - ${receipt.date_payment}`}>
                                             {({loading, url, error, blob}) =>
                                             loading ? (
                                                 <ButtonCancel>Cargando...</ButtonCancel>
