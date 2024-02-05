@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,5 +20,12 @@ class PagesController extends Controller
 
     public function about(){
         return Inertia::render("MainPages/About");
+    }
+
+    public function courses(){
+        return Inertia::render('MainPages/Courses',[
+            'courses' => Course::with('professor')->get(),
+            'url' => env('APP_URL'),
+        ]);
     }
 }
