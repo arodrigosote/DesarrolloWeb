@@ -87,10 +87,12 @@ Route::middleware('auth')->group(function () {
     //MODULES
     Route::post("/admin/cursos/modulo/crear", [ModuleController::class, "store"])->name("admin.modules.store");
     Route::put("/admin/cursos/modulo/actualizar/{id}", [ModuleController::class, "update"])->name("admin.modules.update");
+    Route::delete("/admin/cursos/modulo/eliminar/{id}", [ModuleController::class, "delete"])->name("admin.module.destroy");
 
     //LESSONS
     Route::post("/admin/cursos/modulo/lesson/crear", [LessonController::class, "store"])->name("admin.lesson.store");
     Route::post("/admin/cursos/modulo/lesson/actualizar/{id}", [LessonController::class, "update"])->name("admin.lesson.update");
+    Route::delete("/admin/cursos/modulo/lesson/eliminar/{id}", [LessonController::class, "delete"])->name("admin.lesson.destroy");
 });
 
 

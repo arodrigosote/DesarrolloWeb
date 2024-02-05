@@ -287,6 +287,31 @@ const Course = ({ auth }) => {
             })
         }
     }
+    const [deleteModuleModal, setDeleteModuleModal] = useState(false);
+
+    const openDeleteModuleModal = (module_id, name) => {
+        setDeleteModuleModal(true);
+        setData({
+            id: module_id,
+            name: name,
+        })
+    }
+
+    const closeDeleteModuleModal = () => {
+        setDeleteModuleModal(false);
+    }
+
+    const deleteModule = (e) => {
+        e.preventDefault();
+        destroy(route('admin.module.destroy', data.id), {
+            preserveScroll: true,
+            onSuccess: () => { ok('Módulo eliminado con éxito.') },
+            onError: (error) => {
+                console.error(error); // Log the error for debugging
+                errorModal('Error al eliminar el módulo.');
+            },
+        });
+    }
     //----------------------------------------------------------------------------------------
     //LESSON FUNCTIONS ----------------------------------------------------------------------
     const openLessonModal = (op, module_id, id, lesson_number, name, content, content_houres, content_minutes, resources_url, image, video) => {
@@ -361,6 +386,32 @@ const Course = ({ auth }) => {
             })
         }
     }
+
+    const [deleteLessonModal, setDeleteLessonModal] = useState(false);
+
+    const openDeleteLessonModal = (lesson_id, name) => {
+        setDeleteLessonModal(true);
+        setData({
+            id: lesson_id,
+            name: name,
+        })
+    }
+
+    const closeDeleteLessonModal = () => {
+        setDeleteLessonModal(false);
+    }
+
+    const deleteLesson = (e) => {
+        e.preventDefault();
+        destroy(route('admin.lesson.destroy', data.id), {
+            preserveScroll: true,
+            onSuccess: () => { ok('Lección eliminado con éxito.') },
+            onError: (error) => {
+                console.error(error); // Log the error for debugging
+                errorModal('Error al eliminar el día.');
+            },
+        });
+    }
     //----------------------------------------------------------------------------------------
 
 
@@ -370,6 +421,8 @@ const Course = ({ auth }) => {
         closeModuleModal();
         closeLessonModal();
         closeDeleteModal();
+        closeDeleteLessonModal();
+        closeDeleteModuleModal();
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
     };
 
@@ -417,13 +470,14 @@ const Course = ({ auth }) => {
                         <h1 className=""><strong className="text-primary">Dificultad: </strong> {course.coursedifficulty.name}</h1>
                         <h1 className=""><strong className="text-primary">Precio: </strong> {course.price} pesos</h1>
                         <h1 className="flex"><strong className="text-primary">Activo: </strong> {course.state === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</h1>
+                        <h1 className=""><strong className="text-primary">Horas: </strong> {course.houres} hrs</h1>
                     </div>
                 </div>
                 <div className="mt-4">
                     <h1 className="text-secondary font-bold text-xl">Descripción</h1>
                     <p>{course.description}</p>
                 </div>
-                <div className="mt-11">
+                <div className="mt-8">
                     <h1 className="text-secondary font-bold text-xl mb-6">Módulos y lecciones</h1>
                     {modules.map((module) => (
                         <Accordion key={module.id}>
@@ -448,19 +502,36 @@ const Course = ({ auth }) => {
                                                 {lesson.name}
                                             </Typography>
                                             <Typography>
-                                                <ButtonEdit onClick={(e) => { openLessonModal(2, lesson.module_id, lesson.id, lesson.number, lesson.name, lesson.content, lesson.content_houres, lesson.content_minutes, lesson.resources_url, lesson.image, lesson.video) }}><RiEditBoxFill className="text-white" /></ButtonEdit>
-                                                <ButtonDelete><RiDeleteBinFill className="text-white" /></ButtonDelete>
+                                                <ButtonEdit onClick={(e) => { openLessonModal(2, lesson.module_id, lesson.id, lesson.lesson_number, lesson.name, lesson.content, lesson.content_houres, lesson.content_minutes, lesson.resources_url, lesson.image, lesson.video) }}><RiEditBoxFill className="text-white" /></ButtonEdit>
+                                                <ButtonDelete onClick={(e)=>{openDeleteLessonModal(lesson.id, lesson.name)}}><RiDeleteBinFill className="text-white" /></ButtonDelete>
                                             </Typography>
                                         </MenuItem>
                                     ) : null
                                 ))}
                             </AccordionDetails>
                             <AccordionActions sx={{ paddingBottom: 2, paddingTop: 0, flexShrink: 0 }}>
+                                <ButtonDelete onClick={(e)=>{openDeleteModuleModal(module.id, module.name)}}>Eliminar</ButtonDelete>
                                 <ButtonEdit onClick={(e) => { openModuleModal(2, module.id, module.name, module.short_description) }}>Editar módulo</ButtonEdit>
                                 <ButtonSecondary onClick={(e) => { openLessonModal(1, module.id) }}>Agregar lección</ButtonSecondary>
                             </AccordionActions>
                         </Accordion>
                     ))}
+                </div>
+                <div className="mt-8">
+                    <h1 className="text-secondary font-bold text-xl">Objetivos de aprendizaje</h1>
+                    <p>{course.target_learning}</p>
+                </div>
+                <div className="mt-8">
+                    <h1 className="text-secondary font-bold text-xl">Público objetivo</h1>
+                    <p>{course.target_audience}</p>
+                </div>
+                <div className="mt-8">
+                    <h1 className="text-secondary font-bold text-xl">Requerimientos</h1>
+                    <p>{course.requirements}</p>
+                </div>
+                <div className="mt-8">
+                    <h1 className="text-secondary font-bold text-xl">Enlace de recursos</h1>
+                    <p>{course.files_included}</p>
                 </div>
             </DashboardLayout>
 
@@ -727,7 +798,53 @@ const Course = ({ auth }) => {
                     <div className="flex justify-end items-center">
                         <ButtonCancel type='button' onClick={closeDeleteModal} className="">Cancel</ButtonCancel>
                         <ButtonDelete className="ml-3" disabled={processing}>
-                            Borrar Curso
+                            Eliminar
+                        </ButtonDelete>
+                    </div>
+                </form>
+            </Modal>
+            <Modal show={deleteModuleModal} onClose={closeDeleteModuleModal}>
+                <div className="p-6">
+                    <h2 className="text-3xl font-medium text-primary font-extrabold text-center">
+                        ¿Estás seguro que quieres eliminar el módulo "{data.name}"?
+                    </h2>
+
+                </div>
+                <form onSubmit={deleteModule} className="p-6">
+
+                    <TextInput
+                        id="id"
+                        name='id'
+                        defaultValue={data.id}
+                        style={{ display: 'none' }}
+                    />
+                    <div className="flex justify-end items-center">
+                        <ButtonCancel type='button' onClick={closeDeleteModuleModal} className="">Cancel</ButtonCancel>
+                        <ButtonDelete className="ml-3" disabled={processing}>
+                            Eliminar
+                        </ButtonDelete>
+                    </div>
+                </form>
+            </Modal>
+            <Modal show={deleteLessonModal} onClose={closeDeleteLessonModal}>
+                <div className="p-6">
+                    <h2 className="text-3xl font-medium text-primary font-extrabold text-center">
+                        ¿Estás seguro que quieres eliminar la lección "{data.name}"?
+                    </h2>
+
+                </div>
+                <form onSubmit={deleteLesson} className="p-6">
+
+                    <TextInput
+                        id="id"
+                        name='id'
+                        defaultValue={data.id}
+                        style={{ display: 'none' }}
+                    />
+                    <div className="flex justify-end items-center">
+                        <ButtonCancel type='button' onClick={closeDeleteLessonModal} className="">Cancel</ButtonCancel>
+                        <ButtonDelete className="ml-3" disabled={processing}>
+                            Eliminar
                         </ButtonDelete>
                     </div>
                 </form>

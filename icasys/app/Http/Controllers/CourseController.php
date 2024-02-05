@@ -91,8 +91,21 @@ class CourseController extends Controller
             $rutaRelativaStorage = $course->image;
             $videoRelativeStorage = $course->video;
 
-            $course->update($request->all());
-
+            $course->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'short_description' => $request->short_description,
+                'slug' => $request->slug,
+                'difficulty_id' => $request->difficulty_id,
+                'professor_id' => $request->professor_id,
+                'category_id' => $request->category_id,
+                'price' => $request->price,
+                'target_learning' => $request->target_learning,
+                'target_audience' => $request->target_audience,
+                'houres' => $request->houres,
+                'files_included' => $request->files_included,
+                'requirements' => $request->requirements,
+            ]);
 
             if ($request->hasFile('image')) {
                 // Construye la ruta completa al archivo en la carpeta storage

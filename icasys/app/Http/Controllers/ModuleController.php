@@ -38,4 +38,16 @@ class ModuleController extends Controller
             $module->save();
         }
     }
+
+    public function delete($id){
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $module = Module::find($id);
+            $module->delete();
+        }
+    }
 }

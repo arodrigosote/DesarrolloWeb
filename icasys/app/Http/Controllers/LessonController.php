@@ -56,11 +56,11 @@ class LessonController extends Controller
             ]);
         } else {
             $lesson = Lesson::find($id);
-            $rutaRelativaImagen = $lesson->imagenDestacada;
+            $rutaRelativaImagen = $lesson->image;
             // Ruta relativa al archivo en la carpeta storage
-            $rutaRelativaVideo = $lesson->urlVideoLeccion;
+            $rutaRelativaVideo = $lesson->video;
 
-            request()->validate(Clase::$rules);
+            // request()->validate(Lesson::$rules);
 
             $lesson->update($request->all());
 
@@ -104,6 +104,41 @@ class LessonController extends Controller
             }
 
             $lesson->save();
+        }
+    }
+
+    public function delete($id)
+    {
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $lesson = Lesson::find($id);
+
+            // Ruta relativa al archivo en la carpeta storage
+            $rutaRelativaImagen = $lesson->imagen;
+            // Ruta relativa al archivo en la carpeta storage
+            $rutaRelativaVideo = $lesson->video;
+
+            // Construye la ruta completa al archivo en la carpeta storage
+            $rutaCompletaStorage = storage_path('app/public/' . $rutaRelativaVideo);
+            // Verifica si el archivo existe
+            if (File::exists($rutaCompletaStorage)) {
+                // Elimina el archivo
+                File::delete($rutaCompletaStorage);
+            }
+
+            // Construye la ruta completa al archivo en la carpeta storage
+            $rutaCompletaStorage = storage_path('app/public/' . $rutaRelativaImagen);
+            // Verifica si el archivo existe
+            if (File::exists($rutaCompletaStorage)) {
+                // Elimina el archivo
+                File::delete($rutaCompletaStorage);
+            }
+
+            $lesson->delete();
         }
     }
 }

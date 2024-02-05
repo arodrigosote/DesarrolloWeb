@@ -18,14 +18,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('module_id');
             $table->foreign('module_id')->references('id')->on('modules')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedSmallInteger('lesson_number');
+            $table->unsignedSmallInteger('lesson_number')->nullable();
             $table->string('name');
             $table->text('content');
             $table->string('image')->nullable();
             $table->string('video')->nullable();
             $table->unsignedSmallInteger('content_houres');
             $table->unsignedSmallInteger('content_minutes');
-            $table->string('resources_url');
+            $table->string('resources_url')->nullable();
             $table->timestamps();
         });
     }
