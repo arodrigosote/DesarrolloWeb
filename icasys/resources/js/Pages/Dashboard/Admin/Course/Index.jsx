@@ -265,7 +265,7 @@ const Course = ({ auth }) => {
                             {courses.map((course) => (
                                 <TableRow key={course.id}>
                                     <TableCell>
-                                        <CImage rounded thumbnail src={`${url}/storage/${course.image}`} width={200} height={200} alt={course.name} />
+                                        <CImage rounded thumbnail src={`${url}storage/${course.image}`} width={200} height={200} alt={course.name} />
                                     </TableCell>
                                     <TableCell>{course.title}</TableCell>
                                     <TableCell>{course.short_description}</TableCell>

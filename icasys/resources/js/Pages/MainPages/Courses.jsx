@@ -7,6 +7,7 @@ import { Head, usePage } from '@inertiajs/react';
 import CourseCard from '@/Components/CourseCard';
 import { Grid, Container } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
+import Footer from '../Components/Footer/Footer';
 
 export default function Courses(auth) {
     const { courses, url } = usePage().props;
@@ -25,6 +26,7 @@ export default function Courses(auth) {
                     ))}
                 </Grid>
             </Container>
+            <Footer></Footer>
         </>
     )
 }

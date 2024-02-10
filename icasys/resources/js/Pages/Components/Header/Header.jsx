@@ -35,6 +35,7 @@ export default function (auth) {
                     <Avatar alt="icasys logo" src={icono} className="w-1/6 mx-auto nav md:mx-auto lg:mx-0" />
                     <MenuList className='flex nav'>
                         <MenuItem className=""><Link href={route('page.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Inicio</Link></MenuItem>
+                        <MenuItem className="w-full"><Link href={route('courses')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Cursos</Link></MenuItem>
                         <MenuItem className=""><Link href={route('page.contact')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Contacto</Link></MenuItem>
                         <MenuItem className=""><Link href={route('page.about')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Acerca de</Link></MenuItem>
                     </MenuList>
@@ -46,6 +47,7 @@ export default function (auth) {
                 <MenuList className={`movile-nav w-full ${isMovileMenuOpen ? 'movile-menu-active' : ''}`}>
                     <MenuItem className="w-full"><Link href={route('page.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Inicio</Link></MenuItem>
                     <MenuItem className="w-full"><Link href={route('page.contact')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Contacto</Link></MenuItem>
+                    <MenuItem className="w-full"><Link href={route('courses')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Cursos</Link></MenuItem>
                     <MenuItem className="w-full"><Link href={route('page.about')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start text-sm">Acerca de</Link></MenuItem>
                 </MenuList>
                 <div className='right-section'>

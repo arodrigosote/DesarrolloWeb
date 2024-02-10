@@ -460,7 +460,7 @@ const Course = ({ auth }) => {
                 </div>
                 <div className="lg:flex">
                     <div className="lg:w-[40%] pr-3 text-center flex justify-center md:mb-8">
-                        <CImage rounded thumbnail src={`${url}/storage/${course.image}`} width={400} height={400} alt={course.name} />
+                        <CImage rounded thumbnail src={`${url}storage/${course.image}`} width={400} height={400} alt={course.name} />
                     </div>
                     <div>
                         <h1 className=""><strong className="text-primary">Titulo: </strong> {course.title}</h1>
@@ -497,7 +497,7 @@ const Course = ({ auth }) => {
                                     lesson.module_id === module.id ? (
                                         <MenuItem key={lesson.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                                                <CImage rounded className="mr-4" thumbnail src={`${url}/storage/${lesson.image}`} width={100} height={100} alt={lesson.name} />
+                                                <CImage rounded className="mr-4" thumbnail src={`${url}storage/${lesson.image}`} width={100} height={100} alt={lesson.name} />
                                                 {`${lesson.lesson_number}.   `}
                                                 {lesson.name}
                                             </Typography>

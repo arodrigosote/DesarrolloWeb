@@ -12,6 +12,7 @@
     --auxiliar1: #1466c3;
     --auxiliar2: #2174d4;
     --light: #B6CFDD;
+    --lighter: #eaf6fd;
     --more-light: #d1e4ee;
     --red: #C00000;
     --yellow: #FFC107;
@@ -45,6 +46,9 @@ html, body{
 }
 .bg-light{
     background-color: var(--light);
+}
+.bg-lighter{
+    background-color: var(--lighter);
 }
 
 

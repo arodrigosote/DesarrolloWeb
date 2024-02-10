@@ -24,7 +24,7 @@ class PagesController extends Controller
 
     public function courses(){
         return Inertia::render('MainPages/Courses',[
-            'courses' => Course::with('professor')->get(),
+            'courses' => Course::with('professor')->where('state', 1)->get(),
             'url' => env('APP_URL'),
         ]);
     }

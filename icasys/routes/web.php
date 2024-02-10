@@ -93,6 +93,9 @@ Route::middleware('auth')->group(function () {
     Route::post("/admin/cursos/modulo/lesson/crear", [LessonController::class, "store"])->name("admin.lesson.store");
     Route::post("/admin/cursos/modulo/lesson/actualizar/{id}", [LessonController::class, "update"])->name("admin.lesson.update");
     Route::delete("/admin/cursos/modulo/lesson/eliminar/{id}", [LessonController::class, "delete"])->name("admin.lesson.destroy");
+
+    //Courses
+    Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
 });
 
 
@@ -102,6 +105,7 @@ Route::get('/', [PagesController::class, "home"])->name('page.home');
 Route::get('/contacto', [PagesController::class, "contact"])->name('page.contact');
 Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
 Route::get('/cursos', [PagesController::class, "courses"])->name('courses');
+Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
 
 //dashboard
 Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dashboard.home')->middleware(['auth', 'verified']);
