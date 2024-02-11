@@ -147,4 +147,8 @@ class LessonController extends Controller
             'lesson' => Lesson::find($lesson_id),
         ]);
     }
+
+    public function show_lesson(){
+
+    }
 }

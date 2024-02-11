@@ -14,20 +14,11 @@ import Footer from '@/Pages/Components/Footer/Footer';
 export default function Courses(auth) {
     const { course, modules, lessons, url } = usePage().props;
 
-    const { data, setData, delete: destroy, post, get, put, processing, progress, errors, reset } = useForm({
-        course_id:'',
-        course_slug:'',
-    })
+    const {data, setData, get, errors} = useForm({});
 
     const handleShowLessons = (course_id, course_slug) => {
-        setData({
-            course_id: course_id,
-            course_slug: course_slug,
-        });
-        const routeUrl = route('course.show.content', { course_id, course_slug });
-        get(routeUrl);
+        get(route('course.show.content', [course_id, course_slug]));
     }
-
 
     return (
         <>
