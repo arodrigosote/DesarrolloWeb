@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import CourseCard from '@/Components/CourseCard';
 import { Grid, Container, Accordion, AccordionSummary, Typography, AccordionDetails, MenuItem } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +13,22 @@ import Footer from '@/Pages/Components/Footer/Footer';
 
 export default function Courses(auth) {
     const { course, modules, lessons, url } = usePage().props;
+
+    const { data, setData, delete: destroy, post, get, put, processing, progress, errors, reset } = useForm({
+        course_id:'',
+        course_slug:'',
+    })
+
+    const handleShowLessons = (course_id, course_slug) => {
+        setData({
+            course_id: course_id,
+            course_slug: course_slug,
+        });
+        const routeUrl = route('course.show.content', { course_id, course_slug });
+        get(routeUrl);
+    }
+
+
     return (
         <>
             <Head>
@@ -22,7 +38,7 @@ export default function Courses(auth) {
             {/* <Header auth={auth}></Header> */}
             <HeaderCallToAction></HeaderCallToAction>
             <CourseHero course={course}></CourseHero>
-            <div className='flex mx-60 mt-12'>
+            <div className='lg:flex block mx-60 mt-12'>
                 <div className='w-[60%]'>
                     <CImage rounded thumbnail src={`${url}storage/${course.image}`} width='100%' alt={course.name} />
                     <h2 className='text-2xl mt-6 font-bold text-secondary'>Descripción</h2>
@@ -70,7 +86,7 @@ export default function Courses(auth) {
                     <div className=' mx-12 mb-12 border border-gray-300'>
                         <div className='bg-lighter p-7'>
                             <p className='font-bold text-2xl'>${course.price}</p>
-                            <ButtonPrimary className='text-center'>Inscribirme</ButtonPrimary>
+                            <ButtonPrimary className='text-center' onClick={() => {handleShowLessons(course.id, course.slug)}}>Inscribirme</ButtonPrimary>
                         </div>
                         <div className='p-7'>
                             <div className='flex justify-start items-center'><RiBarChartFill/>{course.coursedifficulty.name}</div>

@@ -141,4 +141,10 @@ class LessonController extends Controller
             $lesson->delete();
         }
     }
+
+    public function show($lesson_id, $lesson_name, $course_name){
+        return Inertia::render('Dashboard/Admin/Course/Lesson/Show', [
+            'lesson' => Lesson::find($lesson_id),
+        ]);
+    }
 }

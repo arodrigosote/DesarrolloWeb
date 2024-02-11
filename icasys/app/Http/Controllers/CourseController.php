@@ -196,4 +196,15 @@ class CourseController extends Controller
             'url' => env('APP_URL'),
         ]);
     }
+
+    public function show_content($course_id, $course_slug){
+        return Inertia::render('Dashboard/Admin/Course/Lesson/Show', [
+            'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
+            'modules' => Module::where('course_id', $course_id)->get(),
+            'lessons' => Lesson::whereHas('module', function ($query) use ($course_id) {
+                $query->where('course_id', $course_id);
+            })->get(),
+            'url' => env('APP_URL'),
+        ]);
+    }
 }

@@ -83,6 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::post("/admin/cursos/crear", [CourseController::class, "store"])->name("admin.courses.store");
     Route::post("/admin/cursos/actualizar/{id}", [CourseController::class, "update"])->name("admin.courses.update");
     Route::get("/admin/cursos/mostrar/{id}", [CourseController::class, "show"])->name("admin.courses.show");
+    Route::get("/curso/mostrar/{course_id}/{course_slug}/", [CourseController::class, "show_content"])->name("course.show.content");
 
     //MODULES
     Route::post("/admin/cursos/modulo/crear", [ModuleController::class, "store"])->name("admin.modules.store");
@@ -93,6 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::post("/admin/cursos/modulo/lesson/crear", [LessonController::class, "store"])->name("admin.lesson.store");
     Route::post("/admin/cursos/modulo/lesson/actualizar/{id}", [LessonController::class, "update"])->name("admin.lesson.update");
     Route::delete("/admin/cursos/modulo/lesson/eliminar/{id}", [LessonController::class, "delete"])->name("admin.lesson.destroy");
+    Route::delete("/curso/{course_name}/lesson/{lesson_id}/{lesson_name}", [LessonController::class, "show_lesson"])->name("lesson.show");
 
     //Courses
     Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');

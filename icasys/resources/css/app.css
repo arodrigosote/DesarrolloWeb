@@ -17,6 +17,7 @@
     --red: #C00000;
     --yellow: #FFC107;
     --white: #ffffff;
+    --dark: #25262b;
 }
 html, body{
     margin: 0;
@@ -50,7 +51,6 @@ html, body{
 .bg-lighter{
     background-color: var(--lighter);
 }
-
-
-
-
+.bg-dark{
+    background-color: var(--dark);
+}
