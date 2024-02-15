@@ -22,7 +22,7 @@ export default function (props) {
     return (
         <>
             {/* Sidebar */}
-            <div className={`fixed lg:static top-0 transition-all ${sidebar ? "-left-0" : "-left-full"} lg:w-full md:w-[40%] w-[80%] h-full  col-span-1 bg-primary`}>
+            <div className={`z-50 fixed lg:static top-0 transition-all ${sidebar ? "-left-0" : "-left-full"} lg:w-full md:w-[40%] w-[80%] h-full  col-span-2 bg-primary`}>
 
                 {/* Logotipo */}
                 <Link href={route('page.home')}>
@@ -63,7 +63,7 @@ export default function (props) {
             {/* <button onClick={handleSidebar} className="block lg:hidden absolute bottom-4 right-4 bg-auxiliar2 text-white p-2 text-2xl md:text-3xl rounded-full">
 
             </button> */}
-            <ButtonInvisible onClick={handleSidebar} className="block lg:hidden absolute bottom-4 right-4 bg-auxiliar2 text-white p-2 text-2xl md:text-3xl rounded-full">
+            <ButtonInvisible onClick={handleSidebar} className="block lg:hidden fixed bottom-4 right-4 lg:relative lg:bottom-auto lg:right-auto bg-auxiliar2 text-white p-2 text-2xl md:text-3xl rounded-full">
                 {sidebar ? <RiCloseFill /> : <RiMenuFill />}
             </ButtonInvisible>
         </>

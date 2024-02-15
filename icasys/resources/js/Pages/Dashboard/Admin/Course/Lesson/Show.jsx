@@ -92,7 +92,7 @@ const Lesson = ({ auth }) => {
                             <AccordionDetails sx={{ paddingBottom: 0, paddingTop: 0, flexShrink: 0 }}>
                                 {lessons.map((lesson) => (
                                     lesson.module_id === module.id ? (
-                                        <Link key={lesson.id} href={route('lesson.show', [course.title, lesson.id, lesson.name])}>
+                                        <Link key={lesson.id} href={route('lesson.show', [course.id, course.title, lesson.id, lesson.name])}>
                                             <MenuItem sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                 <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                                     <CImage rounded className="mr-4" thumbnail src={`${url}storage/${lesson.image}`} width={100} height={100} alt={lesson.name} />

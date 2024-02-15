@@ -131,7 +131,6 @@ class CourseController extends Controller
                     // Elimina el archivo
                     File::delete($rutaCompletaStorage);
                 }
-
                 $file = $request->file('video');
                 $rutaDestino = 'videos/courses/';
                 $nombreArchivo = time() . '-' . $file->getClientOriginalName();
