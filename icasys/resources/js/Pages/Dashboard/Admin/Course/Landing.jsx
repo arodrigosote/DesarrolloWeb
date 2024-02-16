@@ -10,9 +10,12 @@ import { CImage } from '@coreui/react';
 import ButtonPrimary from '@/Components/ButtonPrimary';
 import { RiArrowDownSFill, RiBarChartFill, RiTimeLine } from "react-icons/ri";
 import Footer from '@/Pages/Components/Footer/Footer';
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 
 export default function Courses(auth) {
-    const { course, modules, lessons, url } = usePage().props;
+    const { course, modules, lessons, url, preference, key } = usePage().props;
+
+    initMercadoPago(key);
 
     const {data, setData, get, errors} = useForm({});
 
@@ -77,7 +80,10 @@ export default function Courses(auth) {
                     <div className=' mx-12 mb-12 border border-gray-300'>
                         <div className='bg-lighter p-7'>
                             <p className='font-bold text-2xl'>${course.price}</p>
-                            <ButtonPrimary className='text-center' onClick={() => {handleShowLessons(course.id, course.slug)}}>Inscribirme</ButtonPrimary>
+                            {/* <ButtonPrimary className='text-center' onClick={() => {handleShowLessons(course.id, course.slug)}}>Inscribirme</ButtonPrimary> */}
+                            <div id="wallet_container"></div>
+                            <Wallet initialization={{ preferenceId: preference.id }} customization={{ texts:{ valueProp: 'smart_option'}}} />
+
                         </div>
                         <div className='p-7'>
                             <div className='flex justify-start items-center'><RiBarChartFill/>{course.coursedifficulty.name}</div>

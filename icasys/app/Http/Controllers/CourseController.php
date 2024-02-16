@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
+use MercadoPago\Client\Payment\PreferenceClient;
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\SDK;
 
 class CourseController extends Controller
 {
@@ -185,18 +188,42 @@ class CourseController extends Controller
         }
     }
 
-    public function show_course_landing($id, $slug){
+    public function show_course_landing($id, $slug)
+    {
+
+        $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
+        MercadoPago\SDK::setAccessToken(config('services.mercadopago.token'));
+
+        $client = new PreferenceClient();
+        // $request_options = new MPRequestOptions();
+        // $request_options->setCustomHeaders(["X-Idempotency-Key: <SOME_UNIQUE_VALUE>"]);
+
+        $preference = $client->create([
+            "items" => array(
+                array(
+                    "title" => $course->title,
+                    "quantity" => 1,
+                    "unit_price" => $course->price,
+                )
+            ),
+            false
+        ]);
+
+
         return Inertia::render('Dashboard/Admin/Course/Landing', [
-            'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id),
+            'course' => $course,
             'modules' => Module::where('course_id', $id)->get(),
             'lessons' => Lesson::whereHas('module', function ($query) use ($id) {
                 $query->where('course_id', $id);
             })->get(),
             'url' => env('APP_URL'),
+            'preference' => $preference,
+            'key' => config('services.mercadopago.token'),
         ]);
     }
 
-    public function show_content($course_id, $course_slug){
+    public function show_content($course_id, $course_slug)
+    {
         return Inertia::render('Dashboard/Admin/Course/Lesson/Show', [
             'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
             'modules' => Module::where('course_id', $course_id)->get(),

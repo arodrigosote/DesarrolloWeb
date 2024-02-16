@@ -25,6 +25,7 @@
         "@emotion/react": "^11.11.3",
         "@emotion/styled": "^11.11.0",
         "@inertiajs/inertia-react": "^0.8.1",
+        "@mercadopago/sdk-react": "^0.0.17",
         "@mui/material": "^5.15.3",
         "@mui/styled-engine-sc": "^6.0.0-alpha.11",
         "@react-pdf/renderer": "^3.3.3",
