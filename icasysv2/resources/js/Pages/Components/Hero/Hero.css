@@ -1,4 +1,53 @@
-@import url("../../../../css/app.css");
+:root{
+    --primary: #014ba0;
+    --secondary: #0a5cb8;
+    --auxiliar1: #1466c3;
+    --auxiliar2: #2174d4;
+    --light: #B6CFDD;
+    --lighter: #eaf6fd;
+    --more-light: #d1e4ee;
+    --red: #C00000;
+    --yellow: #FFC107;
+    --white: #ffffff;
+    --dark: #25262b;
+
+}
+html, body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Verdana', sans-serif !important;
+}
+.text-primary{
+    color: var(--primary) !important;
+}
+.text-auxiliar2{
+    color: var(--auxiliar2);
+}
+.text-auxiliar1{
+    color: var(--auxiliar1);
+}
+.text-secondary{
+    color: var(--secondary);
+}
+.bg-primary{
+    background-color: var(--primary);
+}
+.bg-auxiliar2{
+    background-color: var(--auxiliar2);
+}
+.bg-yellow{
+    background-color: var(--yellow);
+}
+.bg-light{
+    background-color: var(--light);
+}
+.bg-lighter{
+    background-color: var(--lighter);
+}
+.bg-dark{
+    background-color: var(--dark);
+}
+
 
 .imagen {
     background-image: url(../../../Assets/Images/fondo.webp);
