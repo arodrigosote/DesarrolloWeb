@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import CourseCard from '@/Components/CourseCard';
 import { Grid, Container, Accordion, AccordionSummary, Typography, AccordionDetails, MenuItem } from '@mui/material';
@@ -10,19 +10,21 @@ import { CImage } from '@coreui/react';
 import ButtonPrimary from '@/Components/ButtonPrimary';
 import { RiArrowDownSFill, RiBarChartFill, RiTimeLine } from "react-icons/ri";
 import Footer from '@/Pages/Components/Footer/Footer';
-import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 
 export default function Courses(auth) {
     const { course, modules, lessons, url, preference, key } = usePage().props;
 
-    initMercadoPago(key);
+    useEffect(() => {
+        initMercadoPago(key, { locale: 'es-MX' });
+    }, []);
 
-    const {data, setData, get, errors} = useForm({});
+    const { data, setData, get, errors } = useForm({});
 
     const handleShowLessons = (course_id, course_slug) => {
         get(route('course.show.content', [course_id, course_slug]));
     }
-
+    console.log(preference)
     return (
         <>
             <Head>
@@ -76,18 +78,19 @@ export default function Courses(auth) {
                     <h2 className='text-2xl mt-6 font-bold text-secondary'>Audiencia</h2>
                     <p>{course.target_audience}</p>
                 </div>
-                <div className='w-[40%]'>
+                <div className='w-[45%]'>
                     <div className=' mx-12 mb-12 border border-gray-300'>
                         <div className='bg-lighter p-7'>
                             <p className='font-bold text-2xl'>${course.price}</p>
                             {/* <ButtonPrimary className='text-center' onClick={() => {handleShowLessons(course.id, course.slug)}}>Inscribirme</ButtonPrimary> */}
-                            <div id="wallet_container"></div>
-                            <Wallet initialization={{ preferenceId: preference.id }} customization={{ texts:{ valueProp: 'smart_option'}}} />
+                            <div id="wallet_container w-full">
+                                <Wallet initialization={{ preferenceId: preference.id, redirectMode:'modal' }} customization={{ texts:{ valueProp: 'smart_option'}}} />
+                            </div>
 
                         </div>
                         <div className='p-7'>
-                            <div className='flex justify-start items-center'><RiBarChartFill/>{course.coursedifficulty.name}</div>
-                            <div className='flex justify-start items-center'><RiTimeLine/>{course.houres} horas de curso</div>
+                            <div className='flex justify-start items-center'><RiBarChartFill />{course.coursedifficulty.name}</div>
+                            <div className='flex justify-start items-center'><RiTimeLine />{course.houres} horas de curso</div>
                         </div>
                     </div>
                     <div className=' m-12 border border-gray-300'>

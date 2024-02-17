@@ -12,9 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
-use MercadoPago\Client\Payment\PreferenceClient;
+use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
-use MercadoPago\SDK;
 
 class CourseController extends Controller
 {
@@ -190,26 +189,32 @@ class CourseController extends Controller
 
     public function show_course_landing($id, $slug)
     {
-        require_once('path/to/mercadopago/autoload.php');
-        // require base_path('vendor/autoload.php');
+        MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
         $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
-        MercadoPagoConfig::setAccessToken(config('services.mercadopago.token'));
 
         $client = new PreferenceClient();
-        // $request_options = new MPRequestOptions();
-        // $request_options->setCustomHeaders(["X-Idempotency-Key: <SOME_UNIQUE_VALUE>"]);
-
         $preference = $client->create([
+            "external_reference" => "teste",
             "items" => array(
                 array(
+                    "description" => $course->short_description,
                     "title" => $course->title,
                     "quantity" => 1,
                     "unit_price" => $course->price,
+                    "picture_url" => "http://www.myapp.com/myimage.jpg",
                 )
             ),
-            false
+            "payment_methods" => [
+                "default_payment_method_id" => "master",
+                "excluded_payment_types" => array(
+                    array(
+                        "id" => "ticket"
+                    )
+                ),
+                "installments" => 12,
+                "default_installments" => 1
+            ],
         ]);
-
 
         return Inertia::render('Dashboard/Admin/Course/Landing', [
             'course' => $course,
@@ -219,7 +224,7 @@ class CourseController extends Controller
             })->get(),
             'url' => env('APP_URL'),
             'preference' => $preference,
-            'key' => config('services.mercadopago.token'),
+            'key' => env('MP_PUBLIC_KEY'),
         ]);
     }
 

@@ -190,14 +190,29 @@ class CourseController extends Controller
 
     public function show_course_landing($id, $slug)
     {
-        require_once('path/to/mercadopago/autoload.php');
-        // require base_path('vendor/autoload.php');
-        $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
-        MercadoPagoConfig::setAccessToken(config('services.mercadopago.token'));
+        // require_once('path/to/mercadopago/autoload.php');
+        // // require base_path('vendor/autoload.php');
+        // $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
+        // MercadoPagoConfig::setAccessToken(config('services.mercadopago.token'));
 
+        // $client = new PreferenceClient();
+        // // $request_options = new MPRequestOptions();
+        // // $request_options->setCustomHeaders(["X-Idempotency-Key: <SOME_UNIQUE_VALUE>"]);
+
+        // $preference = $client->create([
+        //     "items" => array(
+        //         array(
+        //             "title" => $course->title,
+        //             "quantity" => 1,
+        //             "unit_price" => $course->price,
+        //         )
+        //     ),
+        //     false
+        // ]);
+
+        MercadoPagoConfig::setAccessToken(config('services.mercadopago.token'));
+        $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
         $client = new PreferenceClient();
-        // $request_options = new MPRequestOptions();
-        // $request_options->setCustomHeaders(["X-Idempotency-Key: <SOME_UNIQUE_VALUE>"]);
 
         $preference = $client->create([
             "items" => array(
@@ -209,7 +224,6 @@ class CourseController extends Controller
             ),
             false
         ]);
-
 
         return Inertia::render('Dashboard/Admin/Course/Landing', [
             'course' => $course,
