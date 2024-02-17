@@ -1,0 +1,17 @@
+composer create-project laravel/Laravel nombredelproyecto
+
+composer require laravel/breeze --dev 
+
+php artisan breeze:install react 
+
+npm install
+npm run dev
+
+npm install react-icons --save
+npm install --save react-toastify
+npm install @inertiajs/react
+npm install sweetalert2
+npm install boxicons --save
+npm install @react-pdf/renderer --save
+npm install --save video-react react react-dom redux
+npm install @mui/material @emotion/react @emotion/styled

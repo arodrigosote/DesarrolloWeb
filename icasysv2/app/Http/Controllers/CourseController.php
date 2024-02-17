@@ -58,7 +58,7 @@ class CourseController extends Controller
                 'target_learning' => $request->target_learning,
                 'target_audience' => $request->target_audience,
                 'houres' => $request->houres,
-                'files_included' => $request->files_included,
+                // 'files_included' => $request->files_included,
                 'requirements' => $request->requirements,
             ]);
 
@@ -106,7 +106,7 @@ class CourseController extends Controller
                 'target_learning' => $request->target_learning,
                 'target_audience' => $request->target_audience,
                 'houres' => $request->houres,
-                'files_included' => $request->files_included,
+                // 'files_included' => $request->files_included,
                 'requirements' => $request->requirements,
             ]);
 
