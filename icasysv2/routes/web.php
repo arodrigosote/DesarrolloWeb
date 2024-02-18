@@ -102,6 +102,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
     //Courses
     Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
+    Route::get('/curso/comprar/{id}/{slug}', [CourseController::class, 'cart_course'])->name('course.cart');
 });
 
 

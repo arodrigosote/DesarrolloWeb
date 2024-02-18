@@ -245,6 +245,15 @@ const Student = () => {
         Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
     };
 
+    const handleProfilepicChange = (e) => {
+        const file = e.target.files[0];
+        setData('profile_pic', file); // Actualiza el estado solo con el archivo de imagen
+    };
+    const handleCredentialpicChange = (e) => {
+        const file = e.target.files[0];
+        setData('credential_pic', file); // Actualiza el estado solo con el archivo de imagen
+    };
+
     return (
         <>
 
@@ -551,11 +560,23 @@ const Student = () => {
                         <InputError message={errors.make} />
 
                         <InputLabel htmlFor='profile_pic' value='Foto de perfil: ' />
-                        <TextInput className='' id='profile_pic' name='profile_pic' ref={profile_picInput} value={data.profile_pic || ''} onChange={(e) => setData("profile_pic", e.target.value)} />
+                        <TextField
+                            type="file"
+                            accept="image/*"
+                            id="image"
+                            name="image"
+                            onChange={handleProfilepicChange}
+                        />
                         <InputError message={errors.make} />
 
                         <InputLabel htmlFor='credential_pic' value='Foto de credencial: ' />
-                        <TextInput className='' id='credential_pic' name='credential_pic' ref={credential_picInput} value={data.credential_pic || ''} onChange={(e) => setData("credential_pic", e.target.value)} />
+                        <TextField
+                            type="file"
+                            accept="image/*"
+                            id="image"
+                            name="image"
+                            onChange={handleCredentialpicChange}
+                        />
                         <InputError message={errors.make} />
 
                         <h2 className="text-2xl text-primary font-bold my-2">Datos del tutor</h2>

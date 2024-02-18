@@ -189,8 +189,21 @@ class CourseController extends Controller
 
     public function show_course_landing($id, $slug)
     {
-        MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
         $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
+
+        return Inertia::render('Dashboard/Admin/Course/Landing', [
+            'course' => $course,
+            'modules' => Module::where('course_id', $id)->get(),
+            'lessons' => Lesson::whereHas('module', function ($query) use ($id) {
+                $query->where('course_id', $id);
+            })->get(),
+            'url' => env('APP_URL'),
+        ]);
+    }
+
+    public function cart_course($course_id, $course_slug){
+        MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+        $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id);
 
         $client = new PreferenceClient();
         $preference = $client->create([
@@ -215,12 +228,11 @@ class CourseController extends Controller
                 "default_installments" => 1
             ],
         ]);
-
-        return Inertia::render('Dashboard/Admin/Course/Landing', [
+        return Inertia::render('Dashboard/Admin/Payment/CoursePayment', [
             'course' => $course,
-            'modules' => Module::where('course_id', $id)->get(),
-            'lessons' => Lesson::whereHas('module', function ($query) use ($id) {
-                $query->where('course_id', $id);
+            'modules' => Module::where('course_id', $course_id)->get(),
+            'lessons' => Lesson::whereHas('module', function ($query) use ($course_id) {
+                $query->where('course_id', $course_id);
             })->get(),
             'url' => env('APP_URL'),
             'preference' => $preference,

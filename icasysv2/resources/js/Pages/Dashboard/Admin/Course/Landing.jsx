@@ -10,21 +10,21 @@ import { CImage } from '@coreui/react';
 import ButtonPrimary from '@/Components/ButtonPrimary';
 import { RiArrowDownSFill, RiBarChartFill, RiTimeLine } from "react-icons/ri";
 import Footer from '@/Pages/Components/Footer/Footer';
-import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
+
 
 export default function Courses(auth) {
-    const { course, modules, lessons, url, preference, key } = usePage().props;
-
-    useEffect(() => {
-        initMercadoPago(key, { locale: 'es-MX' });
-    }, []);
+    const { course, modules, lessons, url } = usePage().props;
 
     const { data, setData, get, errors } = useForm({});
 
     const handleShowLessons = (course_id, course_slug) => {
         get(route('course.show.content', [course_id, course_slug]));
     }
-    console.log(preference)
+
+    const handlePaymentCourse = (course_id, course_slug) => {
+        get(route('course.cart', [course_id, course_slug]));
+    }
+
     return (
         <>
             <Head>
@@ -34,8 +34,8 @@ export default function Courses(auth) {
             {/* <Header auth={auth}></Header> */}
             <HeaderCallToAction></HeaderCallToAction>
             <CourseHero course={course}></CourseHero>
-            <div className='lg:flex block mx-60 mt-12'>
-                <div className='w-[60%]'>
+            <div className='lg:flex block mx-4 md:mx-24 lg:mx-24 xl:mx-36 mt-12 mx-auto'>
+                <div className='w-full lg:w-[65%]'>
                     <CImage rounded thumbnail src={`${url}storage/${course.image}`} width='100%' alt={course.name} />
                     <h2 className='text-2xl mt-6 font-bold text-secondary'>Descripción</h2>
                     <p>{course.description}</p>
@@ -48,7 +48,7 @@ export default function Courses(auth) {
                                 aria-controls="panel1-content"
                                 id="panel1-header"
                             >
-                                <Typography sx={{ width: '15%', flexShrink: 0 }}>
+                                <Typography sx={{ width: '28%', flexShrink: 0 }}>
                                     {module.name}
                                 </Typography>
                                 <Typography sx={{ color: 'text.secondary' }}>{module.short_description}</Typography>
@@ -67,33 +67,24 @@ export default function Courses(auth) {
                                     ) : null
                                 ))}
                             </AccordionDetails>
-                            {/* <AccordionActions sx={{ paddingBottom: 2, paddingTop: 0, flexShrink: 0 }}>
-                                <ButtonDelete onClick={(e)=>{openDeleteModuleModal(module.id, module.name)}}>Eliminar</ButtonDelete>
-                                <ButtonEdit onClick={(e) => { openModuleModal(2, module.id, module.name, module.short_description) }}>Editar módulo</ButtonEdit>
-                                <ButtonSecondary onClick={(e) => { openLessonModal(1, module.id) }}>Agregar lección</ButtonSecondary>
-                            </AccordionActions> */}
                         </Accordion>
                     ))}
 
                     <h2 className='text-2xl mt-6 font-bold text-secondary'>Audiencia</h2>
                     <p>{course.target_audience}</p>
                 </div>
-                <div className='w-[45%]'>
-                    <div className=' mx-12 mb-12 border border-gray-300'>
+                <div className='w-full lg:w-[35%] mt-6 md:mt-0'>
+                    <div className=' lg:mx-12 lg:mb-12 border border-gray-300'>
                         <div className='bg-lighter p-7'>
                             <p className='font-bold text-2xl'>${course.price}</p>
-                            {/* <ButtonPrimary className='text-center' onClick={() => {handleShowLessons(course.id, course.slug)}}>Inscribirme</ButtonPrimary> */}
-                            <div id="wallet_container w-full">
-                                <Wallet initialization={{ preferenceId: preference.id, redirectMode:'modal' }} customization={{ texts:{ valueProp: 'smart_option'}}} />
-                            </div>
-
+                            <ButtonPrimary onClick={(e) => {handlePaymentCourse(course.id, course.slug)}} className='w-full text-center flex justify-center'>Inscríbete</ButtonPrimary>
                         </div>
                         <div className='p-7'>
                             <div className='flex justify-start items-center'><RiBarChartFill />{course.coursedifficulty.name}</div>
                             <div className='flex justify-start items-center'><RiTimeLine />{course.houres} horas de curso</div>
                         </div>
                     </div>
-                    <div className=' m-12 border border-gray-300'>
+                    <div className=' lg:m-12 my-12 border border-gray-300'>
                         <div className='bg-lighter p-7'>
                             <p className='text-sm'>Un curso de:</p>
                             <p className='font-bold text-md'>{course.professor.name}</p>
@@ -112,11 +103,10 @@ export default function Courses(auth) {
                 </div>
             </div>
 
-            <div className='my-32 text-center mx-96'>
-                <h2 className='font-bold text-primary text-4xl mb-3'>Invierte en tu futuro, aprende habilidades de alto valor</h2>
-                <ButtonPrimary>Inscríbete</ButtonPrimary>
+            <div className='my-12 md:my-32 text-center mx-4 md:mx-10 lg:mx-24 xl:mx-36'>
+                <h2 className='font-bold text-primary text-2xl md:text-4xl lg:text-5xl mb-3'>Invierte en tu futuro, aprende habilidades de alto valor</h2>
+                <ButtonPrimary onClick={(e) => {handlePaymentCourse(course.id, course.slug)}} variant="contained">Inscríbete</ButtonPrimary>
             </div>
-
             <Footer></Footer>
         </>
     )
