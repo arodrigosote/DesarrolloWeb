@@ -45,6 +45,26 @@ class StudentController extends Controller
             ]);
         }
     }
+    public function searchStudent(Request $request, $name)
+    {
+        if (Gate::denies("isAdmin")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            return Inertia::render('Dashboard/Admin/Student/Search', [
+                'students' => Student::where('active', 1)->where('name', 'like', '%'.$name.'%')->with('group.schedule', 'group.schedule.day', 'group.schedule.hour', 'group.professor', 'tutor')->get(),
+                'groups' => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
+                'grades' => Grade::all(),
+                'activities' => Activity::all(),
+                'locations' => Locations::all(),
+                'inscriptions' => Inscription::all(),
+                'url' => env('APP_URL'),
+                'search' => $name,
+            ]);
+        }
+    }
     public function store(Request $request)
     {
         if (Gate::denies("isAdmin")) {

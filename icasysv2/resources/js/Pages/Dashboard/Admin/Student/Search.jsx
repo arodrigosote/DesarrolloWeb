@@ -29,8 +29,8 @@ import ButtonPayment from "@/Components/ButtonPayment";
 import ButtonYellow from "@/Components/ButtonYellow";
 import Avatar from '@mui/material/Avatar';
 
-const Student = () => {
-    const { students, groups, activities, inscriptions, grades, locations, url, auth } = usePage().props;
+const Search = () => {
+    const { students, groups, activities, inscriptions, grades, locations, url, auth, search } = usePage().props;
     const [mainModal, setMainModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(0);
@@ -257,7 +257,7 @@ const Student = () => {
     return (
         <>
 
-            <DashboardLayout title={'Mostrando alumnos inscritos y activos.'} auth={auth}>
+            <DashboardLayout title={`Resultados de la busqueda: ${search}`} auth={auth}>
                 <div className="flex justify-end">
                     <ButtonPrimary onClick={(e) => openMainModal(1)}>Alta</ButtonPrimary>
                 </div>
@@ -612,4 +612,4 @@ const Student = () => {
 
 // Student.layout = page => <DashboardLayout children={page} ></DashboardLayout>
 
-export default Student;
+export default Search;

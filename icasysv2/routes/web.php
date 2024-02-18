@@ -65,6 +65,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get("/alumno/{id}/agregar/pagos", [StudentController::class, "showStudentPayment"])->name("alumnos.payment.show");
     Route::post("/alumno/crear/pago", [StudentController::class, "storeStudentPayment"])->name("alumnos.payment");
     Route::get("/alumno/{id}/mostrar/recibos", [StudentController::class, "showStudentReceipts"])->name("alumnos.receipts");
+    //STUDENT SEARCH
+    Route::get("/buscar/alumno/{name}", [StudentController::class, "searchStudent"])->name("alumno.search");
+
 
     //GRADES
     Route::put("/grupo/materia/ver-calificaciones/{id}", [StudentclassController::class, "updateGrades"])->name("grupos.grades.update");
