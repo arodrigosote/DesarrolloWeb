@@ -8,10 +8,11 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import ButtonInvisible from "@/Components/ButtonInvisible";
 import Dropdown from "@/Components/Dropdown";
+import { usePage } from "@inertiajs/react";
 
-export default function UserProfileMenu({ auth }) {
+export default function UserProfileMenu({  }) {
     const [isMenuOpen, setMenuOpen] = useState(false);
-
+    const {auth} = usePage().props
     const handleMenuOpen = () => {
         setMenuOpen(!isMenuOpen);
     };

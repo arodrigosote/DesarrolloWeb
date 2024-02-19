@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import './Sidebar.css';
 import NavLink from '@/Components/NavLink';
 import '../../../../../css/app.css';
-import { RiDashboardFill, RiMenuFill, RiCloseFill, RiCompass2Fill, RiUser2Fill, RiGroupFill, RiUser3Fill, RiFunctionFill, RiHome2Fill   } from "react-icons/ri";
+import { RiDashboardFill, RiBook2Fill , RiMenuFill, RiCloseFill, RiCompass2Fill, RiUser2Fill, RiGroupFill, RiUser3Fill, RiFunctionFill, RiHome2Fill   } from "react-icons/ri";
 import icono from '../../../../Assets/Images/blanco.webp';
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import { Menu } from "@headlessui/react";
 import ButtonInvisible from "@/Components/ButtonInvisible";
 
-export default function (props) {
-
+export default function () {
+    const {auth} = usePage().props;
     const [sidebar, setSidebar] = useState(false)
 
     const handleSidebar = () => {
@@ -32,9 +32,8 @@ export default function (props) {
                     </div>
 
                 </Link>
-
                 {/* Menu */}
-                {props.auth.user.rol === 2 ? (
+                {auth.user.rol === 2 ? (
                     <>
                         <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[11px] mt-5 ml-3">PANEL ADMINISTRADOR</h2>
                         <MenuList>
@@ -53,6 +52,7 @@ export default function (props) {
                         <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[11px] mt-5 ml-3">PANEL ESTUDIANTE</h2>
                         <MenuList>
                             <MenuItem className=""><Link href={route('dashboard.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiFunctionFill  className="text-xl"></RiFunctionFill>Escritotio</Link></MenuItem>
+                            <MenuItem className=""><Link href={route('alumno.courses', auth.user.id)} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiBook2Fill  className='text-xl' />Mis cursos</Link></MenuItem>
                         </MenuList>
                     </>
                 )}

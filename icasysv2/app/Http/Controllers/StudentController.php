@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\Inscription;
 use App\Models\Locations;
 use App\Models\Professor;
+use App\Models\Pucharse;
 use App\Models\Receipt;
 use App\Models\Schedule;
 use App\Models\Student;
@@ -325,6 +326,22 @@ class StudentController extends Controller
                 'student' => Student::with('group', 'group.schedule', 'group.schedule.day', 'group.schedule.hour')->find($id),
                 'baseUrl' => env('APP_URL'),
                 'receipts' => Receipt::with('student', 'studentpayments')->where('student_id', $id)->orderBy('created_at', 'desc')->get(),
+            ]);
+        }
+    }
+
+    // ======================================================
+    // Show student courses
+    // ======================================================
+    public function myCourses($user_id){
+        if (Gate::denies("isUser")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No eres alumno.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            return Inertia::render('Dashboard/Student/Courses/MyCourses', [
+                'pucharses' => Pucharse::with('course')->where('state', 'payed')->where('user_id',$user_id)->get(),
             ]);
         }
     }
