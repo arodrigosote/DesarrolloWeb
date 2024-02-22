@@ -25,7 +25,7 @@ const MyCourses = (auth) => {
             <DashboardLayout title={'Mis cursos'} auth={auth}>
                 {pucharses.length === 0 ? (
                     <div>
-                        <p>No hay cursos disponibles.</p>
+                        <p className="my-4">No hay cursos disponibles.</p>
                         <ButtonPrimary><Link href={route('courses')}>Explorar cursos</Link></ButtonPrimary>
                     </div>
                 ) : (

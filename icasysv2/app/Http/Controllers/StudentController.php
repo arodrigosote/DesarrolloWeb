@@ -12,6 +12,7 @@ use App\Models\Pucharse;
 use App\Models\Receipt;
 use App\Models\Schedule;
 use App\Models\Student;
+use App\Models\Studentclasssubject;
 use App\Models\Studentpayment;
 use App\Models\Tutor;
 use App\Models\User;
@@ -342,6 +343,20 @@ class StudentController extends Controller
         } else {
             return Inertia::render('Dashboard/Student/Courses/MyCourses', [
                 'pucharses' => Pucharse::with('course')->where('state', 'payed')->where('user_id',$user_id)->get(),
+            ]);
+        }
+    }
+
+    public function myGrades($user_id){
+        if (Gate::denies("isUser")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No eres alumno.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $student = Student::where('user_id', $user_id)->first();
+            return Inertia::render('Dashboard/Student/Grades/MyGrades', [
+                'grades' => Studentclasssubject::where('student_id',$student->id)->with('classsubjectgroup', 'classsubjectgroup.subjectgroup', 'classsubjectgroup.subjectgroup.subject')->get(),
             ]);
         }
     }

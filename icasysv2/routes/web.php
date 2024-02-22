@@ -43,7 +43,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
@@ -69,6 +69,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get("/buscar/alumno/{name}", [StudentController::class, "searchStudent"])->name("alumno.search");
     //STUDENT
     Route::get("/alumno/{user_id}/mis-cursos", [StudentController::class, "myCourses"])->name("alumno.courses");
+    Route::get("/alumno/{user_id}/mis-calificaciones", [StudentController::class, "myGrades"])->name("alumno.grades");
 
     //GRADES
     Route::put("/grupo/materia/ver-calificaciones/{id}", [StudentclassController::class, "updateGrades"])->name("grupos.grades.update");
