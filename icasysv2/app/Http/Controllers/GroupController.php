@@ -20,16 +20,16 @@ class GroupController extends Controller
     //
     public function index()
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             return Inertia::render("Dashboard/Admin/Group/Index", [
                 "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
                 "professors" => Professor::all(),
                 "schedules" => Schedule::with('day', 'hour')->get(),
+            ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
             ]);
         }
     }
@@ -82,15 +82,15 @@ class GroupController extends Controller
 
     public function show($id)
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             return Inertia::render("Dashboard/Admin/Group/Show", [
                 'group' => Group::with('schedule', 'schedule.hour', 'schedule.day', 'professor')->find($id),
                 'students' => Student::where('group_id', $id)->get(),
+            ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
             ]);
         }
     }
@@ -98,46 +98,40 @@ class GroupController extends Controller
 
     public function showSubjects($id)
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             return Inertia::render("Dashboard/Admin/Group/Subjects", [
                 'subjectsgroup' => Subjectgroup::with('subject')->where('group_id', $id)->get(),
                 'group' => Group::with('schedule', 'schedule.day', 'schedule.hour', 'professor')->find($id),
                 'subjects' => Subject::all(),
+            ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
             ]);
         }
     }
 
     public function storeSubjects(Request $request)
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
-
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             $subjectgroup = SubjectGroup::create([
                 'group_id' => $request->input('group_id'),
                 'subject_id' => $request->input('subject_id'),
                 'start_date' => $request->input('start_date'),
                 'finish_date' => $request->input('finish_date'),
             ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
         }
     }
 
     public function updateSubjects(Request $request, $id)
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             $subjectgroup = SubjectGroup::find($id);
             $subjectgroup->update([
                 'group_id' => $request->input('group_id'),
@@ -145,46 +139,46 @@ class GroupController extends Controller
                 'start_date' => $request->input('start_date'),
                 'finish_date' => $request->input('finish_date'),
             ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
         }
     }
 
     public function deleteSubjects($id)
     {
-        if (Gate::denies("isAdmin")) {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
+            $subjectgroup = SubjectGroup::find($id);
+            $subjectgroup->delete();
+        } else {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',
                 'tipo' => 'error',
             ]);
-        } else {
-            $subjectgroup = SubjectGroup::find($id);
-            $subjectgroup->delete();
         }
     }
 
     public function showLessons($subjectgroup_id, $group_id)
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             return Inertia::render("Dashboard/Admin/Group/Lessons", [
                 'lessons' => Classsubjectgroup::where('subjectgroup_id', $subjectgroup_id)->get(),
                 'group' => Group::find($group_id),
                 'subjectgroup' => Subjectgroup::with('subject')->find($subjectgroup_id),
+            ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
             ]);
         }
     }
 
     public function storeLessons(Request $request)
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             $classsubjectgroup = Classsubjectgroup::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
@@ -199,17 +193,17 @@ class GroupController extends Controller
                     'class_subject_group_id' => $classsubjectgroup->id,
                 ]);
             }
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
         }
     }
 
     public function updateLessons(Request $request, $id)
     {
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             $classsubjectgroup = Classsubjectgroup::find($id);
             $classsubjectgroup->update([
                 'name' => $request->input('name'),
@@ -218,18 +212,23 @@ class GroupController extends Controller
                 'subjectgroup_id' => $request->input('subjectgroup_id'),
                 'group_id' => $request->input('group_id'),
             ]);
-        }
-    }
-    public function deleteLessons($id)
-    {
-        if (Gate::denies("isAdmin")) {
+        } else {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',
                 'tipo' => 'error',
             ]);
-        } else {
+        }
+    }
+    public function deleteLessons($id)
+    {
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             $classsubjectgroup = Classsubjectgroup::find($id);
             $classsubjectgroup->delete();
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
         }
     }
 

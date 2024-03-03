@@ -76,7 +76,7 @@ const MyGrades = (auth) => {
                                                     {grade.grade}
                                                 </Typography>
                                                 <Typography sx={{ display: 'flex', alignItems: 'center', width:'33%', justifyContent:'end' }}>
-                                                    <ButtonPrimary className="">Ver</ButtonPrimary>
+                                                    {/* <ButtonPrimary className="">Ver</ButtonPrimary> */}
                                                 </Typography>
                                             </MenuItem>
                                         ) : null

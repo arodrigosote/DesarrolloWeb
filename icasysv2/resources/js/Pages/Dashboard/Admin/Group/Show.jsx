@@ -73,9 +73,9 @@ const ShowGroup = (props) => {
                             <TableRow>
                                 <TableCell>ALUMNO</TableCell>
                                 <TableCell>CORREO</TableCell>
-                                <TableCell>TELEFONO</TableCell>
+                                {auth.user.rol === 2 ? (<TableCell>TELEFONO</TableCell>):<></>}
                                 <TableCell>ACTIVO</TableCell>
-                                <TableCell>ACCIONES</TableCell>
+                                {auth.user.rol === 2 ? (<TableCell>ACCIONES</TableCell>):<></>}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -89,7 +89,9 @@ const ShowGroup = (props) => {
                                         {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}
                                     </TableCell>
                                     <TableCell>
-                                        <ButtonShow onClick={() => handleShowStudent(student.id)}>
+                                        {auth.user.rol === 2 ? (
+                                            <>
+                                            <ButtonShow onClick={() => handleShowStudent(student.id)}>
                                             Mostrar
                                         </ButtonShow>
                                         <ButtonEdit onClick={() => handleEditStudent(student.id)}>
@@ -98,6 +100,8 @@ const ShowGroup = (props) => {
                                         <ButtonDelete onClick={() => handleDeleteStudent(student.id)}>
                                             Delete
                                         </ButtonDelete>
+                                        </>
+                                        ):(<></>)}
                                     </TableCell>
                                 </TableRow>
                             ))}

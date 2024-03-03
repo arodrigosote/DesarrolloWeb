@@ -188,7 +188,7 @@ const Group = (props) => {
             <ToastContainer />
             <DashboardLayout title={'Mostrando grupos en sistema'} auth={props.auth}>
                 <div className="flex justify-end">
-                    <ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>
+                    {props.auth.user.rol === 2 ? (<ButtonPrimary onClick={() => { openMainModal(1) }}>Agregar</ButtonPrimary>):<></>}
                 </div>
                 <TableContainer>
                     <Table>
@@ -210,8 +210,14 @@ const Group = (props) => {
                                     <TableCell className="text-center">{group.active === 1 ? <RiCircleFill className="text-green-600 text-2xl" /> : <RiCircleFill className="text-red-600 text-2xl" />}</TableCell>
                                     <TableCell>
                                         <ButtonShow onClick={(e) => { handleShowGroup(group.id) }}>Mostrar</ButtonShow>
-                                        <ButtonEdit onClick={(e) => { openMainModal(2, group.id, group.professor.id, group.schedule.id, group.active === 1 ? true : false) }}>Editar</ButtonEdit>
-                                        <ButtonDelete onClick={(e) => { openDeleteModal(group.schedule.id, `${group.schedule.day.name} | ${group.schedule.hour.name}`) }}>Eliminar</ButtonDelete>
+                                        {props.auth.user.rol === 2 ? (
+                                            <>
+                                                <ButtonEdit onClick={(e) => { openMainModal(2, group.id, group.professor.id, group.schedule.id, group.active === 1 ? true : false) }}>Editar</ButtonEdit>
+                                                <ButtonDelete onClick={(e) => { openDeleteModal(group.schedule.id, `${group.schedule.day.name} | ${group.schedule.hour.name}`) }}>Eliminar</ButtonDelete>
+                                            </>
+                                        ) : (
+                                            <></>
+                                        )}
                                     </TableCell>
                                 </TableRow>
                             ))}

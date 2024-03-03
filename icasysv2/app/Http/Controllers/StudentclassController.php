@@ -12,26 +12,20 @@ class StudentclassController extends Controller
 {
     //
     public function showGrades($grade_id){
-        if (Gate::denies("isAdmin")) {
-            return Inertia::render("Dashboard/Dashboard")->with('toast', [
-                'mensaje' => 'No estás autorizado.',
-                'tipo' => 'error',
-            ]);
-        } else {
-            // dd($grade_id);
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             return Inertia::render("Dashboard/Admin/Group/Grades",[
                 'grades' => Studentclasssubject::with('student')->where('class_subject_group_id', $grade_id)->get(),
                 'lesson' => Classsubjectgroup::with('subjectgroup', 'subjectgroup.subject')->find($grade_id),
             ]);
-        }
-    }
-    public function updateGrades(Request $request, $grade_id){
-        if (Gate::denies("isAdmin")) {
+        } else {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',
                 'tipo' => 'error',
             ]);
-        } else {
+        }
+    }
+    public function updateGrades(Request $request, $grade_id){
+        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             $grade = Studentclasssubject::find($grade_id);
             $grade->grade = $request->grade;
             $grade->note = $request->note;
@@ -42,6 +36,11 @@ class StudentclassController extends Controller
                 $grade->attendance = $request->attendance;
             }
             $grade->save();
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
         }
     }
 }

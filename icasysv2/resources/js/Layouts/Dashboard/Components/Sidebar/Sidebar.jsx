@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './Sidebar.css';
 import NavLink from '@/Components/NavLink';
 import '../../../../../css/app.css';
-import { RiDashboardFill, RiDraftFill, RiBook2Fill , RiMenuFill, RiCloseFill, RiCompass2Fill, RiUser2Fill, RiGroupFill, RiUser3Fill, RiFunctionFill, RiHome2Fill   } from "react-icons/ri";
+import { RiDashboardFill, RiDraftFill,RiUserFill, RiBook2Fill , RiMenuFill, RiCloseFill, RiCompass2Fill, RiUser2Fill, RiGroupFill, RiUser3Fill, RiFunctionFill, RiHome2Fill   } from "react-icons/ri";
 import icono from '../../../../Assets/Images/blanco.webp';
 import { Link, usePage } from "@inertiajs/react";
 import Avatar from '@mui/material/Avatar';
@@ -37,7 +37,7 @@ export default function () {
                     <>
                         <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[11px] mt-5 ml-3">PANEL ADMINISTRADOR</h2>
                         <MenuList>
-                            <MenuItem className=""><Link href={route('dashboard.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiHome2Fill className="text-xl"></RiHome2Fill>Escritotio</Link></MenuItem>
+                            <MenuItem className=""><Link href={route('dashboard.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiHome2Fill className="text-xl"></RiHome2Fill>Escritorio</Link></MenuItem>
                             <MenuItem className=""><Link href={route('grupos.index')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiGroupFill className='text-xl' />Grupos</Link></MenuItem>
                             <MenuItem className=""><Link href={route('alumnos.index')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiUser3Fill className='text-xl' />Alumnos</Link></MenuItem>
                             <MenuItem className=""><Link href={route('horarios.index')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiCompass2Fill className="text-xl"></RiCompass2Fill >Horarios</Link></MenuItem>
@@ -46,18 +46,39 @@ export default function () {
                         <MenuList>
                             <MenuItem className=""><Link href={route('admin.courses')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiDashboardFill className="text-xl"></RiDashboardFill>Cursos</Link></MenuItem>
                         </MenuList>
+                        <MenuList>
+                            <MenuItem className=""><Link href={route('profile.show')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiUserFill className="text-xl"></RiUserFill>Perfil</Link></MenuItem>
+                        </MenuList>
                     </>
-                ) : (
+                ):<></>}
+                {auth.user.rol === 1 ? (
+                    <>
+                        <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[11px] mt-5 ml-3">PANEL PROFESOR</h2>
+                        <MenuList>
+                            <MenuItem className=""><Link href={route('dashboard.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiHome2Fill className="text-xl"></RiHome2Fill>Escritorio</Link></MenuItem>
+                            <MenuItem className=""><Link href={route('grupos.index')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiGroupFill className='text-xl' />Mis Grupos</Link></MenuItem>
+                        </MenuList>
+                        {/* <MenuList>
+                            <MenuItem className=""><Link href={route('admin.courses')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiDashboardFill className="text-xl"></RiDashboardFill>Cursos</Link></MenuItem>
+                        </MenuList> */}
+                        <MenuList>
+                            <MenuItem className=""><Link href={route('profile.show')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiUserFill className="text-xl"></RiUserFill>Perfil</Link></MenuItem>
+                        </MenuList>
+                    </>
+                ) : <></>}
+                {auth.user.rol === 0 ? (
                     <>
                         <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[11px] mt-5 ml-3">PANEL ESTUDIANTE</h2>
                         <MenuList>
-                            <MenuItem className=""><Link href={route('dashboard.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiFunctionFill  className="text-xl"></RiFunctionFill>Escritotio</Link></MenuItem>
+                            <MenuItem className=""><Link href={route('dashboard.home')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiFunctionFill  className="text-xl"></RiFunctionFill>Escritorio</Link></MenuItem>
                             <MenuItem className=""><Link href={route('alumno.courses', auth.user.id)} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiBook2Fill  className='text-xl' />Mis cursos</Link></MenuItem>
                             <MenuItem className=""><Link href={route('alumno.grades', auth.user.id)} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiDraftFill  className='text-xl' />Calificaciones</Link></MenuItem>
                         </MenuList>
+                        <MenuList>
+                            <MenuItem className=""><Link href={route('profile.show')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]"><RiUserFill className="text-xl"></RiUserFill>Perfil</Link></MenuItem>
+                        </MenuList>
                     </>
-                )}
-
+                ):<></>}
             </div>
 
             {/* Button to hide or show */}
