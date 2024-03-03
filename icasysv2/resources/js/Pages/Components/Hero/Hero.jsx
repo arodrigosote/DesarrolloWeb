@@ -12,7 +12,7 @@ export default function () {
                         <p className="description">Somos un instituto de educación que busca proporcionar enseñanza de calidad a nuestros estudiantes en áreas como:</p>
                         <h3 className="offering"><strong>Ofimática, Programación, Diseño Gráfico, Diseño Web, Marketing e Inglés.</strong></h3>
                         <div className="mt-9">
-                            <a href="#" className="button">Explorar Cursos</a>
+                            <a href={route('courses')} className="button">Explorar Cursos</a>
                         </div>
                     </div>
                 </div>

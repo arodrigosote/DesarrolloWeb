@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Student;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,14 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+
+    public function show(Request $request){
+        return Inertia::render('Profile/Show', [
+            'url' => env('APP_URL'),
+            'student' => Student::where('user_id', $request->user()->id)->with('group', 'group.professor', 'group.schedule', 'group.schedule.day', 'group.schedule.hour')->first(),
+
+        ]);
+    }
     /**
      * Display the user's profile form.
      */

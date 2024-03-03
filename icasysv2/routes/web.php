@@ -44,6 +44,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
