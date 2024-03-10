@@ -294,8 +294,8 @@ const Student = () => {
                                                 {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}
                                             </TableCell>
                                             <TableCell>
-                                                <ButtonYellow type='button' className="md:inline-block" onClick={(e) => studetnPayment(student.id)}>Pago</ButtonYellow>
-                                                <ButtonShow type='button' className="md:inline-block" onClick={(e) => showStudent(student.id)}>Mostrar</ButtonShow>
+                                                <ButtonYellow type='button' className="md:inline-block w-full my-0" onClick={(e) => studetnPayment(student.id)}>Pago</ButtonYellow>
+                                                <ButtonShow type='button' className="md:inline-block w-full my-0" onClick={(e) => showStudent(student.id)}>Mostrar</ButtonShow>
                                                 <ButtonEdit
                                                     onClick={(e) =>
                                                         openMainModal(
@@ -328,7 +328,7 @@ const Student = () => {
                                                             student.tutor.occupation
                                                         )
                                                     }
-                                                    className="md:inline-block"
+                                                    className="md:inline-block w-full my-0"
                                                 >
                                                     Editar
                                                 </ButtonEdit>

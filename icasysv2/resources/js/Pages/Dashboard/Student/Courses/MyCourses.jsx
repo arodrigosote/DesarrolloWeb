@@ -13,12 +13,30 @@ import ButtonDelete from "@/Components/ButtonDelete";
 import ButtonEdit from "@/Components/ButtonEdit";
 import ButtonCancel from "@/Components/ButtonCancel";
 import SecondaryLink from "@/Components/SecondaryLink";
+import { CImage } from "@coreui/react";
 
 
-const MyCourses = (auth) => {
-    const { pucharses } = usePage().props
+const MyCourses = (auth, props) => {
+    const { pucharses, url } = usePage().props
+    const [toastInfo, setToastInfo] = useState(null);
+
+    useEffect(() => {
+        // Verificar si hay información de "toast" y mostrar el "toast" correspondiente
+        if (props.toast) {
+            setToastInfo(props.toast);
+        }
+    }, [props.toast]);
+
+    useEffect(() => {
+        // Mostrar el "toast" cuando se actualice el estado local
+        if (toastInfo) {
+            toast[toastInfo.tipo](toastInfo.mensaje);
+            setToastInfo(null); // Limpiar el estado después de mostrar el "toast"
+        }
+    }, [toastInfo]);
     return (
         <>
+            <ToastContainer />
             <Head>
                 <title>Mis cursos</title>
             </Head>
@@ -30,7 +48,23 @@ const MyCourses = (auth) => {
                     </div>
                 ) : (
                     <div>
-                        <h2>Longitud de cursos: {coursesLength}</h2>
+                        {/* <h2>Longitud de cursos: {pucharses.length}</h2> */}
+                        {pucharses.map((pucharse, index) => (
+                            <div key={index} className="block lg:flex lg:justify-between my-5">
+                                <div className="block lg:flex lg:justify-start items-center">
+                                    <div className="w-full lg:w-[30%] flex md:justify-center lg:justify-start">
+                                        <CImage rounded thumbnail src={`${url}storage/${pucharse.course.image}`} className='w-[100%] md:w-[50%] lg:w-[100%]' alt={pucharse.course.name} />
+                                    </div>
+                                    <div className="lg:ml-3 text-center lg:text-left py-3">
+                                        <p className="text-primary font-bold">{pucharse.course.title}</p>
+                                        <p className="text-gray-600">{pucharse.course.coursecategory.name}</p>
+                                    </div>
+                                </div>
+                                <div className="mx-auto flex justify-center items-center">
+                                    <ButtonPrimary className="h-[35%]">Entrar</ButtonPrimary>
+                                </div>
+                            </div>
+                        ))}
                         {/* Aquí puedes renderizar el resto de tu componente */}
                     </div>
                 )}

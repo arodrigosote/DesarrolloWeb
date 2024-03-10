@@ -14,9 +14,9 @@ export default function Show({ auth }) {
             <div className='flex justify-end'>
                 <Link href={route('profile.edit')}><ButtonPrimary>Editar informacion</ButtonPrimary></Link>
             </div>
-            <div className="block lg:flex">
-                <div className=''>
-                    <CImage rounded thumbnail src={`${url}storage/${auth.user.profile_pic}`} width={300} height={300} />
+            <div className="block lg:flex lg:justify-start justify-center lg:text-left text-center">
+                <div className='px-7 '>
+                    <CImage className="rounded-full mx-auto lg:mx-0 pb-4" thumbnail src={`${url}storage/${auth.user.profile_pic}`} width={300} height={300} />
                 </div>
                 <div>
                     <h2 className='text-secondary text-xl'>Información</h2>
@@ -24,13 +24,11 @@ export default function Show({ auth }) {
                     <p className='my-1'><strong>Email: </strong>{auth.user.email}</p>
                 </div>
             </div>
-            {console.log(student)}
             {student === null ? <div>
 
-            </div> : <div className="block lg:flex mt-12">
-                    <div className=''>
-
-                        <CImage rounded thumbnail src={`${url}storage/${student.profile_pic}`} width={300} height={300} />
+            </div> : <div className="block lg:flex lg:justify-start justify-center lg:text-left text-center">
+                    <div className='px-7'>
+                        <CImage className="rounded-full mx-auto lg:mx-0 pb-1" thumbnail src={`${url}storage/${student.profile_pic}`} width={300} height={300} />
                     </div>
                     <div>
                         <h2 className='text-secondary text-xl'>Información de alumno en sistema</h2>

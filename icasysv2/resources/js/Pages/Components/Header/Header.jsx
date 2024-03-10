@@ -80,7 +80,7 @@ export default function (auth) {
 
                         <Dropdown.Content>
                             <Dropdown.Link href={route('dashboard.home')} className='text-end'>Escritorio</Dropdown.Link>
-                            <Dropdown.Link href={route('profile.edit')} className='text-end'>Perfil</Dropdown.Link>
+                            <Dropdown.Link href={route('profile.show')} className='text-end'>Perfil</Dropdown.Link>
                             <Dropdown.Link href={route('logout')} method="post" as="button" className='text-end'>
                                 Cerrar sesión
                             </Dropdown.Link>

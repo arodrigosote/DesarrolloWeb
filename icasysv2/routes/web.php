@@ -7,6 +7,7 @@ use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
@@ -45,7 +46,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show');
-    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('dias', DayController::class);
@@ -69,8 +70,8 @@ Route::middleware('auth', 'verified')->group(function () {
     //STUDENT SEARCH
     Route::get("/buscar/alumno/{name}", [StudentController::class, "searchStudent"])->name("alumno.search");
     //STUDENT
-    Route::get("/alumno/{user_id}/mis-cursos", [StudentController::class, "myCourses"])->name("alumno.courses");
-    Route::get("/alumno/{user_id}/mis-calificaciones", [StudentController::class, "myGrades"])->name("alumno.grades");
+    Route::get("/alumno/mis-cursos", [StudentController::class, "myCourses"])->name("alumno.courses");
+    Route::get("/alumno/mis-calificaciones", [StudentController::class, "myGrades"])->name("alumno.grades");
 
     //GRADES
     Route::put("/grupo/materia/ver-calificaciones/{id}", [StudentclassController::class, "updateGrades"])->name("grupos.grades.update");
@@ -105,10 +106,14 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::delete("/admin/cursos/modulo/lesson/eliminar/{id}", [LessonController::class, "delete"])->name("admin.lesson.destroy");
     Route::get("/curso/{course_id}/{course_name}/lesson/{lesson_id}/{lesson_name}", [LessonController::class, "show_lesson"])->name("lesson.show");
 
-
     //Courses
     Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
     Route::get('/curso/comprar/{id}/{slug}', [CourseController::class, 'cart_course'])->name('course.cart');
+
+    //Payments
+    Route::get('/curso/comprar/{id}/{slug}/aprobado', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/curso/comprar/{id}/{slug}/pendiente', [PaymentController::class, 'pending'])->name('payment.pending');
+    Route::get('/curso/comprar/{id}/{slug}/error', [PaymentController::class, 'failure'])->name('payment.failure');
 });
 
 

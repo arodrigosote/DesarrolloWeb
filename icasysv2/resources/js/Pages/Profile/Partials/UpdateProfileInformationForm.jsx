@@ -8,16 +8,24 @@ import { Transition } from '@headlessui/react';
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
         email: user.email,
-        profile_pic: user.profile_pic,
+        profile_pic: null, // Initialize as null
     });
 
     const submit = (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('email', data.email);
+        formData.append('profile_pic', data.profile_pic); // Append the file to FormData
+        post(route('profile.update'), formData); // Pass FormData to post
+    };
 
-        patch(route('profile.update'));
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setData('profile_pic', file); // Update state with the selected file
     };
 
     return (
@@ -61,6 +69,21 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="profile_pic" value="Imagen de perfil" />
+
+                    <input
+                        id="profile_pic"
+                        className="mt-1 block w-full"
+                        type="file"
+                        accept="image/*"
+                        name="profile_pic"
+                        onChange={handleImageChange}
+                    />
+
+                    <InputError className="mt-2" message={errors.profile_pic} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

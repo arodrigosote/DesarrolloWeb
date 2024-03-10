@@ -28,9 +28,16 @@ import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 import ButtonYellow from "@/Components/ButtonYellow";
 import { router } from '@inertiajs/react'
+import { CImage } from "@coreui/react";
 
 const ShowStudent = () => {
     const { student, baseUrl, auth } = usePage().props;
+
+    const [image, setImage] = useState(false);
+
+    const changeImage = () => {
+        setImage(!image);
+    }
 
     const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
 
@@ -39,42 +46,52 @@ const ShowStudent = () => {
     const handleRecibos = () => {
         get(route('alumnos.receipts', student.id))
     }
+    const studetnPayment = (id) => {
+        get(route('alumnos.payment.show', id));
+    }
     return (
         <>
-            <DashboardLayout title={student.name} auth={auth}>
-                <div className="lg:flex sm:block">
-                    <div className="lg:w-[33%] sm:w-[100%] flex">
-                        <div className="w-[1%]">
-                            <IconButton className="">
-                                <RiLoopRightFill />
-                            </IconButton>
-                        </div>
-                        <div className="w-[99%] flex items-center">
-                            <img src={`${baseUrl}/storage/${student.credential_pic}`} className="rounded-full" alt="" />
-                        </div>
-
-
+        <Head>
+            <title>{student.name}</title>
+        </Head>
+        <DashboardLayout title={student.name} auth={auth}>
+            <div className="lg:flex sm:block">
+                <div className="lg:w-[33%] sm:w-[100%] flex">
+                    <div className="w-[1%]">
+                        <IconButton onClick={(e)=>{changeImage()}} className="bg-white">
+                            <RiLoopRightFill />
+                        </IconButton>
                     </div>
-                    <div className="w-[66%] my-auto">
-                        <h1 className="text-primary font-bold text-xl mt-5">Información del alumno.</h1>
-                        <p className="mt-3"><strong>Nombre:</strong> {student.name}</p>
-                        <p className="mt2"><strong>Fecha de inicio:</strong> {student.firstday}</p>
-                        <p className="mt2"><strong>Asistencias:</strong> </p>
-                        <p className="mt2"><strong>Faltas:</strong> </p>
-                        <p className="mt2"><strong>Teléfono:</strong> {student.phone}</p>
-                        <p className="mt2"><strong>Email:</strong> {student.email}</p>
-                        <div className="lg:flex sm:block justify-between mt-4">
-                            <ButtonSecondary className="sm:w-[100%] lg:w-auto">Historia académica</ButtonSecondary>
-                            <ButtonSecondary className="sm:w-[100%] lg:w-auto">Formato inscripción</ButtonSecondary>
-                            <ButtonEdit className="sm:w-[100%] lg:w-auto">Editar</ButtonEdit>
-                            <ButtonEdit className="sm:w-[100%] lg:w-auto" onClick={handleRecibos}>Recibos</ButtonEdit>
-                            <ButtonYellow className="sm:w-[100%] lg:w-auto">Pagos</ButtonYellow>
-                            <ButtonSecondary className="sm:w-[100%] lg:w-auto">Credencial</ButtonSecondary>
-                        </div>
+                    <div className="w-[99%] flex items-center justify-center">
+                        {image === false ? (
+                            <CImage rounded thumbnail src={`${baseUrl}storage/${student.profile_pic}`} width={230} height={230} />
+                        ) : (
+                            <CImage rounded thumbnail src={`${baseUrl}storage/${student.credential_pic}`} width={230} height={230} />
+                        )}
                     </div>
 
                 </div>
-            </DashboardLayout>
+                <div className="lg:w-[66%] w-[100%] my-auto mx-auto">
+                    <h1 className="text-primary font-bold text-xl mt-5">Información del alumno.</h1>
+                    <p className="mt-3"><strong>Nombre:</strong> {student.name}</p>
+                    <p className="mt2"><strong>Fecha de inicio:</strong> {student.firstday}</p>
+                    <p className="mt2"><strong>Asistencias:</strong> </p>
+                    <p className="mt2"><strong>Faltas:</strong> </p>
+                    <p className="mt2"><strong>Teléfono:</strong> {student.phone}</p>
+                    <p className="mt2"><strong>Email:</strong> {student.email}</p>
+                    <div className="lg:flex sm:block justify-between mt-4">
+                        <ButtonSecondary className="sm:w-[100%] lg:w-auto">Historia académica</ButtonSecondary>
+                        <ButtonSecondary className="sm:w-[100%] lg:w-auto">Formato inscripción</ButtonSecondary>
+                        <ButtonEdit className="sm:w-[100%] lg:w-auto">Editar</ButtonEdit>
+                        <ButtonEdit className="sm:w-[100%] lg:w-auto" onClick={handleRecibos}>Recibos</ButtonEdit>
+                        <ButtonYellow className="sm:w-[100%] lg:w-auto mt-2" onClick={(e) => studetnPayment(student.id)}>Pagos</ButtonYellow>
+                        <ButtonSecondary className="sm:w-[100%] lg:w-auto">Credencial</ButtonSecondary>
+                    </div>
+                </div>
+
+            </div>
+        </DashboardLayout>
+
         </>
     )
 }

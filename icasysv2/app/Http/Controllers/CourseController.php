@@ -201,33 +201,53 @@ class CourseController extends Controller
         ]);
     }
 
-    public function cart_course($course_id, $course_slug){
-        MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+    public function cart_course($course_id, $course_slug)
+    {
+        // Use environment variables for sensitive information
+        $accessToken = env('MP_ACCESS_TOKEN');
+        MercadoPagoConfig::setAccessToken($accessToken);
+
         $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id);
 
         $client = new PreferenceClient();
-        $preference = $client->create([
-            "external_reference" => "teste",
-            "items" => array(
-                array(
-                    "description" => $course->short_description,
-                    "title" => $course->title,
-                    "quantity" => 1,
-                    "unit_price" => $course->price,
-                    "picture_url" => "http://www.myapp.com/myimage.jpg",
-                )
-            ),
-            "payment_methods" => [
-                "default_payment_method_id" => "master",
-                "excluded_payment_types" => array(
-                    array(
-                        "id" => "ticket"
-                    )
-                ),
-                "installments" => 12,
-                "default_installments" => 1
-            ],
-        ]);
+
+        try {
+            $preference = $client->create([
+                "external_reference" => "course_" . $course_id, // Use course ID for reference
+                "items" => [
+                    [
+                        "description" => $course->short_description,
+                        "title" => $course->title,
+                        "quantity" => 1,
+                        "unit_price" => $course->price,
+                        "picture_url" => "http://www.myapp.com/myimage.jpg",
+                    ]
+                ],
+                "payment_methods" => [
+                    "default_payment_method_id" => "master",
+                    "excluded_payment_types" => [
+                        ["id" => "ticket"]
+                    ],
+                    "installments" => 12,
+                    "default_installments" => 1
+                ],
+                "back_urls" => [
+                    "success" => route('payment.success', ['course_id' => $course->id, 'id' => $course->id, 'slug' => $course->slug]),
+                    "failure" => route('payment.failure', ['course_id' => $course->id, 'id' => $course->id, 'slug' => $course->slug]),
+                    "pending" => route('payment.pending', ['course_id' => $course->id, 'id' => $course->id, 'slug' => $course->slug])
+                ]
+            ]);
+        } catch (Exception $e) {
+            // Handle preference creation error gracefully (e.g., log error, display user-friendly message)
+            return redirect()->back()->withErrors(['error' => 'Failed to create payment preference']);
+        }
+
+        // $preference->back_urls = array(
+
+        // );
+
+        $preference->auto_return = "approved";
+
         return Inertia::render('Dashboard/Admin/Payment/CoursePayment', [
             'course' => $course,
             'modules' => Module::where('course_id', $course_id)->get(),
@@ -239,6 +259,7 @@ class CourseController extends Controller
             'key' => env('MP_PUBLIC_KEY'),
         ]);
     }
+
 
     public function show_content($course_id, $course_slug)
     {

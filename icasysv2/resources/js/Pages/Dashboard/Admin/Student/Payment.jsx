@@ -35,7 +35,16 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 
 const ShowStudent = () => {
 
-    const [modal, setModal] = useState(false);
+    const [dialog, setDialog] = useState(false);
+
+    const openDialog = () => {
+        setDialog(true);
+    }
+    const closeDialog = () => {
+        setDialog(false);
+    }
+
+    const [switchChangesCount, setSwitchChangesCount] = useState(0);
 
     const { student, baseUrl, payments, auth } = usePage().props;
     // Suponiendo que tienes un array llamado pagos
@@ -95,12 +104,7 @@ const ShowStudent = () => {
 
     const submit = (e) => {
         e.preventDefault();
-        data.student_id = student.id;
-        post(route('alumnos.payment', {
-            onSuccess: () => { ok('Pagos registrados correctamente.') },
-            onError: () => { errorModal('Hubo un error al momento de crear los pagos.') }
-        }))
-
+        openDialog(); // Abre el modal de confirmación antes de enviar el formulario
     };
 
     const ok = (message) => {
@@ -113,26 +117,57 @@ const ShowStudent = () => {
         Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
     };
 
+    const cero_weeks = (message) => {
+        reset();
+        Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
+    };
+
+    const handleSwitch = (data, e) => {
+        if (e.target.checked === true) {
+            setSwitchChangesCount(prevCount => prevCount + 1);
+        } else {
+            setSwitchChangesCount(prevCount => prevCount - 1);
+        }
+        setData(`payment_check_${data}`, e.target.checked)
+    }
+
+
+    const handleConfirmation = () => {
+        // Enviar el formulario si se confirma la acción
+        if (switchChangesCount === 0) {
+            cero_weeks('No es posible crear pago de 0 semanas.')
+        } else {
+            data.student_id = student.id;
+            post(route('alumnos.payment', {
+                onSuccess: () => { ok('Pagos registrados correctamente.') },
+                onError: () => { errorModal('Hubo un error al momento de crear los pagos.') }
+            }));
+        }
+
+        closeDialog(); // Cierra el modal de confirmación después de enviar el formulario
+    };
+
     return (
         <>
 
             <DashboardLayout title={`Pagos de: ${student.name}`} auth={auth}>
                 {/* <ButtonEdit onClick={pdf}>Download</ButtonEdit> */}
-                <form onSubmit={submit}>
+                <form onSubmit={submit} id="form">
 
                     <div className="flex justify-end">
-                        <ButtonPrimary type='submit' disabled={processing}>Enviar</ButtonPrimary>
+                        <ButtonPrimary disabled={processing}>Enviar</ButtonPrimary>
+
                     </div>
-                    <div className="xl:flex block justify-around text-center">
-                        <div className="w-full overflow-x-auto">
-                            <h2 className="my-4 text-xl">Semanas pagadas</h2>
+                    <div className="xl:flex block lg:justify-around mx-auto text-center">
+                        <div className="w-full overflow-x-auto text-center flex justify-center">
                             <div className="">
+                                <h2 className="my-4 text-xl">Semanas pagadas</h2>
                                 <table className="">
                                     <thead className="">
                                         <tr className="w-16">
-                                            <th className="hidden">Número <br/>de semana</th>
-                                            <th className="p-4 text-[14px]">Número<br/> semana</th>
-                                            <th className="p-4 text-[14px]">Fecha a <br/>pagar</th>
+                                            <th className="hidden">Número <br />de semana</th>
+                                            <th className="p-4 text-[14px]">Número<br /> semana</th>
+                                            <th className="p-4 text-[14px]">Fecha a <br />pagar</th>
                                             <th className="p-4 text-[14px]">Fecha de pago</th>
                                             <th className="p-4 text-[14px]">Seleccionar</th>
                                         </tr>
@@ -200,17 +235,18 @@ const ShowStudent = () => {
 
 
                         </div>
-                        <div className="w-full overflow-x-auto">
-                            <h2 className="my-4 text-xl">Semanas <strong>no</strong> pagadas</h2>
-                            <div className="w-full overflow-x-auto">
+                        <div className="w-full overflow-x-auto ">
+                        <h2 className="mt-8 mb-1 text-xl">Semanas <strong>no</strong> pagadas</h2>
+                            <div className="w-full overflow-x-auto flex justify-center">
+
                                 <table className="table">
                                     <thead>
 
                                         <tr>
                                             <th className="hidden">student_id</th>
-                                            <th className="p-4 text-[14px]">Número<br/> semana</th>
-                                            <th className="p-4 text-[14px]">Fecha a<br/> pagar</th>
-                                            <th className="p-4 text-[14px]">Fecha de<br/> pago</th>
+                                            <th className="p-4 text-[14px]">Número<br /> semana</th>
+                                            <th className="p-4 text-[14px]">Fecha a<br /> pagar</th>
+                                            <th className="p-4 text-[14px]">Fecha de<br /> pago</th>
                                             <th className="p-4 text-[14px]">Seleccionar</th>
                                         </tr>
                                     </thead>
@@ -263,7 +299,7 @@ const ShowStudent = () => {
                                                         id={`payment_check_${dato[0]}`}
                                                         name={`payment_check_${dato[0]}`}
                                                         checked={data[`payment_check_${dato[0]}`]}
-                                                        onChange={(e) => setData(`payment_check_${dato[0]}`, e.target.checked)}
+                                                        onChange={(e) => { handleSwitch(dato[0], e) }}
                                                         inputProps={{ 'aria-label': 'controlled' }}
                                                     />
                                                 </td>
@@ -277,6 +313,25 @@ const ShowStudent = () => {
                         </div>
 
                     </div>
+                    <Dialog open={dialog} onClose={closeDialog}>
+                        <DialogTitle>
+                            <p className="text-primary font-bold">Detalles de pago</p>
+                        </DialogTitle>
+                        <DialogContent>
+                            <p>¿Estás seguro de que deseas crear el pago?</p>
+                            <p><strong>Semanas a pagar:</strong> {switchChangesCount}</p>
+                            <p><strong>Importe</strong> {switchChangesCount * student.tuition} pesos</p>
+                        </DialogContent>
+                        <DialogActions>
+                            <ButtonPrimary className="mt-2 py-3 text-xs" onClick={handleConfirmation} >
+                                Confirmar
+                            </ButtonPrimary>
+                            <ButtonCancel onClick={closeDialog} >
+                                Cancelar
+                            </ButtonCancel>
+                        </DialogActions>
+
+                    </Dialog>
                 </form>
             </DashboardLayout>
 

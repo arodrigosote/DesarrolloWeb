@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import DashboardLayout from "@/Layouts/Dashboard/DashboardLayout";
 import { ToastContainer, toast } from 'react-toastify';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Accordion, AccordionSummary, Typography, AccordionDetails, MenuItem } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Accordion, AccordionSummary, Typography, AccordionDetails, MenuItem, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import ButtonPrimary from "@/Components/ButtonPrimary";
 import Modal from "@/Components/Modal";
@@ -20,6 +20,20 @@ import { CImage } from "@coreui/react";
 const MyGrades = (auth) => {
     const { grades } = usePage().props
 
+    const [modal, setModal] = useState(false);
+    const [title, setTitle] = useState('');
+    const [message, setMessage] = useState('');
+
+
+    const openModal = (title, message) => {
+        setTitle(title);
+        setMessage(message);
+        setModal(true);
+    }
+
+    const closeModal = () => {
+        setModal(false);
+    }
 
     let subjects = [];
     let temp = [];
@@ -55,7 +69,7 @@ const MyGrades = (auth) => {
                                     id="panel1-header"
                                 >
                                     <Typography sx={{ width: '28%', flexShrink: 0 }}>
-                                        <p className="font-bold">{subject[1]}</p>
+                                        {subject[1]}
                                     </Typography>
                                     {/* <Typography sx={{ color: 'text.secondary' }}>{module.short_description}</Typography> */}
 
@@ -66,18 +80,18 @@ const MyGrades = (auth) => {
                                             <MenuItem key={grade.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingY: '13px' }}>
                                                 <Typography sx={{ display: 'flex', alignItems: 'center', width:'33%', justifyContent:'start' }}>
                                                     {/* <CImage rounded className="mr-4" thumbnail src={`${url}storage/${lesson.image}`} width={100} height={100} alt={lesson.name} /> */}
-                                                    <p className="font-bold mr-1">{grade.classsubjectgroup.name}</p>
+                                                    <span className="font-bold mr-1">{grade.classsubjectgroup.name}</span>
                                                 </Typography>
                                                 <Typography sx={{ display: 'flex', alignItems: 'center', }}>
                                                     {/* <CImage rounded className="mr-4" thumbnail src={`${url}storage/${lesson.image}`} width={100} height={100} alt={lesson.name} /> */}
-                                                    <p className="font-bold mr-1"> Asistencia:</p>
+                                                    <span className="font-bold mr-1"> Asistencia:</span>
                                                     {grade.attendance ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}
-                                                    <p className="font-bold mr-1 ml-2">Calificacion:</p>
+                                                    <span className="font-bold mr-1 ml-2">Calificacion:</span>
                                                     {grade.grade}
                                                 </Typography>
                                                 <Typography sx={{ display: 'flex', alignItems: 'center', width:'33%', justifyContent:'end' }}>
-                                                    {/* <ButtonPrimary className="">Ver</ButtonPrimary> */}
-                                                </Typography>
+                                                    <ButtonPrimary className="" onClick={(e)=>{openModal(grade.classsubjectgroup.name,grade.note)}}>Ver nota</ButtonPrimary>
+                                                </Typography>|
                                             </MenuItem>
                                         ) : null
                                     ))}
@@ -87,6 +101,15 @@ const MyGrades = (auth) => {
                     </div>
                 )}
             </DashboardLayout>
+            <Dialog open={modal} onClose={closeModal} maxWidth="md" fullWidth>
+                <DialogTitle className="text-3xl font-bold text-gray-900 pl-6 pr-6 pt-6 text-primary font-extrabold">
+                    {title}
+                </DialogTitle>
+                <DialogContent>
+                    {message}
+                </DialogContent>
+            </Dialog>
+
         </>
     )
 }

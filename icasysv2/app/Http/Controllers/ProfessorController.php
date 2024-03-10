@@ -105,7 +105,7 @@ class ProfessorController extends Controller
             $user->save();
         }
 
-        dd($request->file("picture"));
+        //dd($request->file("picture"));
         if ($request->hasFile('picture')) {
 
             if ($rutaRelativaStorage == 'images/professors/user.jpg') {
