@@ -34,6 +34,11 @@ const MyCourses = (auth, props) => {
             setToastInfo(null); // Limpiar el estado después de mostrar el "toast"
         }
     }, [toastInfo]);
+
+    const openCourse = () => {
+
+    }
+
     return (
         <>
             <ToastContainer />
@@ -61,7 +66,13 @@ const MyCourses = (auth, props) => {
                                     </div>
                                 </div>
                                 <div className="mx-auto flex justify-center items-center">
-                                    <ButtonPrimary className="h-[35%]">Entrar</ButtonPrimary>
+                                    {/* <ButtonPrimary className="h-[35%]">
+                                        <Link href={route('lesson.show', { course_id: pucharse.course.id, course_name: pucharse.course.title})}>Entrar</Link>
+                                    </ButtonPrimary> */}
+                                    <ButtonPrimary className="h-[35%]">
+                                        <Link href={route('lesson.show.updated', { course_id: pucharse.course.id, course_name: pucharse.course.slug})}>Entrar</Link>
+                                    </ButtonPrimary>
+
                                 </div>
                             </div>
                         ))}

@@ -100,7 +100,7 @@ class LessonController extends Controller
                 $rutaCompleta = storage_path('app/public/' . $lesson->video);
 
                 // Establecer los permisos a 640
-                chmod($rutaCompleta, 0641);
+                chmod($rutaCompleta, 0644);
 
 
             }
@@ -150,7 +150,7 @@ class LessonController extends Controller
         ]);
     }
 
-    public function show_lesson($course_id, $course_title, $lesson_id, $lesson_name){
+    public function show_lesson($course_id, $course_title, $lesson_id, $lesson_number, $lesson_name){
         return Inertia::render('Dashboard/Admin/Course/Lesson/ShowLesson', [
             'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
             'modules' => Module::where('course_id', $course_id)->get(),
@@ -158,6 +158,20 @@ class LessonController extends Controller
                 $query->where('course_id', $course_id);
             })->get(),
             'lesson' => Lesson::find($lesson_id),
+            'url' => env('APP_URL'),
+        ]);
+    }
+
+    public function show_lesson_updated($course_id, $course_title){
+        return Inertia::render('Dashboard/Admin/Course/Lesson/ShowLessonUpdated', [
+            'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
+            'modules' => Module::where('course_id', $course_id)->get(),
+            'lessons' => Lesson::whereHas('module', function ($query) use ($course_id) {
+                $query->where('course_id', $course_id);
+            })->get(),
+            'lesson' => Lesson::whereHas('module', function ($query) use ($course_id) {
+                $query->where('course_id', $course_id);
+            })->first(),
             'url' => env('APP_URL'),
         ]);
     }

@@ -358,9 +358,15 @@ class StudentController extends Controller
         } else {
             $user = auth()->user();
             $student = Student::where('user_id', $user->id)->first();
-            return Inertia::render('Dashboard/Student/Grades/MyGrades', [
-                'grades' => Studentclasssubject::where('student_id',$student->id)->with('classsubjectgroup', 'classsubjectgroup.subjectgroup', 'classsubjectgroup.subjectgroup.subject')->get(),
-            ]);
+            if($student){
+                return Inertia::render('Dashboard/Student/Grades/MyGrades', [
+                    'grades' => Studentclasssubject::where('student_id',$student->id)->with('classsubjectgroup', 'classsubjectgroup.subjectgroup', 'classsubjectgroup.subjectgroup.subject')->get(),
+                ]);
+            }else{
+
+            }
+
+
         }
     }
 }

@@ -436,7 +436,7 @@ const Search = () => {
                         >
                             {groups.map((group) => (
                                 <MenuItem key={group.id} value={group.id}>
-                                    {group.schedule.day.name} {group.schedule.hour.name}
+                                    {group.schedule.day.name} {group.schedule.hour.name} - {group.professor.name}
                                 </MenuItem>
                             ))}
                         </Select>

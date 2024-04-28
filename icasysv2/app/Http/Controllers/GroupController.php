@@ -21,11 +21,16 @@ class GroupController extends Controller
     public function index()
     {
         if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
+            $user = auth()->user();
+            $professor = Professor::where('user_id', $user->id)->first(); // Corregido
             return Inertia::render("Dashboard/Admin/Group/Index", [
-                "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
+                "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')
+                    ->where('professor_id', $professor->id)
+                    ->get(),
                 "professors" => Professor::all(),
                 "schedules" => Schedule::with('day', 'hour')->get(),
             ]);
+
         } else {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',

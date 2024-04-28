@@ -4,6 +4,7 @@ import { Head, usePage } from '@inertiajs/react';
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 import { useEffect } from 'react';
 import Cart from '@/Components/Cart';
+import Footer from '@/Pages/Components/Footer/Footer';
 
 export default function CoursePayment(auth) {
     const { course, modules, lessons, url, preference, key } = usePage().props;
@@ -25,6 +26,7 @@ export default function CoursePayment(auth) {
                     <Wallet initialization={{ preferenceId: preference.id, redirectMode: 'modal' }} customization={{ texts: { valueProp: 'smart_option' } }} />
                 </div>
             </div>
+            <Footer></Footer>
         </>
     )
 }

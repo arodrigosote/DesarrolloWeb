@@ -28,6 +28,7 @@
         "@react-pdf/renderer": "^3.3.8",
         "boxicons": "^2.1.4",
         "react-icons": "^5.0.1",
+        "react-player": "^2.16.0",
         "react-toastify": "^10.0.4",
         "redux": "^5.0.1",
         "sweetalert2": "^11.10.5",

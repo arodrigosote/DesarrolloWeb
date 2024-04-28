@@ -55,8 +55,8 @@ class Course extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function modulos()
+    public function modules()
     {
-        return $this->hasMany('App\Models\Modulo', 'curso_id', 'id');
+        return $this->hasMany('App\Models\Module', 'course_id', 'id');
     }
 }

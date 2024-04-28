@@ -82,8 +82,8 @@ export default function (auth) {
                     <Accordion key={module.id} module={module}>
                         {lessons.map((lesson) => (
                             lesson.module_id === module.id ? (
-                                <Link className="pl-0" key={lesson.id} href={route('lesson.show', [course.id, course.title, lesson.id, lesson.name])}>
-                                    <MenuItem sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Link className="pl-0" key={lesson.id} href={route('lesson.show', [course.id, course.slug,lesson.id, lesson.lesson_number, lesson.name])}>
+                                    <MenuItem sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                                         <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                                             {/* <CImage rounded className="mr-4" thumbnail src={`${url}storage/${lesson.image}`} width={100} height={100} alt={lesson.name} /> */}
                                             {`${lesson.lesson_number}.   `}
