@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import CourseCard from '@/Components/CourseCard';
 import { Grid, Container, Accordion, AccordionSummary, Typography, AccordionDetails, MenuItem } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,7 +13,7 @@ import Footer from '@/Pages/Components/Footer/Footer';
 
 
 export default function Courses(auth) {
-    const { course, modules, lessons, url } = usePage().props;
+    const { course, modules, lessons, url, payed, pucharse } = usePage().props;
 
     const { data, setData, get, errors } = useForm({});
 
@@ -34,9 +34,9 @@ export default function Courses(auth) {
             {/* <Header auth={auth}></Header> */}
             <HeaderCallToAction></HeaderCallToAction>
             <CourseHero course={course}></CourseHero>
-            <div className='lg:flex block mx-4 md:mx-24 lg:mx-24 xl:mx-36 mt-12 mx-auto'>
+            <div className='lg:flex block mx-4 md:mx-24 lg:mx-36 xl:mx-36 mt-12 mx-auto'>
                 <div className='w-full lg:w-[65%]'>
-                    <CImage rounded thumbnail src={`${url}storage/${course.image}`} width='100%' alt={course.name} />
+                    <CImage rounded thumbnail src={`${url}storage/${course.image}`} width='100%' className='text-center mx-auto' alt={course.name} />
                     <h2 className='text-2xl mt-6 font-bold text-secondary'>Descripción</h2>
                     <p>{course.description}</p>
 
@@ -77,7 +77,14 @@ export default function Courses(auth) {
                     <div className=' lg:mx-12 lg:mb-12 border border-gray-300'>
                         <div className='bg-lighter p-7'>
                             <p className='font-bold text-2xl'>${course.price}</p>
-                            <ButtonPrimary onClick={(e) => {handlePaymentCourse(course.id, course.slug)}} className='w-full text-center flex justify-center'>Inscríbete</ButtonPrimary>
+
+                            {payed ? (
+                                <ButtonPrimary className="h-[35%] w-full text-center flex justify-center">
+                                    <Link href={route('lesson.show.updated', { course_id: course.id, course_name: course.slug })}>Acceder al curso</Link>
+                                </ButtonPrimary>
+                            ) : (
+                                <ButtonPrimary onClick={(e) => { handlePaymentCourse(course.id, course.slug) }} className='w-full text-center flex justify-center'>Inscríbete</ButtonPrimary>
+                            )}
                         </div>
                         <div className='p-7'>
                             <div className='flex justify-start items-center'><RiBarChartFill />{course.coursedifficulty.name}</div>
@@ -105,8 +112,15 @@ export default function Courses(auth) {
 
             <div className='my-12 md:my-32 text-center mx-4 md:mx-10 lg:mx-24 xl:mx-36'>
                 <h2 className='font-bold text-primary text-2xl md:text-4xl lg:text-5xl mb-3'>Invierte en tu futuro, aprende habilidades de alto valor</h2>
-                <ButtonPrimary onClick={(e) => {handlePaymentCourse(course.id, course.slug)}} variant="contained">Inscríbete</ButtonPrimary>
+                {payed ? (
+                    <ButtonPrimary className="h-[35%]">
+                        <Link href={route('lesson.show.updated', { course_id: course.id, course_name: course.slug })}>Acceder al curso</Link>
+                    </ButtonPrimary>
+                ) : (
+                    <ButtonPrimary onClick={(e) => { handlePaymentCourse(course.id, course.slug) }} variant="contained">Inscríbete</ButtonPrimary>
+                )}
             </div>
+            {console.log(payed)}
             <Footer></Footer>
         </>
     )

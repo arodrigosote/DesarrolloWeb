@@ -90,7 +90,7 @@ export default function (auth) {
                     // Aquí puedes colocar el contenido que deseas mostrar cuando el usuario no ha iniciado sesión
                     <>
                         <Link href={route('login')} className='bg-white p-3 mx-2 text-primary rounded-[5px] font-bold text-sm'>Iniciar sesión</Link>
-                        <Link href={route('register')} className='bg-yellow p-3 text-white rounded-[5px] font-bold text-sm'>Registrarse</Link>
+                        <Link href={route('register')} className='w p-3 text-white rounded-[5px] font-bold text-sm'>Registrarse</Link>
                     </>
                 )}
 

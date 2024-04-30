@@ -8,6 +8,7 @@ use App\Models\Coursedifficulty;
 use App\Models\Lesson;
 use App\Models\Module;
 use App\Models\Professor;
+use App\Models\Pucharse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\File;
@@ -190,6 +191,14 @@ class CourseController extends Controller
     public function show_course_landing($id, $slug)
     {
         $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
+        $user = auth()->user();
+        $pucharse = Pucharse::where('course_id',$course->id)->where('user_id',$user->id)->where('state', 'payed')->first();
+        if($pucharse){
+            $payed = true;
+        }else{
+            $payed = false;
+        }
+
 
         return Inertia::render('Dashboard/Admin/Course/Landing', [
             'course' => $course,
@@ -198,6 +207,8 @@ class CourseController extends Controller
                 $query->where('course_id', $id);
             })->get(),
             'url' => env('APP_URL'),
+            'payed' => $payed,
+            'pucharse' => $pucharse,
         ]);
     }
 

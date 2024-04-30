@@ -37,6 +37,9 @@ html, body{
 .bg-primary{
     background-color: var(--primary);
 }
+.bg-secondary{
+    background-color: var(--auxiliar2);
+}
 .bg-auxiliar2{
     background-color: var(--auxiliar2);
 }

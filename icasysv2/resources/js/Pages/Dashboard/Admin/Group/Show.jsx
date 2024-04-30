@@ -83,7 +83,7 @@ const ShowGroup = (props) => {
                                 <TableRow key={student.id}>
                                     <TableCell>{student.name}</TableCell>
                                     <TableCell>{student.email}</TableCell>
-                                    <TableCell>{student.phone}</TableCell>
+                                    {auth.user.rol === 2 ? (<TableCell>{student.phone}</TableCell>):<></>}
                                     <TableCell>
                                         {/* <Switch checked={student.active} disabled /> */}
                                         {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />}

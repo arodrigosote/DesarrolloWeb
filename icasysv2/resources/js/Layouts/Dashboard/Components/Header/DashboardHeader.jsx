@@ -15,9 +15,10 @@ export default function () {
                         <DropdownMenu auth={auth}></DropdownMenu>
                     </div>
                 ) : (
-                    <div className="lg:flex md:flex flex justify-end px-4 py-5 bg-white">
+                    <div className="lg:flex md:flex items-center justify-end px-4 py-5 bg-white">
                         <DropdownMenu auth={auth}></DropdownMenu>
                     </div>
+
                 )
             }
         </>

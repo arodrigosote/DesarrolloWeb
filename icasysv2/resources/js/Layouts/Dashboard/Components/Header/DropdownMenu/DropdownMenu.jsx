@@ -41,6 +41,8 @@ export default function UserProfileMenu({  }) {
                             >
                                 <Avatar alt={auth.user.name} src={`/storage/${auth.user.profile_pic}`} />
 
+                                <h1 className="px-2">{auth.user.name}</h1>
+
                                 <svg
                                     className="ml-2 -mr-0.5 h-4 w-4"
                                     xmlns="http://www.w3.org/2000/svg"
