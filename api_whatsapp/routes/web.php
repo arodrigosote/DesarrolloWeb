@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/hello_world', [WhatsController::class, 'hello_world']);
+Route::post('/reserva', [WhatsController::class, 'hello_world']);
 Route::get('/webhook', [WhatsController::class, 'webhook']);
 Route::post('/webhook', [WhatsController::class, 'receive']);
 
