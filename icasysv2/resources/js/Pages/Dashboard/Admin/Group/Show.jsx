@@ -58,7 +58,11 @@ const ShowGroup = (props) => {
     const handleShowSubjects = ($id) => {
         get(route('grupos.subjects.show', $id))
     }
-    //------------------------------------------------------------------------------------------
+    //SHOW STUDENT------------------------------------------------------------------------------
+    const showStudent = (id) => {
+        get(route('alumnos.show', id));
+    }
+
 
     return (
         <>
@@ -91,15 +95,9 @@ const ShowGroup = (props) => {
                                     <TableCell>
                                         {auth.user.rol === 2 ? (
                                             <>
-                                            <ButtonShow onClick={() => handleShowStudent(student.id)}>
+                                            <ButtonShow onClick={() => showStudent(student.id)}>
                                             Mostrar
                                         </ButtonShow>
-                                        <ButtonEdit onClick={() => handleEditStudent(student.id)}>
-                                            Editar
-                                        </ButtonEdit>
-                                        <ButtonDelete onClick={() => handleDeleteStudent(student.id)}>
-                                            Delete
-                                        </ButtonDelete>
                                         </>
                                         ):(<></>)}
                                     </TableCell>

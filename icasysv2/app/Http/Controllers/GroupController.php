@@ -20,7 +20,7 @@ class GroupController extends Controller
     //
     public function index()
     {
-        if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
+        if (Gate::allows("isProfessor") ) {
             $user = auth()->user();
             $professor = Professor::where('user_id', $user->id)->first(); // Corregido
             return Inertia::render("Dashboard/Admin/Group/Index", [
@@ -31,6 +31,13 @@ class GroupController extends Controller
                 "schedules" => Schedule::with('day', 'hour')->get(),
             ]);
 
+        } else if(Gate::allows("isAdmin")){
+            $user = auth()->user();
+            return Inertia::render("Dashboard/Admin/Group/Index", [
+                "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
+                "professors" => Professor::all(),
+                "schedules" => Schedule::with('day', 'hour')->get(),
+            ]);
         } else {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',

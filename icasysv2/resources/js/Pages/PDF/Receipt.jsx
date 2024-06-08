@@ -79,15 +79,16 @@ const styles = StyleSheet.create({
         paddingTop: '5px',
         color: '#014ba0',
         fontStyle: 'normal',
-        fontWeight: 'bold',
     },
     name_text: {
-        fontSize: 11,
+        fontSize: 11.5,
         alignItems: 'center',
         textAlign: 'center',
         paddingBottom: '21px',
         paddingTop: '21px',
+        textTransform: 'uppercase', // Agrega esta línea
     },
+
     sub_text: {
         fontSize: 7,
         alignItems: 'center',

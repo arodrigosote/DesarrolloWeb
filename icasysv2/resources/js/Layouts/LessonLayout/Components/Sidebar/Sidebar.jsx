@@ -39,8 +39,8 @@ export default function (auth) {
                         <h1 className="uppercase text-gray-200 tracking-[1px] hover:text-white">ICASYS</h1>
                     </div>
                 </Link>
-                <div className="pb-8">
-                    <h2 className="text-white px-5 pt-4 text-xl font-bold">{course.title}</h2>
+                <div className="py-8">
+                    <h2 className="text-white px-5 text-xl font-bold">{course.title}</h2>
                     <p className="text-white px-5">{numberOfLessons} lecciones </p>
                 </div>
 
