@@ -39,6 +39,11 @@ const ShowReceipts = (props) => {
 
     const { student, baseUrl, receipts, auth } = usePage().props;
 
+    //Estado de generacion de PDF ---------------------------------------------------------------------------
+    const [downloadingReceiptId, setDownloadingReceiptId] = useState(null);
+    //-------------------------------------------------------------------------------------------------------
+
+
     //SECCION PARA RECIBIR NOTIFICACION----------------------------------------------------------------------
     const [toastInfo, setToastInfo] = useState(null);
     useEffect(() => {
@@ -55,6 +60,12 @@ const ShowReceipts = (props) => {
             setToastInfo(null); // Limpiar el estado después de mostrar el "toast"
         }
     }, [toastInfo]);
+    //-------------------------------------------------------------------------------------------------------
+
+    //Generacion de PDF -------------------------------------------------------------------------------------
+    const handleDownloadClick = (receiptId) => {
+        setDownloadingReceiptId(receiptId);
+    };
     //-------------------------------------------------------------------------------------------------------
 
     return (
@@ -80,14 +91,23 @@ const ShowReceipts = (props) => {
                                     <td className="border rounded text-xs text-center mx-auto my-auto">{receipt.weeks_number}</td>
                                     <td className="border rounded text-xs text-center mx-auto my-auto">{receipt.amount}</td>
                                     <td className="border rounded text-xs text-center mx-auto my-auto">
-                                        <PDFDownloadLink document={<Receipt student={student} payments={receipt.studentpayments} schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`} receipt={receipt}/>} fileName={`Recibo - ${receipt.student.name} - ${receipt.date_payment}`}>
-                                            {({loading, url, error, blob}) =>
-                                            loading ? (
-                                                <ButtonCancel>Cargando...</ButtonCancel>
-                                            ) : (
-                                                <ButtonSecondary>Descargar</ButtonSecondary>
-                                            )}
-                                        </PDFDownloadLink>
+                                        {downloadingReceiptId === receipt.id ? (
+                                            <PDFDownloadLink
+                                                document={<Receipt student={student} payments={receipt.studentpayments} schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`} receipt={receipt} />}
+                                                fileName={`Recibo - ${receipt.student.name} - ${receipt.date_payment}`}
+                                            >
+                                                {({ loading }) =>
+                                                    loading ? (
+                                                        <ButtonCancel>Cargando...</ButtonCancel>
+                                                    ) : (
+                                                        <ButtonSecondary>Descargar</ButtonSecondary>
+                                                    )
+                                                }
+                                            </PDFDownloadLink>
+                                        ) : (
+                                            <ButtonYellow onClick={() => handleDownloadClick(receipt.id)}>Generar</ButtonYellow>
+                                        )}
+
                                     </td>
                                 </tr>
                             ))}
