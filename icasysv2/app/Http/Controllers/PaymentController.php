@@ -48,13 +48,40 @@ class PaymentController extends Controller
         }
     }
 
-    public function pending()
+    public function pending($course_id)
     {
+        $user = auth()->user();
+        $course = Course::findOrFail($course_id);
 
+
+        return Inertia::render('Dashboard/Student/Courses/MyCourses', [
+            'pucharses' => Pucharse::with('course', 'course.coursecategory')->where('state', 'payed')->where('user_id', $user->id)->get(),
+            'url'=>env('APP_URL'),
+        ])->with('toast', [
+                    'mensaje' => 'Su compra está siendo procesada, en breve podrá acceder al curso',
+                    'tipo' => 'warning',
+        ]);
     }
 
-    public function failure()
+    public function failure($course_id)
     {
+        if (Gate::denies("isUser")) {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No eres alumno.',
+                'tipo' => 'error',
+            ]);
+        } else {
+            $user = auth()->user();
+            $course = Course::findOrFail($course_id);
 
+
+            return Inertia::render('Dashboard/Student/Courses/MyCourses', [
+                'pucharses' => Pucharse::with('course', 'course.coursecategory')->where('state', 'payed')->where('user_id', $user->id)->get(),
+                'url'=>env('APP_URL'),
+            ])->with('toast', [
+                        'mensaje' => 'Hubo un error al procesar su compra, por favor inténtelo de nuevo',
+                        'tipo' => 'error',
+            ]);
+        }
     }
 }
