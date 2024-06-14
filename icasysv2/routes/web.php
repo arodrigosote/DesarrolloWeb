@@ -123,6 +123,7 @@ Route::middleware('auth', 'verified')->group(function () {
 Route::get('/', [PagesController::class, "home"])->name('page.home');
 Route::get('/contacto', [PagesController::class, "contact"])->name('page.contact');
 Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
+Route::get('/servicios', [PagesController::class, "services"])->name('page.services');
 Route::get('/cursos', [PagesController::class, "courses"])->name('courses');
 Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
 

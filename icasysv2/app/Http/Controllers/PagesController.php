@@ -22,6 +22,10 @@ class PagesController extends Controller
         return Inertia::render("MainPages/About");
     }
 
+    public function services(){
+        return Inertia::render("MainPages/Services");
+    }
+
     public function courses(){
         return Inertia::render('MainPages/Courses',[
             'courses' => Course::with('professor')->where('state', 1)->get(),

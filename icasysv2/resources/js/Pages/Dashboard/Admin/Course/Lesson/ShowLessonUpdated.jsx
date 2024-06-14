@@ -4,6 +4,8 @@ import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import LessonLayout from "@/Layouts/LessonLayout/LessonLayout";
 import { BigPlayButton, ControlBar, LoadingSpinner, PlayToggle, Player, ReplayControl, VolumeMenuButton } from "video-react";
 import 'video-react/dist/video-react.css'; // Importar el CSS directamente
+import React from 'react'
+import ReactPlayer from 'react-player/youtube'
 
 const Lesson = ({ auth }) => {
     const { course, url, modules, lessons, lesson } = usePage().props;
@@ -36,6 +38,8 @@ const Lesson = ({ auth }) => {
                             <VolumeMenuButton vertical />
                         </ControlBar>
                     </Player>
+
+
                 </div>
                 <div className="mt-6">
                     <h2 className="text-primary text-xl mb-1">Contenido</h2>

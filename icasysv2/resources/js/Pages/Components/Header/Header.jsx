@@ -35,10 +35,11 @@ export default function (auth) {
                 {/* <Avatar alt="icasys logo" src={icono} className="w-1/6 mx-auto nav md:mx-auto lg:mx-0" /> */}
                 <CImage rounded thumbnail src={icono} width={50} height={50} alt={`icasys logo blanco`} />
                 <MenuList className='flex nav'>
-                    <Link href={route('page.home')} className=" text-white h-16 pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors flex items-center justify-center text-sm px-6 w-28 text-center mx-auto">Inicio</Link>
-                    <Link href={route('courses')} className=" text-white h-16 pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors flex items-center justify-center text-sm px-6 w-28 text-center mx-auto">Cursos</Link>
-                    <Link href={route('page.contact')} className=" text-white h-16 pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors flex items-center justify-center text-sm px-6 w-28 text-center mx-auto">Contacto</Link>
-                    <Link href={route('page.about')} className=" text-white h-16 pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors flex items-center justify-center text-sm px-6 w-28 text-center mx-auto">Acerca de</Link>
+                    <Link href={route('page.home')} className=" text-white h-16 pt-3 pb-3  gap-1 rounded-xl transition-colors flex items-center justify-center text-sm w-28 text-center mx-auto">Inicio</Link>
+                    <Link href={route('courses')} className=" text-white h-16 pt-3 pb-3  gap-1 rounded-xl transition-colors flex items-center justify-center text-sm w-28 text-center mx-auto">Cursos</Link>
+                    <Link href={route('page.contact')} className=" text-white h-16 pt-3 pb-3  gap-1 rounded-xl transition-colors flex items-center justify-center text-sm w-28 text-center mx-auto">Contacto</Link>
+                    <Link href={route('page.about')} className=" text-white h-16 pt-3 pb-3  gap-1 rounded-xl transition-colors flex items-center justify-center text-sm w-28 text-center mx-auto">Acerca de</Link>
+                    <Link href={route('page.services')} className=" text-white h-16 pt-3 pb-3  gap-1 rounded-xl transition-colors flex items-center justify-center text-sm w-28 text-center mx-auto">Servicios</Link>
                 </MenuList>
                 <ButtonInvisible className='sm:hidden block lg:hidden ml-2 py-auto my-auto' onClick={movileToggle}>
                     <box-icon name='menu' color='#ffffff' size="md" ></box-icon>
