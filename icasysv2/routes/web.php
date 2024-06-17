@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssistanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\HourController;
@@ -110,6 +111,9 @@ Route::middleware('auth', 'verified')->group(function () {
     //Courses
     Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
     Route::get('/curso/comprar/{id}/{slug}', [CourseController::class, 'cart_course'])->name('course.cart');
+
+    //Asisstance
+    Route::get('/asistencia/ayudas-pendientes', [AssistanceController::class, 'show_assistance_admin'])->name('assistance.admin');
 
     //Payments
     Route::get('/curso/comprar/{id}/{slug}/aprobado', [PaymentController::class, 'success'])->name('payment.success');
