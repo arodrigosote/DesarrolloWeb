@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AssistanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\HourController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PagesController;
@@ -111,6 +113,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
     Route::get('/curso/comprar/{id}/{slug}', [CourseController::class, 'cart_course'])->name('course.cart');
 
+    //Asisstance
+    Route::get('/asistencia/ayudas-pendientes', [AssistanceController::class, 'show_assistance_admin'])->name('assistance.admin');
+
     //Payments
     Route::get('/curso/comprar/{id}/{slug}/aprobado', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/curso/comprar/{id}/{slug}/pendiente', [PaymentController::class, 'pending'])->name('payment.pending');
@@ -126,6 +131,11 @@ Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
 Route::get('/servicios', [PagesController::class, "services"])->name('page.services');
 Route::get('/cursos', [PagesController::class, "courses"])->name('courses');
 Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
+
+
+// Landing pages
+Route::get('/servicio/sitios-web', [LandingPageController::class,'web_site'])->name('landing.website');
+
 
 //dashboard
 Route::get('/escritorio', [DashboardController::class, "dashboard"])->name('dashboard.home')->middleware(['auth', 'verified']);
