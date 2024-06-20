@@ -71,6 +71,7 @@ const Course = ({ auth }) => {
     const content_houresInput = useRef();
     const content_minutesInput = useRef();
     const resources_urlInput = useRef();
+    const isPracticeInput = useRef();
     const { data, setData, delete: destroy, post, put, processing, progress, errors, reset } = useForm({
         id: '',
         title: '',
@@ -98,6 +99,7 @@ const Course = ({ auth }) => {
         content_houres: '',
         content_minutes: '',
         resources_url: '',
+        isPractice: '',
     });
     const openCourseModal = (op, id, title, description, short_description, slug, difficulty_id, professor_id, category_id, state, price, target_learning, target_audience, houres, requirements, image, video) => {
         setCourseModal(true);
@@ -313,7 +315,7 @@ const Course = ({ auth }) => {
     }
     //----------------------------------------------------------------------------------------
     //LESSON FUNCTIONS ----------------------------------------------------------------------
-    const openLessonModal = (op, module_id, id, lesson_number, name, content, content_houres, content_minutes, resources_url, image, video) => {
+    const openLessonModal = (op, module_id, id, lesson_number, name, content, content_houres, content_minutes, resources_url, isPractice, image, video) => {
         setLessonModal(true);
         setOperation(op);
         setData({
@@ -325,6 +327,7 @@ const Course = ({ auth }) => {
             content_houres: '',
             content_minutes: '',
             resources_url: '',
+            isPractice: '',
             image: '',
             video: '',
         })
@@ -341,6 +344,7 @@ const Course = ({ auth }) => {
                 content_houres: content_houres,
                 content_minutes: content_minutes,
                 resources_url: resources_url,
+                isPractice: isPractice,
                 image: image,
                 video: video,
             })
@@ -363,6 +367,7 @@ const Course = ({ auth }) => {
                     if (errors.content_houres) { reset('content_houres'); content_houresInput.current.focus(); }
                     if (errors.content_minutes) { reset('content_minutes'); content_minutesInput.current.focus(); }
                     if (errors.resources_url) { reset('resources_url'); resources_urlInput.current.focus(); }
+                    if (errors.isPractice) { reset('isPractice'); isPracticeInput.current.focus(); }
                     if (errors.image) { reset('image'); imageInput.current.focus(); }
                     if (errors.video) { reset('video'); videoInput.current.focus(); }
                 }
@@ -379,6 +384,7 @@ const Course = ({ auth }) => {
                     if (errors.content_houres) { reset('content_houres'); content_houresInput.current.focus(); }
                     if (errors.content_minutes) { reset('content_minutes'); content_minutesInput.current.focus(); }
                     if (errors.resources_url) { reset('resources_url'); resources_urlInput.current.focus(); }
+                    if (errors.isPractice) { reset('isPractice'); isPracticeInput.current.focus(); }
                     if (errors.image) { reset('image'); imageInput.current.focus(); }
                     if (errors.video) { reset('video'); videoInput.current.focus(); }
                 }
@@ -501,15 +507,15 @@ const Course = ({ auth }) => {
                                                 {lesson.name}
                                             </Typography>
                                             <Typography>
-                                                <ButtonEdit onClick={(e) => { openLessonModal(2, lesson.module_id, lesson.id, lesson.lesson_number, lesson.name, lesson.content, lesson.content_houres, lesson.content_minutes, lesson.resources_url, lesson.image, lesson.video) }}><RiEditBoxFill className="text-white" /></ButtonEdit>
-                                                <ButtonDelete onClick={(e)=>{openDeleteLessonModal(lesson.id, lesson.name)}}><RiDeleteBinFill className="text-white" /></ButtonDelete>
+                                                <ButtonEdit onClick={(e) => { openLessonModal(2, lesson.module_id, lesson.id, lesson.lesson_number, lesson.name, lesson.content, lesson.content_houres, lesson.content_minutes, lesson.resources_url, lesson.isPractice === 1 ? true : false, lesson.image, lesson.video) }}><RiEditBoxFill className="text-white" /></ButtonEdit>
+                                                <ButtonDelete onClick={(e) => { openDeleteLessonModal(lesson.id, lesson.name) }}><RiDeleteBinFill className="text-white" /></ButtonDelete>
                                             </Typography>
                                         </MenuItem>
                                     ) : null
                                 ))}
                             </AccordionDetails>
                             <AccordionActions sx={{ paddingBottom: 2, paddingTop: 0, flexShrink: 0 }}>
-                                <ButtonDelete onClick={(e)=>{openDeleteModuleModal(module.id, module.name)}}>Eliminar</ButtonDelete>
+                                <ButtonDelete onClick={(e) => { openDeleteModuleModal(module.id, module.name) }}>Eliminar</ButtonDelete>
                                 <ButtonEdit onClick={(e) => { openModuleModal(2, module.id, module.name, module.short_description) }}>Editar módulo</ButtonEdit>
                                 <ButtonSecondary onClick={(e) => { openLessonModal(1, module.id) }}>Agregar lección</ButtonSecondary>
                             </AccordionActions>
@@ -546,15 +552,15 @@ const Course = ({ auth }) => {
 
                 <form onSubmit={submitModal} className="p-6">
                     <InputLabel htmlFor='course_id' value='Curso: ' />
-                    <TextInput className='h-36 mt-2' readOnly id='course_id' name='course_id' ref={course_idInput} value={data.course_id || ''} onChange={(e) => setData("course_id", e.target.value)} />
+                    <TextInput className='h-36 mt-2 w-full' readOnly id='course_id' name='course_id' ref={course_idInput} value={data.course_id || ''} onChange={(e) => setData("course_id", e.target.value)} />
                     <InputError message={errors.course_id} />
 
                     <InputLabel htmlFor='name' value='Nombre: ' />
-                    <TextInput className='h-36 mt-2' id='name' name='name' ref={nameInput} value={data.name || ''} onChange={(e) => setData("name", e.target.value)} />
+                    <TextInput className='h-36 mt-2 w-full' id='name' name='name' ref={nameInput} value={data.name || ''} onChange={(e) => setData("name", e.target.value)} />
                     <InputError message={errors.name} />
 
                     <InputLabel htmlFor='short_description' value='Descripción corta: ' />
-                    <TextInput className='h-36 mt-2' id='short_description' name='short_description' ref={short_descriptionInput} value={data.short_description || ''} onChange={(e) => setData("short_description", e.target.value)} />
+                    <TextInput className='h-36 mt-2 w-full' id='short_description' name='short_description' ref={short_descriptionInput} value={data.short_description || ''} onChange={(e) => setData("short_description", e.target.value)} />
                     <InputError message={errors.short_description} />
 
                     <div className="flex justify-end mt-6">
@@ -571,35 +577,45 @@ const Course = ({ auth }) => {
                     </DialogTitle>
 
 
-                    <InputLabel htmlFor='module_id' value='Módulo: ' />
-                    <TextInput className='h-36 mt-2' readOnly id='module_id' name='module_id' ref={module_idInput} value={data.module_id || ''} onChange={(e) => setData("module_id", e.target.value)} />
+                    <InputLabel className='mt-4' htmlFor='module_id' value='Módulo: ' />
+                    <TextInput className='h-36 mt-2 w-full' readOnly id='module_id' name='module_id' ref={module_idInput} value={data.module_id || ''} onChange={(e) => setData("module_id", e.target.value)} />
                     <InputError message={errors.module_id} />
 
-                    <InputLabel htmlFor='lesson_number' value='Número de lección: ' />
-                    <TextInput className='h-36 mt-2' type='number' id='lesson_number' name='lesson_number' ref={lesson_numberInput} value={data.lesson_number || ''} onChange={(e) => setData("lesson_number", e.target.value)} />
+                    <InputLabel className='mt-4' htmlFor='lesson_number' value='Número de lección: ' />
+                    <TextInput className='h-36 mt-2 w-full' type='number' id='lesson_number' name='lesson_number' ref={lesson_numberInput} value={data.lesson_number || ''} onChange={(e) => setData("lesson_number", e.target.value)} />
                     <InputError message={errors.lesson_number} />
 
-                    <InputLabel htmlFor='name' value='Nombre: ' />
-                    <TextInput className='h-36 mt-2' id='name' name='name' ref={nameInput} value={data.name || ''} onChange={(e) => setData("name", e.target.value)} />
+                    <InputLabel className='mt-4' htmlFor='isPractice' value='Es ejercicio práctica: ' />
+                    <Switch
+                        id="isPractice"
+                        name="isPractice"
+                        checked={data.isPractice}
+                        onChange={(e) => setData("isPractice", e.target.checked)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />
                     <InputError message={errors.name} />
 
-                    <InputLabel htmlFor='content' value='Contenido: ' />
+                    <InputLabel className='mt-4' htmlFor='name' value='Nombre: ' />
+                    <TextInput className='h-36 mt-2 w-full' id='name' name='name' ref={nameInput} value={data.name || ''} onChange={(e) => setData("name", e.target.value)} />
+                    <InputError message={errors.name} />
+
+                    <InputLabel className='mt-4' htmlFor='content' value='Contenido: ' />
                     <TextField multiline rows={4} className='h-36 mt-2 w-full' id='content' name='content' ref={contentInput} value={data.content || ''} onChange={(e) => setData("content", e.target.value)} />
                     <InputError message={errors.content} />
 
-                    <InputLabel htmlFor='content_houres' value='Horas de lección: ' />
-                    <TextInput className='h-36 mt-2' type='number' id='content_houres' name='content_houres' ref={content_houresInput} value={data.content_houres || ''} onChange={(e) => setData("content_houres", e.target.value)} />
+                    <InputLabel className='mt-4' htmlFor='content_houres' value='Horas de lección: ' />
+                    <TextInput className='h-36 mt-2 w-full' type='number' id='content_houres' name='content_houres' ref={content_houresInput} value={data.content_houres || ''} onChange={(e) => setData("content_houres", e.target.value)} />
                     <InputError message={errors.content_houres} />
 
-                    <InputLabel htmlFor='content_minutes' value='Minutos de lección: ' />
-                    <TextInput className='h-36 mt-2' type='number' id='content_minutes' name='content_minutes' ref={content_minutesInput} value={data.content_minutes || ''} onChange={(e) => setData("content_minutes", e.target.value)} />
+                    <InputLabel className='mt-4' htmlFor='content_minutes' value='Minutos de lección: ' />
+                    <TextInput className='h-36 mt-2 w-full' type='number' id='content_minutes' name='content_minutes' ref={content_minutesInput} value={data.content_minutes || ''} onChange={(e) => setData("content_minutes", e.target.value)} />
                     <InputError message={errors.content_minutes} />
 
-                    <InputLabel htmlFor='resources_url' value='Enlace a recursos: ' />
-                    <TextInput className='h-36 mt-2' id='resources_url' name='resources_url' ref={resources_urlInput} value={data.resources_url || ''} onChange={(e) => setData("resources_url", e.target.value)} />
+                    <InputLabel className='mt-4' htmlFor='resources_url' value='Enlace a recursos: ' />
+                    <TextInput className='h-36 mt-2 w-full' id='resources_url' name='resources_url' ref={resources_urlInput} value={data.resources_url || ''} onChange={(e) => setData("resources_url", e.target.value)} />
                     <InputError message={errors.content_minutes} />
 
-                    <InputLabel htmlFor="image">Foto de lección:</InputLabel>
+                    <InputLabel className='mt-4' htmlFor="image">Foto de lección:</InputLabel>
                     <TextField
                         type="file"
                         accept="image/*"
@@ -611,7 +627,7 @@ const Course = ({ auth }) => {
                     <InputError message={errors.image} />
 
 
-                    <InputLabel htmlFor="video">Video de lección:</InputLabel>
+                    <InputLabel className='mt-4' htmlFor="video">Video de lección:</InputLabel>
                     <TextField
                         type="file"
                         accept="video/*"

@@ -46,6 +46,12 @@ class LessonController extends Controller
                 $moverArchivo = $file->storeAs($rutaDestino, $nombreArchivo, 'storage'); // Usar el disco 'storage'
                 $lesson->video = $rutaDestino . $nombreArchivo;
             }
+
+            if ($request->isPractice == false) {
+                $lesson->isPractice = false;
+            } elseif ($request->isPractice == true) {
+                $lesson->isPractice = true;
+            }
             $lesson->save();
         }
     }
@@ -104,6 +110,11 @@ class LessonController extends Controller
                 chmod($rutaCompleta, 0644);
 
 
+            }
+            if ($request->isPractice == false) {
+                $lesson->isPractice = false;
+            } elseif ($request->isPractice == true) {
+                $lesson->isPractice = true;
             }
 
             $lesson->save();
