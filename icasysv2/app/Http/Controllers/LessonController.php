@@ -166,16 +166,32 @@ class LessonController extends Controller
         $user = auth()->user();
         $pucharse = Pucharse::where('course_id',$course_id)->where('user_id',$user->id)->where('state', 'payed')->first();
 
+        $lesson = Lesson::find($lesson_id);
+
+
         if($pucharse){
-            return Inertia::render('Dashboard/Admin/Course/Lesson/ShowLesson', [
-                'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
-                'modules' => Module::where('course_id', $course_id)->get(),
-                'lessons' => Lesson::whereHas('module', function ($query) use ($course_id) {
-                    $query->where('course_id', $course_id);
-                })->get(),
-                'lesson' => Lesson::find($lesson_id),
-                'url' => env('APP_URL'),
-            ]);
+            if($lesson->isPractice === 1){
+                return Inertia::render('Dashboard/Admin/Course/Lesson/ShowPractice', [
+                    'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
+                    'modules' => Module::where('course_id', $course_id)->get(),
+                    'lessons' => Lesson::whereHas('module', function ($query) use ($course_id) {
+                        $query->where('course_id', $course_id);
+                    })->get(),
+                    'lesson' => Lesson::find($lesson_id),
+                    'url' => env('APP_URL'),
+                ]);
+            }else{
+                return Inertia::render('Dashboard/Admin/Course/Lesson/ShowLesson', [
+                    'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
+                    'modules' => Module::where('course_id', $course_id)->get(),
+                    'lessons' => Lesson::whereHas('module', function ($query) use ($course_id) {
+                        $query->where('course_id', $course_id);
+                    })->get(),
+                    'lesson' => Lesson::find($lesson_id),
+                    'url' => env('APP_URL'),
+                ]);
+            }
+
         }else{
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No puedes acceder al curso.',
@@ -191,6 +207,9 @@ class LessonController extends Controller
         $pucharse = Pucharse::where('course_id',$course_id)->where('user_id',$user->id)->where('state', 'payed')->first();
 
         if($pucharse){
+
+
+
             return Inertia::render('Dashboard/Admin/Course/Lesson/ShowLessonUpdated', [
                 'course' => Course::with('coursecategory', 'professor', 'coursedifficulty')->find($course_id),
                 'modules' => Module::where('course_id', $course_id)->get(),

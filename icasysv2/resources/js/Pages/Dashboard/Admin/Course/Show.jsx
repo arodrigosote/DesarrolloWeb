@@ -16,7 +16,7 @@ import { RiCircleFill } from "react-icons/ri";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import ButtonPrimary from "@/Components/ButtonPrimary";
-import { RiEditBoxLine, RiDeleteBin6Fill, RiArrowDownSFill, RiDeleteBinFill, RiEditBoxFill } from "react-icons/ri";
+import { RiEditBoxLine, RiDeleteBin6Fill, RiArrowDownSFill, RiDeleteBinFill, RiEditBoxFill, RiArticleFill  } from "react-icons/ri";
 import Modal from "@/Components/Modal";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from "@/Components/InputLabel";
@@ -505,6 +505,7 @@ const Course = ({ auth }) => {
                                                 <CImage rounded className="mr-4" thumbnail src={`${url}storage/${lesson.image}`} width={100} height={100} alt={lesson.name} />
                                                 {`${lesson.lesson_number}.   `}
                                                 {lesson.name}
+                                                <p className="text-secondary text-2xl mx-3">{lesson.isPractice === 1 ? <RiArticleFill ></RiArticleFill> : ''}</p>
                                             </Typography>
                                             <Typography>
                                                 <ButtonEdit onClick={(e) => { openLessonModal(2, lesson.module_id, lesson.id, lesson.lesson_number, lesson.name, lesson.content, lesson.content_houres, lesson.content_minutes, lesson.resources_url, lesson.isPractice === 1 ? true : false, lesson.image, lesson.video) }}><RiEditBoxFill className="text-white" /></ButtonEdit>
