@@ -18,6 +18,14 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
         });
+
+        DB::table('coursecategories')->insert([
+            ['name' => 'Duda del curso'],
+            ['name' => 'Ayuda con problema en el curso'],
+            ['name' => 'Soporte técnico'],
+            ['name' => 'Ventas, compras'],
+            ['name' => 'Otro'],
+        ]);
     }
 
     /**

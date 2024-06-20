@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contactmessages;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,6 +17,14 @@ class PagesController extends Controller
 
     public function contact(){
         return Inertia::render("MainPages/Contact");
+    }
+    public function contact_message(Request $request){
+        $message = Contactmessages::create([
+            'name'=> $request->name,
+            'subject' => $request->subject,
+            'email' => $request->email,
+            'content' => $request->content
+        ]);
     }
 
     public function about(){

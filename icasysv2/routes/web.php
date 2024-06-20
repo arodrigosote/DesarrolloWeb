@@ -127,6 +127,7 @@ Route::middleware('auth', 'verified')->group(function () {
 // Normal pages
 Route::get('/', [PagesController::class, "home"])->name('page.home');
 Route::get('/contacto', [PagesController::class, "contact"])->name('page.contact');
+Route::post('/contacto', [PagesController::class, "contact_message"])->name('page.contact.message');
 Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
 Route::get('/servicios', [PagesController::class, "services"])->name('page.services');
 Route::get('/cursos', [PagesController::class, "courses"])->name('courses');
