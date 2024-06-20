@@ -116,6 +116,9 @@ Route::middleware('auth', 'verified')->group(function () {
     //Asisstance
     Route::get('/asistencia/ayudas-pendientes', [AssistanceController::class, 'show_assistance_admin'])->name('assistance.admin');
 
+    //Messages
+    Route::get('/mensajes', [PagesController::class, 'show_contact_messages'])->name('contact.messages');
+
     //Payments
     Route::get('/curso/comprar/{id}/{slug}/aprobado', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/curso/comprar/{id}/{slug}/pendiente', [PaymentController::class, 'pending'])->name('payment.pending');
