@@ -61,6 +61,7 @@ export default function UserProfileMenu({ auth }) {
 
                     <Dropdown.Content>
                         <Dropdown.Link href={route('profile.edit')} className='text-end'>Perfil</Dropdown.Link>
+                        <Dropdown.Link href={route('alumno.courses')} className='text-end'>Mis cursos</Dropdown.Link>
                         <Dropdown.Link href={route('logout')} method="post" as="button" className='text-end'>
                             Cerrar sesión
                         </Dropdown.Link>

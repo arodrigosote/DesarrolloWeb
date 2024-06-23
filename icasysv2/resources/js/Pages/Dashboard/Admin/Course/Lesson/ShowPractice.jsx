@@ -34,7 +34,7 @@ const Lesson = ({ auth }) => {
             <Head>
                 <title>{course.title}</title>
             </Head>
-            <LessonLayout auth={auth} title={`Ejercicio práctica: ${lesson.name}`} url={url} modules={modules} lessons={lessons} course={course}>
+            <LessonLayout auth={auth} title={`${lesson.name}:`} url={url} modules={modules} lessons={lessons} course={course}>
 
                 <div className="">
                     <h2 className="text-primary text-xl mb-1">Planteamiento: </h2>
