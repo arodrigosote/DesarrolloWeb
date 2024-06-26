@@ -8,6 +8,7 @@ import Footer from '../Components/Footer/Footer';
 import ButtonPrimary from '@/Components/ButtonPrimary';
 import ButtonSecondary from '@/Components/ButtonSecondary';
 import ButtonYellow from '@/Components/ButtonYellow';
+import { BigPlayButton, ControlBar, LoadingSpinner, PlayToggle, Player, ReplayControl, VolumeMenuButton } from "video-react";
 
 export default function Websites(auth) {
     return (
@@ -17,8 +18,15 @@ export default function Websites(auth) {
             </Head>
             <Header auth={auth}></Header>
             <div className="bg-lighter text-primary font-bold text-center py-44">
-                <h1 className="text-5xl">Ten presencia en internet HOY mismo</h1>
+                <h1 className="text-5xl mb-10">Ten presencia en internet HOY mismo</h1>
+                <p className='text-secondary text-xl'>✅ Sitioweb optimizado completamente en SEO ✅</p>
+                <p className='text-secondary text-xl'>✅ Diseñado y lanzado en 2 semanas ✅</p>
+                <p className='text-secondary text-xl'>✅ Diseñado especialmente para obtener clientes potenciales ✅</p>
+                <div className='flex justify-center mt-14'>
+                <iframe width="720" height="460" src="https://www.youtube-nocookie.com/embed/fVR03j24N-U?si=gfK0AcgRDaDQpUcF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
+            </div>
+
 
             {/* Service section */}
             <div>
