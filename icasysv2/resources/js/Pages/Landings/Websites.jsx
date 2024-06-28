@@ -18,13 +18,18 @@ export default function Websites(auth) {
             </Head>
             <Header auth={auth}></Header>
             <div className="bg-lighter text-primary font-bold text-center py-44">
-                <h1 className="text-5xl mb-10">Ten presencia en internet HOY mismo</h1>
-                <p className='text-secondary text-xl'>✅ Sitioweb optimizado completamente en SEO ✅</p>
-                <p className='text-secondary text-xl'>✅ Diseñado y lanzado en 2 semanas ✅</p>
-                <p className='text-secondary text-xl'>✅ Diseñado especialmente para obtener clientes potenciales ✅</p>
-                <div className='flex justify-center mt-14'>
-                <iframe width="720" height="460" src="https://www.youtube-nocookie.com/embed/fVR03j24N-U?si=gfK0AcgRDaDQpUcF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
+                <h1 className="text-5xl mb-10 lg:mx-0 mx-5">Ten presencia en internet HOY mismo</h1>
+                <p className='text-secondary lg:text-xl text-md lg:mx-0 mx-5 text-center'>✅ Sitioweb optimizado completamente en SEO</p>
+                <p className='text-secondary lg:text-xl text-md lg:mx-0 mx-5 text-center'>✅ Diseñado y lanzado en 2 semanas</p>
+                <p className='text-secondary lg:text-xl text-md lg:mx-0 mx-5 text-center'>✅ Diseñado especialmente para obtener clientes potenciales</p>
+                <div className='flex justify-center mt-14 lg:mx-0 mx-5'>
+                    <iframe className='w-[720px] h-[440px]' src="https://www.youtube-nocookie.com/embed/fVR03j24N-U?si=gfK0AcgRDaDQpUcF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <p className='text-gray-500 lg:mx-0 mx-5 mt-8'>Descubre como conseguir muchas más clientes en el video ☝️</p>
+                <div className='flex justify-center mt-12'>
+                    <ButtonPrimary>Cotizar</ButtonPrimary>
+                </div>
+
             </div>
 
 
