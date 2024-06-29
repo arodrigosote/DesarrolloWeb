@@ -30,21 +30,21 @@ import ButtonShow from "@/Components/ButtonShow";
 import ButtonYellow from "@/Components/ButtonYellow";
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import ReactPDF from '@react-pdf/renderer';
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import Receipt from "@/Pages/PDF/Receipt";
 
-
-
 const ShowReceipts = (props) => {
-
     const { student, baseUrl, receipts, auth } = usePage().props;
 
-    //Estado de generacion de PDF ---------------------------------------------------------------------------
+    // Estado de generacion de PDF ---------------------------------------------------------------------------
     const [downloadingReceiptId, setDownloadingReceiptId] = useState(null);
     //-------------------------------------------------------------------------------------------------------
 
+    // Estado para abrir el modal de vista previa
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [selectedReceipt, setSelectedReceipt] = useState(null);
 
-    //SECCION PARA RECIBIR NOTIFICACION----------------------------------------------------------------------
+    // SECCION PARA RECIBIR NOTIFICACION----------------------------------------------------------------------
     const [toastInfo, setToastInfo] = useState(null);
     useEffect(() => {
         // Verificar si hay información de "toast" y mostrar el "toast" correspondiente
@@ -62,9 +62,10 @@ const ShowReceipts = (props) => {
     }, [toastInfo]);
     //-------------------------------------------------------------------------------------------------------
 
-    //Generacion de PDF -------------------------------------------------------------------------------------
-    const handleDownloadClick = (receiptId) => {
-        setDownloadingReceiptId(receiptId);
+    // Generacion de PDF -------------------------------------------------------------------------------------
+    const handleDownloadClick = (receipt) => {
+        setSelectedReceipt(receipt);
+        setPreviewOpen(true);
     };
     //-------------------------------------------------------------------------------------------------------
 
@@ -91,23 +92,7 @@ const ShowReceipts = (props) => {
                                     <td className="border rounded text-xs text-center mx-auto my-auto">{receipt.weeks_number}</td>
                                     <td className="border rounded text-xs text-center mx-auto my-auto">{receipt.amount}</td>
                                     <td className="border rounded text-xs text-center mx-auto my-auto">
-                                        {downloadingReceiptId === receipt.id ? (
-                                            <PDFDownloadLink
-                                                document={<Receipt student={student} payments={receipt.studentpayments} schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`} receipt={receipt} />}
-                                                fileName={`Recibo - ${receipt.student.name} - ${receipt.date_payment}`}
-                                            >
-                                                {({ loading }) =>
-                                                    loading ? (
-                                                        <ButtonCancel>Cargando...</ButtonCancel>
-                                                    ) : (
-                                                        <ButtonSecondary>Descargar</ButtonSecondary>
-                                                    )
-                                                }
-                                            </PDFDownloadLink>
-                                        ) : (
-                                            <ButtonYellow onClick={() => handleDownloadClick(receipt.id)}>Generar</ButtonYellow>
-                                        )}
-
+                                        <ButtonYellow onClick={() => handleDownloadClick(receipt)}>Generar</ButtonYellow>
                                     </td>
                                 </tr>
                             ))}
@@ -115,14 +100,46 @@ const ShowReceipts = (props) => {
                     </table>
                 </div>
             </DashboardLayout>
+
+            {/* Modal de vista previa */}
+            <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="lg" fullWidth>
+                <DialogTitle>Vista Previa del Recibo</DialogTitle>
+                <DialogContent>
+                    {selectedReceipt && (
+                        <PDFViewer width="100%" height="500">
+                            <Receipt
+                                student={student}
+                                payments={selectedReceipt.studentpayments}
+                                schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`}
+                                receipt={selectedReceipt}
+                            />
+                        </PDFViewer>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <ButtonCancel onClick={() => setPreviewOpen(false)}>Cerrar</ButtonCancel>
+                    {selectedReceipt && (
+                        <PDFDownloadLink
+                            document={<Receipt student={student} payments={selectedReceipt.studentpayments} schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`} receipt={selectedReceipt} />}
+                            fileName={`Recibo - ${selectedReceipt.student.name} - ${selectedReceipt.date_payment}`}
+                        >
+                            {({ loading }) =>
+                                loading ? (
+                                    <ButtonCancel>Cargando...</ButtonCancel>
+                                ) : (
+                                    <ButtonSecondary>Descargar</ButtonSecondary>
+                                )
+                            }
+                        </PDFDownloadLink>
+                    )}
+                </DialogActions>
+            </Dialog>
+
             <Head>
                 <title>Recibos alumno</title>
             </Head>
         </>
-
-
-    )
-
-}
+    );
+};
 
 export default ShowReceipts;

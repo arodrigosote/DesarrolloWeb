@@ -27,6 +27,7 @@ const Message = ({ messages, auth }) => {
     const [name, setName] = useState('');
     const [subject, setSubject] = useState('');
     const [message, setMessage] = useState('');
+    const [email, setEmail] = useState('');
     const [operation, setOperation] = useState(1);
     const nameInput = useRef();
     const { data, setData, delete: destroy, post, put, processing, errors, reset } = useForm({
@@ -34,10 +35,11 @@ const Message = ({ messages, auth }) => {
         name: ''
     })
 
-    const openMainModal = (id, name, subject, message) => {
+    const openMainModal = (id, name, email, subject, message) => {
         setSubject(subject);
         setMessage(message);
         setName(name);
+        setEmail(email);
         setTitle('Mensaje');
         setMainModal(true);
     }
@@ -103,6 +105,7 @@ const Message = ({ messages, auth }) => {
                             <TableRow>
                                 <TableCell>Nombre</TableCell>
                                 <TableCell>Asunto</TableCell>
+                                <TableCell>Email</TableCell>
                                 <TableCell>Fecha</TableCell>
                                 <TableCell>Acciones</TableCell>
                             </TableRow>
@@ -112,9 +115,10 @@ const Message = ({ messages, auth }) => {
                                 <TableRow key={message.id}>
                                     <TableCell>{message.name}</TableCell>
                                     <TableCell>{message.subject}</TableCell>
+                                    <TableCell>{message.email}</TableCell>
                                     <TableCell>{message.created_at}</TableCell>
                                     <TableCell>
-                                        <ButtonSecondary onClick={() => openMainModal(message.id, message.name, message.subject, message.content)}>Ver</ButtonSecondary>
+                                        <ButtonSecondary onClick={() => openMainModal(message.id, message.name, message.email, message.subject, message.content)}>Ver</ButtonSecondary>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -129,6 +133,7 @@ const Message = ({ messages, auth }) => {
                 </h2>
                 <div className="p-6">
                     <h3 className="mt-4"><strong>De:</strong> {name}</h3>
+                    <h3 className="mt-4"><strong>Email:</strong> {email}</h3>
                     <h3 className="mt-4"><strong>Asunto:</strong> {subject}</h3>
                     <p className="mt-4"><strong>Mensaje:</strong> {message}</p>
                 </div>

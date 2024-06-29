@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import Header from "../Components/Header/Header";
 import { Head, useForm } from '@inertiajs/react';
 import { CImage } from "@coreui/react";
 import icono from '../../Assets/Images/azul.png';
 import Footer from "../Components/Footer/Footer";
-import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import Swal from "sweetalert2";
 import ButtonPrimary from "@/Components/ButtonPrimary";
@@ -18,6 +17,8 @@ export default function (auth) {
         content: ''
     });
 
+    const nameInput = useRef(null);
+
     const handleChange = (e) => {
         const { id, value } = e.target;
         setData({ ...data, [id]: value });
@@ -25,6 +26,25 @@ export default function (auth) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validaciones de los campos
+        if (!data.name.trim()) {
+            Swal.fire({ title: 'El nombre es requerido', icon: 'error', confirmButtonColor: '#014ba0' });
+            return;
+        }
+        if (!data.email.trim()) {
+            Swal.fire({ title: 'El email es requerido', icon: 'error', confirmButtonColor: '#014ba0' });
+            return;
+        }
+        if (!data.subject.trim()) {
+            Swal.fire({ title: 'El asunto es requerido', icon: 'error', confirmButtonColor: '#014ba0' });
+            return;
+        }
+        if (!data.content.trim()) {
+            Swal.fire({ title: 'El mensaje es requerido', icon: 'error', confirmButtonColor: '#014ba0' });
+            return;
+        }
+
         post(route('page.contact.message', data), {
             onSuccess: () => { ok('Mensaje enviado con éxito') },
             onError: () => {
@@ -39,12 +59,12 @@ export default function (auth) {
 
     const ok = (message) => {
         reset();
-        Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' })
+        Swal.fire({ title: message, icon: 'success', confirmButtonColor: '#014ba0' });
     };
 
     return (
         <>
-        <ToastContainer></ToastContainer>
+            <ToastContainer></ToastContainer>
             <Head>
                 <title>Contacto</title>
             </Head>
@@ -62,7 +82,7 @@ export default function (auth) {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label for="name" className="block text-sm font-medium text-muted-foreground">
+                            <label htmlFor="name" className="block text-sm font-medium text-muted-foreground">
                                 Nombre
                             </label>
                             <input
@@ -72,10 +92,11 @@ export default function (auth) {
                                 type="text"
                                 value={data.name}
                                 onChange={handleChange}
+                                ref={nameInput}
                             />
                         </div>
                         <div>
-                            <label for="email" className="block text-sm font-medium text-muted-foreground">
+                            <label htmlFor="email" className="block text-sm font-medium text-muted-foreground">
                                 Email
                             </label>
                             <input
@@ -89,7 +110,7 @@ export default function (auth) {
                         </div>
                     </div>
                     <div>
-                        <label for="subject" className="block text-sm font-medium text-muted-foreground">
+                        <label htmlFor="subject" className="block text-sm font-medium text-muted-foreground">
                             Asunto
                         </label>
                         <input
@@ -102,7 +123,7 @@ export default function (auth) {
                         />
                     </div>
                     <div>
-                        <label for="message" className="block text-sm font-medium text-muted-foreground">
+                        <label htmlFor="content" className="block text-sm font-medium text-muted-foreground">
                             Mensaje
                         </label>
                         <textarea
@@ -122,6 +143,5 @@ export default function (auth) {
 
             <Footer></Footer>
         </>
-
-    )
+    );
 }
