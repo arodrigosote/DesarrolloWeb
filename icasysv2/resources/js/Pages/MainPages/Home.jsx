@@ -13,7 +13,7 @@ export default function Home(auth) {
             <Head>
                 <title>Cursos de Computación e Inglés</title>
                 <meta property="og:title" content="Cursos de Computación e Inglés" />
-                <meta property="og:description" content="Somos un instituto de educación que busca proporcionar enseñanza de calidad a nuestros estudiantes en áreas como: Ofimática, Programación, Diseño Gráfico, Diseño Web, Marketing e Inglés." />
+                <meta name='description' property="og:description" content="Somos un instituto de educación que busca proporcionar enseñanza de calidad a nuestros estudiantes en áreas como: Ofimática, Programación, Diseño Gráfico, Diseño Web, Marketing e Inglés." />
                 <meta property="og:image" content={image} />
             </Head>
             <Header auth={auth}></Header>
