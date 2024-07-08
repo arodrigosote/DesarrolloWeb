@@ -45,6 +45,10 @@ class PagesController extends Controller
         }
     }
 
+    public function transparency() {
+        return Inertia::render("MainPages/Transparency");
+    }
+
     public function about()
     {
         return Inertia::render("MainPages/About");

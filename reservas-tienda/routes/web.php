@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,6 +28,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/escritorio', [PagesController::class, 'home'])->name('home');
+
+    Route::get('/categorias-servicios', [ServiceController::class, 'index'])->name('servicecategory');
+    Route::post('/categorias-servicios', [ServiceController::class, 'servicecategory_store'])->name('servicecategory.store');
+    Route::put('/categorias-servicios/{id}', [ServiceController::class, 'servicecategory_update'])->name('servicecategory.update');
+    Route::delete('/categorias-servicios', [ServiceController::class, 'servicecategory_destroy'])->name('servicecategory.destroy');
+
+    Route::get('/categoria/{id}/', [ServiceController::class, 'services'])->name('services');
 });
 
 require __DIR__.'/auth.php';

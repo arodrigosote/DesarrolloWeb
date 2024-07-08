@@ -25,10 +25,9 @@ export default function Sidebar() {
                 <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[11px] mt-5 ml-3">PANEL ADMINISTRADOR</h2>
                 <MenuList>
                     <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Escritorio</Link></MenuItem>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Grupos</Link></MenuItem>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Alumnos</Link></MenuItem>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Horarios</Link></MenuItem>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Profesores</Link></MenuItem>
+                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Clientes</Link></MenuItem>
+                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Citas</Link></MenuItem>
+                    <MenuItem className=""><Link href={route('servicecategory')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Servicios</Link></MenuItem>
                 </MenuList>
                 <MenuList>
                     <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Cursos</Link></MenuItem>

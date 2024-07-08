@@ -134,6 +134,7 @@ Route::post('/contacto', [PagesController::class, "contact_message"])->name('pag
 Route::get('/acerca-de', [PagesController::class, "about"])->name('page.about');
 Route::get('/servicios', [PagesController::class, "services"])->name('page.services');
 Route::get('/cursos', [PagesController::class, "courses"])->name('courses');
+Route::get('/transparencia', [PagesController::class, "transparency"])->name('transparency');
 Route::get('/curso/ver/{id}/{slug}', [CourseController::class, 'show_course_landing'])->name('course.landing');
 
 

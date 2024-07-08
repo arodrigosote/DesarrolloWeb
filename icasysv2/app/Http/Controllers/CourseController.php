@@ -192,12 +192,18 @@ class CourseController extends Controller
     {
         $course = Course::with('coursecategory', 'professor', 'coursedifficulty')->find($id);
         $user = auth()->user();
-        $pucharse = Pucharse::where('course_id',$course->id)->where('user_id',$user->id)->where('state', 'payed')->first();
-        if($pucharse){
-            $payed = true;
+        if($user){
+            $pucharse = Pucharse::where('course_id',$course->id)->where('user_id',$user->id)->where('state', 'payed')->first();
+            if($pucharse){
+                $payed = true;
+            }else{
+                $payed = false;
+            }
         }else{
+            $pucharse = null;
             $payed = false;
         }
+
 
 
         return Inertia::render('Dashboard/Admin/Course/Landing', [
