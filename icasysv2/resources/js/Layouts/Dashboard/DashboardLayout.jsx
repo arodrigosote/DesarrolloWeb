@@ -12,12 +12,12 @@ import '../../../css/app.css'
 export default function ({auth, children, title }) {
 
     return (
-        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-11">
+        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12">
 
             <Sidebar auth={auth}></Sidebar>
 
             {/* content */}
-            <div className="col-span-9 bg-slate-100">
+            <div className="col-span-10 bg-slate-100">
                 <DashboardHeader auth={auth}></DashboardHeader>
                 <div className="bg-white p-16 w-[85%] mx-auto mt-8 shadow-md ">
                     <h2 className="text-primary font-bold text-2xl ">{title}</h2>

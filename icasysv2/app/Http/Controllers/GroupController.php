@@ -34,7 +34,8 @@ class GroupController extends Controller
         } else if(Gate::allows("isAdmin")){
             $user = auth()->user();
             return Inertia::render("Dashboard/Admin/Group/Index", [
-                "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
+                "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->where('active', 1)->get(),
+                "noactive_groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->where('active', 0)->get(),
                 "professors" => Professor::all(),
                 "schedules" => Schedule::with('day', 'hour')->get(),
             ]);
@@ -236,6 +237,38 @@ class GroupController extends Controller
         if (Gate::allows("isProfessor") || Gate::allows("isAdmin")) {
             $classsubjectgroup = Classsubjectgroup::find($id);
             $classsubjectgroup->delete();
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        }
+    }
+
+    public function payments()
+    {
+        if(Gate::allows("isAdmin")){
+            $user = auth()->user();
+            return Inertia::render("Dashboard/Admin/Group/Payments/Payments", [
+                "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
+                "professors" => Professor::all(),
+                "schedules" => Schedule::with('day', 'hour')->get(),
+            ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        }
+    }
+
+    public function make_payments($group_id){
+        if (Gate::allows("isAdmin")) {
+            return Inertia::render("Dashboard/Admin/Group/Payments/Make", [
+                'group' => Group::with('schedule', 'schedule.hour', 'schedule.day', 'professor')->find($group_id),
+                'students' => Student::where('group_id', $group_id)->get(),
+                'baseUrl' => env('APP_URL'),
+            ]);
         } else {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',

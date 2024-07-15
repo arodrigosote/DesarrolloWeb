@@ -90,6 +90,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::put("/grupo/materia/clase/{id}/actualizar", [GroupController::class, "updateLessons"])->name("grupos.lessons.update");
     Route::delete("/grupo/materia/clase/{id}/eliminar", [GroupController::class, "deleteLessons"])->name("grupos.lessons.delete");
 
+    Route::get("/pagos", [GroupController::class, "payments"])->name("grupos.payments");
+    Route::get("/pagos/{group_id}", [GroupController::class, "make_payments"])->name("grupos.make.payments");
+
     //COURSES
     Route::get("/admin/cursos", [CourseController::class, "index"])->name("admin.courses");
     Route::post("/admin/cursos/crear", [CourseController::class, "store"])->name("admin.courses.store");

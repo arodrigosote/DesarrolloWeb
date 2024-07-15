@@ -93,7 +93,6 @@ const ShowStudent = () => {
         initialData[`week_topay_date_${i}`] = dates[i];
         initialData[`payment_date_${i}`] = formatterCurretDate;
         initialData[`payment_check_${i}`] = false;
-
     }
 
     const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
@@ -330,7 +329,6 @@ const ShowStudent = () => {
                                 Cancelar
                             </ButtonCancel>
                         </DialogActions>
-
                     </Dialog>
                 </form>
             </DashboardLayout>
