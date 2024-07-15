@@ -8,35 +8,35 @@ import InputLabel from "@/Components/InputLabel";
 import Modal from "@/Components/Modal";
 import TextInput from "@/Components/TextInput";
 import { Link, useForm, usePage } from "@inertiajs/react";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import { useRef, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
-import { RiEditBoxFill, RiDeleteBin5Fill, RiEyeFill  } from "react-icons/ri";
+import { RiEditBoxFill, RiDeleteBin5Fill, RiEyeFill } from "react-icons/ri";
 
 
 export default function Category() {
-    const { category, services, url, auth } = usePage().props;
+    const { category, services, durations, url, auth } = usePage().props;
 
     const [mainModal, setMainModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(0);
 
-    const id = useRef();
-    const category_id = useRef();
-    const name = useRef();
-    const price = useRef();
-    const duration = useRef();
-    const description = useRef();
-    const image = useRef();
+    const idInput = useRef();
+    const category_idInput = useRef();
+    const nameInput = useRef();
+    const priceInput = useRef();
+    const duration_idInput = useRef();
+    const descriptionInput = useRef();
+    const imageInput = useRef();
 
     const { data, setData, delete: destroy, post, put, processing, errors, reset } = useForm({
-        id:'',
-        category_id:'',
+        id: '',
+        category_id: category.id,
         name: '',
         price: '',
-        duration: '',
+        duration_id: '',
         description: '',
         image: '',
     })
@@ -44,15 +44,15 @@ export default function Category() {
     // ----------------------------------------------------------------------------------------------
     // MODAL PARA AGREGAR CATEGORIA
     // ----------------------------------------------------------------------------------------------
-    const openMainModal = (op, id, category_id, name, price, duration, description, image) => {
+    const openMainModal = (op, id, category_id, name, price, duration_id, description, image) => {
         setMainModal(true);
         setOperation(op)
         setData({
-            id:'',
-            category_id:'',
+            id: '',
+            category_id: category.id,
             name: '',
             price: '',
-            duration: '',
+            duration_id: '',
             description: '',
             image: '',
         })
@@ -61,11 +61,11 @@ export default function Category() {
         } else {
             setTitle('Editar categoría.');
             setData({
-                id:id,
-                category_id:category_id,
+                id: id,
+                category_id: category_id,
                 name: name,
                 price: price,
-                duration: duration,
+                duration_id: duration_id,
                 description: description,
                 image: image,
             })
@@ -84,13 +84,13 @@ export default function Category() {
                 preserveScroll: true,
                 onSuccess: () => { ok('Categoría agregada con éxito.') },
                 onError: () => {
-                    if (error.id){reset('id'); idInput.current.focus();}
-                    if (error.category_id){reset('category_id'); category_idInput.current.focus();}
-                    if (error.name){reset('name'); nameInput.current.focus();}
-                    if (error.price){reset('price'); priceInput.current.focus();}
-                    if (error.duration){reset('duration'); durationInput.current.focus();}
-                    if (error.description){reset('description'); descriptionInput.current.focus();}
-                    if (error.image){reset('image'); imageInput.current.focus();}
+                    if (error.id) { reset('id'); idInput.current.focus(); }
+                    if (error.category_id) { reset('category_id'); category_idInput.current.focus(); }
+                    if (error.name) { reset('name'); nameInput.current.focus(); }
+                    if (error.price) { reset('price'); priceInput.current.focus(); }
+                    if (error.duration_id) { reset('duration'); duration_idInput.current.focus(); }
+                    if (error.description) { reset('description'); descriptionInput.current.focus(); }
+                    if (error.image) { reset('image'); imageInput.current.focus(); }
                 }
             })
         } else {
@@ -98,29 +98,35 @@ export default function Category() {
                 preserveScroll: true,
                 onSuccess: () => { ok('Categoría editada con éxito.') },
                 onError: () => {
-                    if (error.id){reset('id'); idInput.current.focus();}
-                    if (error.category_id){reset('category_id'); category_idInput.current.focus();}
-                    if (error.name){reset('name'); nameInput.current.focus();}
-                    if (error.price){reset('price'); priceInput.current.focus();}
-                    if (error.duration){reset('duration'); durationInput.current.focus();}
-                    if (error.description){reset('description'); descriptionInput.current.focus();}
-                    if (error.image){reset('image'); imageInput.current.focus();}
+                    if (error.id) { reset('id'); idInput.current.focus(); }
+                    if (error.category_id) { reset('category_id'); category_idInput.current.focus(); }
+                    if (error.name) { reset('name'); nameInput.current.focus(); }
+                    if (error.price) { reset('price'); priceInput.current.focus(); }
+                    if (error.duration_id) { reset('duration'); duration_idInput.current.focus(); }
+                    if (error.description) { reset('description'); descriptionInput.current.focus(); }
+                    if (error.image) { reset('image'); imageInput.current.focus(); }
                 }
             })
         }
     }
 
+    // MANEJAR IMAGEN
+    const handleImage = (e) => {
+        const file = e.target.files[0];
+        setData('image', file); // Actualiza el estado solo con el archivo de imagen
+    };
+
     // ----------------------------------------------------------------------------------------------
     // MODAL PARA ELIMINAR CATEGORIA
     // ----------------------------------------------------------------------------------------------
-    const openDeleteModal = (id, category_id, name, price, duration, description, image) => {
+    const openDeleteModal = (id, category_id, name, price, duration_id, description, image) => {
         setDeleteModal(true);
         setData({
-            id:id,
-            category_id:category_id,
+            id: id,
+            category_id: category_id,
             name: name,
             price: price,
-            duration: duration,
+            duration_id: duration_id,
             description: description,
             image: image,
         })
@@ -169,7 +175,7 @@ export default function Category() {
 
     return (
         <>
-            <ToastContainer/>
+            <ToastContainer />
             <DashboardLayout title={`Mostrando servicios de ${category.name}`} auth={auth}>
                 <div className="flex justify-end">
                     <ButtonPrimary onClick={() => openMainModal(1)}>Agregar categoría</ButtonPrimary>
@@ -190,10 +196,10 @@ export default function Category() {
                             {services.map((service) => (
                                 <TableRow key={service.id}>
                                     <TableCell><span className="text-lg">{service.name}</span></TableCell>
-                                    <TableCell>{}</TableCell>
+                                    <TableCell>{ }</TableCell>
                                     <TableCell>
                                         <ButtonPrimary onClick={(e) => { handleShowCategory(service.id) }}><RiEyeFill className="text-lg"></RiEyeFill></ButtonPrimary>
-                                        <ButtonEdit onClick={(e) => openMainModal(2, service.id, service.category_id, service.name, service.price, service.duration, service.description, service.image)}><RiEditBoxFill className="text-lg"></RiEditBoxFill></ButtonEdit>
+                                        <ButtonEdit onClick={(e) => openMainModal(2, service.id, service.category_id, service.name, service.price, service.duration_id, service.description, service.image)}><RiEditBoxFill className="text-lg"></RiEditBoxFill></ButtonEdit>
                                         <ButtonDelete onClick={(e) => openDeleteModal(service.id, service.name)} className="ml-2"><RiDeleteBin5Fill className="text-lg"></RiDeleteBin5Fill></ButtonDelete>
                                     </TableCell>
                                 </TableRow>
@@ -210,28 +216,72 @@ export default function Category() {
                     </DialogTitle>
                     <DialogContent>
                         <InputLabel className="mt-0" htmlFor='name' value='Nombre:'></InputLabel>
-                        <TextInput className='w-[100%]' id='name' name='name' ref={name} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
+                        <TextInput className='w-[100%]' id='name' name='name' ref={nameInput} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
                         <InputError message={errors.make}></InputError>
 
-                        <InputLabel className="mt-7" htmlFor='category' value='Categoría:'></InputLabel>
-                        <TextInput className='w-[100%]' id='category' name='category' ref={name} value={data.category} required='required' onChange={(e) => setData('category', e.target.value)}></TextInput>
-                        <InputError message={errors.make}></InputError>
+                        <InputLabel className="mt-7 hidden" htmlFor='category' value='Categoría:'></InputLabel>
+                        <TextInput className='w-[100%] hidden' id='category' name='category' ref={category_idInput} defaultValue={category.id} required='required'></TextInput>
+                        <InputError className='hidden' message={errors.make}></InputError>
 
-                        <InputLabel className="mt-7" htmlFor='name' value='Precio:'></InputLabel>
-                        <TextInput className='w-[100%]' id='name' name='name' ref={name} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
-                        <InputError message={errors.make}></InputError>
+                        <InputLabel className="mt-7" htmlFor='price' value='Precio:'></InputLabel>
+                        <TextInput
+                            className='w-[100%]'
+                            id='price'
+                            name='price'
+                            ref={priceInput}
+                            value={data.price}
+                            required='required'
+                            onChange={(e) => setData('price', e.target.value)}
+                            type='number'
+                            min='0'
+                            step='0.01'
+                            onWheel={(e) => e.target.blur()} // Evita el scroll
+                        ></TextInput>
+                        <InputError message={errors.price}></InputError>
 
-                        <InputLabel className="mt-7" htmlFor='name' value='Duración:'></InputLabel>
-                        <TextInput className='w-[100%]' id='name' name='name' ref={name} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
-                        <InputError message={errors.make}></InputError>
 
-                        <InputLabel className="mt-7" htmlFor='name' value='Descripción:'></InputLabel>
-                        <TextInput className='w-[100%]' id='name' name='name' ref={name} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
-                        <InputError message={errors.make}></InputError>
 
-                        <InputLabel className="mt-7" htmlFor='name' value='Image:'></InputLabel>
-                        <TextInput className='w-[100%]' id='name' name='name' ref={name} value={data.name} required='required' onChange={(e) => setData('name', e.target.value)}></TextInput>
-                        <InputError message={errors.make}></InputError>
+                        <InputLabel className="mt-7" htmlFor='duration_id' value='Duración del servicio: ' />
+                        <Select
+                            className="w-full mt-1"
+                            id='duration_id'
+                            ref={duration_idInput}
+                            value={data.duration_id || ''} // Ensure that value is not undefined
+                            onChange={(e) => setData("duration_id", e.target.value)}
+                        >
+                            {durations.map((duration) => (
+                                <MenuItem key={duration.id} value={duration.id}>
+                                    {duration.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                        <InputError message={errors.make} />
+
+
+                        <InputLabel className="mt-7" htmlFor='description' value='Descripción:'></InputLabel>
+                        <textarea
+                            className='w-[100%] h-40 p-2 border rounded border-gray-300'
+                            id='description'
+                            name='description'
+                            ref={descriptionInput}
+                            value={data.description}
+                            required='required'
+                            onChange={(e) => setData('description', e.target.value)}
+                        ></textarea>
+                        <InputError message={errors.description}></InputError>
+
+
+                        <InputLabel className="mt-7" htmlFor='image' value='Foto de perfil: ' />
+                        <TextField
+                            className="w-full"
+                            type="file"
+                            accept="image/*"
+                            id="image"
+                            name="image"
+                            onChange={handleImage}
+                        />
+                        <InputError message={errors.make} />
+
                     </DialogContent>
                     <DialogActions>
                         <div className="flex justify-end items-center mt-4">

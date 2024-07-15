@@ -36,7 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/categorias-servicios/{id}', [ServiceController::class, 'servicecategory_update'])->name('servicecategory.update');
     Route::delete('/categorias-servicios', [ServiceController::class, 'servicecategory_destroy'])->name('servicecategory.destroy');
 
-    Route::get('/categoria/{id}/', [ServiceController::class, 'services'])->name('services');
+    Route::get('/categoria/{category_id}/', [ServiceController::class, 'services'])->name('services');
+    Route::post('/servicio', [ServiceController::class, 'service_store'])->name('service.store');
+    Route::put('/servicio/{service_id}/', [ServiceController::class, 'service_update'])->name('service.update');
+    Route::delete('/servicio/{service_id}/', [ServiceController::class, 'service_destroy'])->name('service.destroy');
 });
 
 require __DIR__.'/auth.php';

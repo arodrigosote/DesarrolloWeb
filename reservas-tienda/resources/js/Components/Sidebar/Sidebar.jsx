@@ -22,18 +22,18 @@ export default function Sidebar() {
                     </div>
                 </Link>
 
-                <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[11px] mt-5 ml-3">PANEL ADMINISTRADOR</h2>
+                <h2 className="text-white xl:text-[14px] xs:text-[10px] md:text-[20px] mt-5 ml-3">PANEL ADMINISTRADOR</h2>
                 <MenuList>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Escritorio</Link></MenuItem>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Clientes</Link></MenuItem>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Citas</Link></MenuItem>
-                    <MenuItem className=""><Link href={route('servicecategory')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Servicios</Link></MenuItem>
+                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[18px] xl:text-[14px]">Escritorio</Link></MenuItem>
+                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[18px] xl:text-[14px]">Clientes</Link></MenuItem>
+                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[18px] xl:text-[14px]">Citas</Link></MenuItem>
+                    <MenuItem className=""><Link href={route('servicecategory')} className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[18px] xl:text-[14px]">Servicios</Link></MenuItem>
                 </MenuList>
                 <MenuList>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Cursos</Link></MenuItem>
+                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[18px] xl:text-[14px]">Cursos</Link></MenuItem>
                 </MenuList>
                 <MenuList>
-                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[12px] xl:text-[14px]">Perfil</Link></MenuItem>
+                    <MenuItem className=""><Link href='#' className=" text-white w-full pt-3 pb-3 pl-4 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[18px] xl:text-[14px]">Perfil</Link></MenuItem>
                 </MenuList>
             </div>
             <ButtonInvisible onClick={handleSidebar} className="block lg:hidden fixed bottom-4 right-4 lg:relative lg:bottom-auto lg:right-auto bg-color2 text-white p-2 text-2xl md:text-3xl rounded-full">

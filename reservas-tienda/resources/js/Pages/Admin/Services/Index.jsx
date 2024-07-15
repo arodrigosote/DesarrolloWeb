@@ -23,7 +23,7 @@ export default function Services() {
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(0);
 
-    const name = useRef();
+    const nameInput = useRef();
 
     const { data, setData, delete: destroy, post, put, processing, errors, reset } = useForm({
         id: '',
@@ -152,9 +152,9 @@ export default function Services() {
                                     <TableCell><Link href={route('services', category.id)}><span className="text-lg">{category.name}</span></Link></TableCell>
                                     <TableCell></TableCell>
                                     <TableCell>
-                                        <Link href={route('services', category.id)}><span className="text-lg"><ButtonPrimary><RiEyeFill className="text-lg"></RiEyeFill></ButtonPrimary></span></Link>
-                                        <ButtonEdit onClick={(e) => openMainModal(2, category.id, category.name)}><RiEditBoxFill className="text-lg"></RiEditBoxFill></ButtonEdit>
-                                        <ButtonDelete onClick={(e) => openDeleteModal(category.id, category.name)} className="ml-2"><RiDeleteBin5Fill className="text-lg"></RiDeleteBin5Fill></ButtonDelete>
+                                        <Link href={route('services', category.id)}><span className="text-lg"><ButtonPrimary><RiEyeFill className="text-lg"></RiEyeFill> Mostrar</ButtonPrimary></span></Link>
+                                        <ButtonEdit onClick={(e) => openMainModal(2, category.id, category.name)}><RiEditBoxFill className="text-lg"></RiEditBoxFill>Editar</ButtonEdit>
+                                        <ButtonDelete onClick={(e) => openDeleteModal(category.id, category.name)} className=""><RiDeleteBin5Fill className="text-lg"></RiDeleteBin5Fill>Eliminar</ButtonDelete>
                                     </TableCell>
                                 </TableRow>
                             ))}
