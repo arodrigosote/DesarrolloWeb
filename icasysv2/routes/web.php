@@ -92,6 +92,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::get("/pagos", [GroupController::class, "payments"])->name("grupos.payments");
     Route::get("/pagos/{group_id}", [GroupController::class, "make_payments"])->name("grupos.make.payments");
+    Route::post("/pagos", [GroupController::class, "store_payments"])->name('grupos.payment.store');
 
     //COURSES
     Route::get("/admin/cursos", [CourseController::class, "index"])->name("admin.courses");

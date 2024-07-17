@@ -6,11 +6,14 @@ namespace App\Http\Controllers;
 use App\Models\Classsubjectgroup;
 use App\Models\Group;
 use App\Models\Professor;
+use App\Models\Receipt;
 use App\Models\Schedule;
 use App\Models\Student;
 use App\Models\Studentclasssubject;
+use App\Models\Studentpayment;
 use App\Models\Subject;
 use App\Models\Subjectgroup;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -20,7 +23,7 @@ class GroupController extends Controller
     //
     public function index()
     {
-        if (Gate::allows("isProfessor") ) {
+        if (Gate::allows("isProfessor")) {
             $user = auth()->user();
             $professor = Professor::where('user_id', $user->id)->first(); // Corregido
             return Inertia::render("Dashboard/Admin/Group/Index", [
@@ -31,7 +34,7 @@ class GroupController extends Controller
                 "schedules" => Schedule::with('day', 'hour')->get(),
             ]);
 
-        } else if(Gate::allows("isAdmin")){
+        } else if (Gate::allows("isAdmin")) {
             $user = auth()->user();
             return Inertia::render("Dashboard/Admin/Group/Index", [
                 "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->where('active', 1)->get(),
@@ -247,7 +250,7 @@ class GroupController extends Controller
 
     public function payments()
     {
-        if(Gate::allows("isAdmin")){
+        if (Gate::allows("isAdmin")) {
             $user = auth()->user();
             return Inertia::render("Dashboard/Admin/Group/Payments/Payments", [
                 "groups" => Group::with('professor', 'schedule.day', 'schedule.hour')->get(),
@@ -262,13 +265,81 @@ class GroupController extends Controller
         }
     }
 
-    public function make_payments($group_id){
+    public function make_payments($group_id)
+    {
         if (Gate::allows("isAdmin")) {
             return Inertia::render("Dashboard/Admin/Group/Payments/Make", [
                 'group' => Group::with('schedule', 'schedule.hour', 'schedule.day', 'professor')->find($group_id),
-                'students' => Student::where('group_id', $group_id)->get(),
+                'students' => Student::with('receipts', 'receipts.studentpayments', 'group', 'group.schedule', 'group.schedule.day', 'group.schedule.hour')->where('group_id', $group_id)->get(),
                 'baseUrl' => env('APP_URL'),
             ]);
+        } else {
+            return Inertia::render("Dashboard/Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        }
+    }
+
+    public function store_payments(Request $request)
+    {
+        if (Gate::allows("isAdmin")) {
+
+            // dd($requestData = $request->json());
+            $requestData = $request->json();
+
+            $week_topay_date = $request->date;
+
+            // Contar elementos con valor true
+            $trueCount = 0;
+            foreach ($requestData as $key => $value) {
+
+                if (strpos($key, "student_id_") === 0) {
+                    $student_id = $value;
+                } else if (strpos($key, "payment_date_") === 0) {
+                    $payment_date = $value;
+                } else if (strpos($key, "payment_check_") === 0 && $value === true) {
+                    // $payment_check = $value;
+                    $student = Student::find($student_id);
+
+                    // Suponiendo que $firstDay y $paymentDate son instancias de DateTime
+                    $firstDay = new DateTime($student->firstday); // Reemplaza con tu fecha de inicio
+                    $paymentDate = new DateTime($week_topay_date); // Reemplaza con tu fecha de pago
+
+                    // Calcula la diferencia en días
+                    $interval = $firstDay->diff($paymentDate);
+                    $daysDifference = $interval->days;
+
+                    // Calcula el número de semanas
+                    $week_topay_number = intdiv($daysDifference, 7) + 1; // Se suma 1 porque la primera semana es la semana 1
+
+                    $receipt = Receipt::create([
+                        'student_id' => $student->id,
+                        'amount' => $student->tuition,
+                        'date_payment' => $week_topay_date,
+                        'weeks_number' => $week_topay_number,
+                    ]);
+
+                    $payment = Studentpayment::create([
+                        'student_id' => $student->id,
+                        'payment_day' => $payment_date,
+                        'week_topay_number' => $week_topay_number,
+                        'week_topay_date' => $week_topay_date,
+                        'receipt_id' => $receipt->id,
+                    ]);
+
+                    $trueCount++;
+                }
+            }
+
+            return Inertia::render("Dashboard/Admin/Group/Payments/Make", [
+                'group' => Group::with('schedule', 'schedule.hour', 'schedule.day', 'professor')->find($student->group_id),
+                'students' => Student::with('receipts', 'receipts.studentpayments', 'group', 'group.schedule', 'group.schedule.day', 'group.schedule.hour')->where('group_id', $student->group_id)->get(),
+                'baseUrl' => env('APP_URL'),
+            ])->with('toast', [
+                        'mensaje' => 'Pagos agregados con éxito.',
+                        'tipo' => 'success',
+                    ]);
         } else {
             return Inertia::render("Dashboard/Dashboard")->with('toast', [
                 'mensaje' => 'No estás autorizado.',

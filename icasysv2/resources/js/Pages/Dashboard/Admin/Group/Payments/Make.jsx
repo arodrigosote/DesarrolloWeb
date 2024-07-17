@@ -10,7 +10,7 @@ import {
     DialogActions,
     Switch
 } from '@mui/material';
-import { RiCircleFill } from "react-icons/ri";
+import { RiCircleFill, RiCheckboxCircleFill } from "react-icons/ri";
 import { ToastContainer, toast } from "react-toastify";
 import ButtonEdit from "@/Components/ButtonEdit";
 import ButtonDelete from "@/Components/ButtonDelete";
@@ -27,6 +27,9 @@ import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 import 'react-toastify/dist/ReactToastify.css';
 import { CImage } from "@coreui/react";
+import ButtonYellow from "@/Components/ButtonYellow";
+import Receipt from "@/Pages/PDF/Receipt";
+import { PDFViewer } from "@react-pdf/renderer";
 
 
 const Make = (props) => {
@@ -77,16 +80,20 @@ const Make = (props) => {
 
     const currentDate = new Date();
     const formatterCurretDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+
+    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const dayOfWeek = daysOfWeek[currentDate.getDay()];
+
     const initialData = {};
     students.forEach((student, i) => {
-        initialData[`student_id`] = student.id;
+        initialData[`student_id_${student.id}`] = student.id;
         initialData[`payment_date_${student.id}`] = formatterCurretDate;
         initialData[`payment_check_${student.id}`] = false;
     });
 
 
     const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
-        student_id: '',
+        date: formatterCurretDate,
         ...initialData
     });
 
@@ -104,13 +111,18 @@ const Make = (props) => {
         openDialog(); // Abre el modal de confirmación antes de enviar el formulario
     };
 
+    const cero_weeks = (message) => {
+        reset();
+        Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
+    };
+
     const handleConfirmation = () => {
         // Enviar el formulario si se confirma la acción
         if (switchChangesCount === 0) {
             cero_weeks('No es posible crear pago de 0 semanas.')
         } else {
-            data.student_id = student.id;
-            post(route('alumnos.payment', {
+            // data.student_id = student.id;
+            post(route('grupos.payment.store', {
                 onSuccess: () => { ok('Pagos registrados correctamente.') },
                 onError: () => { errorModal('Hubo un error al momento de crear los pagos.') }
             }));
@@ -119,14 +131,82 @@ const Make = (props) => {
         closeDialog(); // Cierra el modal de confirmación después de enviar el formulario
     };
 
+
+    const isPaymentDateRegistered = (student, dateToCheck) => {
+        // Verifica si el estudiante tiene recibos
+        if (!student.receipts || student.receipts.length === 0) {
+            return false; // Retorna false si no hay recibos
+        }
+
+        // Recorre cada recibo del estudiante
+        return student.receipts.some(receipt =>
+            // Recorre cada pago del recibo
+            receipt.studentpayments.some(payment => {
+                // Formatea la fecha del pago
+                const paymentDate = new Date(payment.week_topay_date).toISOString().split('T')[0];
+                // Compara la fecha del pago con la fecha a verificar
+                return paymentDate === dateToCheck;
+            })
+        );
+    };
+
+
+    // --------------------------------------------------------------------------------------
+    // Receipt generation
+    // --------------------------------------------------------------------------------------
+
+    // Estado de generacion de PDF --------------------------------------------------------
+    const [downloadingReceiptId, setDownloadingReceiptId] = useState(null);
+    //-------------------------------------------------------------------------------------
+
+    // Estado para abrir el modal de vista previa
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [selectedReceipt, setSelectedReceipt] = useState(null);
+
+    // Generacion de PDF ------------------------------------------------------------------
+    const handleDownloadClick = () => {
+        setPreviewOpen(true);
+    };
+
+    const [studentsWithRegisteredPayments, setStudentsWithRegisteredPayments] = useState([]);
+    const [matchingReceipts, setMatchingReceipts] = useState([]);
+
+    useEffect(() => {
+        // Reset the arrays when students or date change
+        setStudentsWithRegisteredPayments([]);
+        setMatchingReceipts([]);
+        students.forEach(student => {
+            const flag = isPaymentDateRegistered(student, formatterCurretDate);
+            if (flag) {
+                setStudentsWithRegisteredPayments(prevState => [...prevState, student]);
+                student.receipts.forEach(receipt => {
+                    if (receipt.studentpayments.map(payment => {
+                        const paymentDate = new Date(payment.week_topay_date).toISOString().split('T')[0];
+                        return paymentDate === formatterCurretDate;
+                    })) {
+                        setMatchingReceipts(prevState => [...prevState, [student, receipt]]);
+                    }
+                });
+            }
+        });
+    }, [students, formatterCurretDate]);
+
     return (
         <>
             <ToastContainer />
             <DashboardLayout title={`Registrando pagos de Grupo: ${group.schedule.day.name} | ${group.schedule.hour.name} | ${group.professor.name}`} auth={auth}>
                 <form onSubmit={submit} id="form">
+
+                    {group.schedule.day.name == dayOfWeek ? <></> : <div className="flex justify-center mb-3 bg-red-500 text-white py-4">
+                        <h3>No se pueden agregar pagos, espere al día de clase</h3>
+                    </div>}
+
+
                     <div className="flex justify-end mb-3">
-                        <ButtonPrimary type='submit'>Generar pagos</ButtonPrimary>
+                        {group.schedule.day.name == dayOfWeek ? <ButtonYellow type="button" onClick={() => handleDownloadClick()} className="mr-3">Generar recibos</ButtonYellow> : <ButtonYellow className="mr-3" disabled={true}>Generar recibos</ButtonYellow>}
+                        {group.schedule.day.name == dayOfWeek ? <ButtonPrimary type='submit'>Generar pagos</ButtonPrimary> : <ButtonPrimary type='submit' disabled={true}>Generar pagos</ButtonPrimary>}
                     </div>
+
 
                     <TableContainer>
                         <Table>
@@ -141,35 +221,46 @@ const Make = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {students.map((student) => (
-                                    <TableRow key={student.id}>
-                                        <TableCell><CImage rounded thumbnail src={`${baseUrl}storage/${student.profile_pic}`} width={50} height={50} /></TableCell>
-                                        <TableCell>{student.name}</TableCell>
-                                        <TableCell>{student.email}</TableCell>
-                                        {auth.user.rol === 2 ? (<TableCell>{formatterCurretDate} (HOY)</TableCell>) : <></>}
-                                        <TableCell>
-                                            {/* <Switch checked={student.active} disabled /> */}
-                                            {/* {student.active === 1 ? <RiCircleFill className="text-green-600 text-2xl mx-auto" /> : <RiCircleFill className="text-red-600 text-2xl mx-auto" />} */}
-                                            {student.tuition} pesos
-                                        </TableCell>
-                                        <TableCell>
-                                            <Switch
-                                                id={`payment_check_${student.id}`}
-                                                name={`payment_check_${student.id}`}
-                                                checked={data[`payment_check_${student.id}`]}
-                                                onChange={(e) => { handleSwitch(student.id, e) }}
-                                                inputProps={{ 'aria-label': 'controlled' }}
-                                            />
-                                            {/* <Switch
-                                                id={`payment_check_${dato[0]}`}
-                                                name={`payment_check_${dato[0]}`}
-                                                checked={data[`payment_check_${dato[0]}`]}
-                                                onChange={(e) => { handleSwitch(dato[0], e) }}
-                                                inputProps={{ 'aria-label': 'controlled' }}
-                                            /> */}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                {students.map((student) => {
+                                    const flag = isPaymentDateRegistered(student, formatterCurretDate); // Asegúrate de pasar un objeto Date
+
+                                    return (
+                                        <TableRow key={student.id}>
+                                            <TableCell>
+                                                <CImage
+                                                    rounded
+                                                    thumbnail
+                                                    src={`${baseUrl}storage/${student.profile_pic}`}
+                                                    width={50}
+                                                    height={50}
+                                                />
+                                            </TableCell>
+                                            <TableCell>{student.name}</TableCell>
+                                            <TableCell>{student.email}</TableCell>
+                                            {auth.user.rol === 2 ? (
+                                                <TableCell>{formatterCurretDate} (HOY)</TableCell>
+                                            ) : (
+                                                <></>
+                                            )}
+                                            <TableCell>
+                                                {student.tuition} pesos
+                                            </TableCell>
+                                            <TableCell>
+                                                {flag ? <RiCheckboxCircleFill className="text-green-500 text-lg py-0 my-0"></RiCheckboxCircleFill> : <></>}
+                                                <Switch
+                                                    id={`payment_check_${student.id}`}
+                                                    name={`payment_check_${student.id}`}
+                                                    checked={data[`payment_check_${student.id}`]}
+                                                    onChange={(e) => { handleSwitch(student.id, e) }}
+                                                    inputProps={{ 'aria-label': 'controlled' }}
+                                                    disabled={group.schedule.day.name !== dayOfWeek || flag} // Condición para deshabilitar el Switch
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+
+
 
                             </TableBody>
 
@@ -190,9 +281,9 @@ const Make = (props) => {
                     <p className="text-primary font-bold">Detalles de pago</p>
                 </DialogTitle>
                 <DialogContent>
-                    {/* <p>¿Estás seguro de que deseas crear el pago?</p>
-                            <p><strong>Semanas a pagar:</strong> {switchChangesCount}</p>
-                            <p><strong>Importe</strong> {switchChangesCount * student.tuition} pesos</p> */}
+                    <p>¿Estás seguro de que deseas crear los pagos?</p>
+                    <p><strong>Semanas a pagar:</strong> {switchChangesCount}</p>
+                    {/* <p><strong>Importe</strong> {switchChangesCount * student.tuition} pesos</p> */}
                 </DialogContent>
                 <DialogActions>
                     <ButtonPrimary className="mt-2 py-3 text-xs" onClick={handleConfirmation} >
@@ -204,6 +295,45 @@ const Make = (props) => {
                 </DialogActions>
 
             </Dialog>
+
+
+            {/* Receipt modal */}
+            <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="lg" fullWidth>
+                <DialogTitle>Vista Previa del Recibo</DialogTitle>
+                <DialogContent>
+                    <PDFViewer width="100%" height="500">
+                        {matchingReceipts.map((items, index) => {
+                            const student = items[0];  // Primer elemento del arreglo
+                            const receipt = items[1];  // Segundo elemento del arreglo
+
+                            <Receipt
+                                student={student}
+                                payments={receipt.studentpayments}
+                                schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`}
+                                receipt={receipt}
+                            />
+                        })}
+                    </PDFViewer>
+                </DialogContent>
+                <DialogActions>
+                    <ButtonCancel onClick={() => setPreviewOpen(false)}>Cerrar</ButtonCancel>
+                    {/* {selectedReceipt && (
+                        <PDFDownloadLink
+                            document={<Receipt student={student} payments={selectedReceipt.studentpayments} schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`} receipt={selectedReceipt} />}
+                            fileName={`Recibo - ${selectedReceipt.student.name} - ${selectedReceipt.date_payment}`}
+                        >
+                            {({ loading }) =>
+                                loading ? (
+                                    <ButtonCancel>Cargando...</ButtonCancel>
+                                ) : (
+                                    <ButtonSecondary>Descargar</ButtonSecondary>
+                                )
+                            }
+                        </PDFDownloadLink>
+                    )} */}
+                </DialogActions>
+            </Dialog>
+
         </>
     )
 }
