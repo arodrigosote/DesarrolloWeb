@@ -583,7 +583,7 @@ const Course = ({ auth }) => {
                     <InputError message={errors.module_id} />
 
                     <InputLabel className='mt-4' htmlFor='lesson_number' value='Número de lección: ' />
-                    <TextInput className='h-36 mt-2 w-full' type='number' id='lesson_number' name='lesson_number' ref={lesson_numberInput} value={data.lesson_number || ''} onChange={(e) => setData("lesson_number", e.target.value)} />
+                    <TextInput className='h-36 mt-2 w-full' type='number' onWheel={(e) => e.target.blur()} id='lesson_number' name='lesson_number' ref={lesson_numberInput} value={data.lesson_number || ''} onChange={(e) => setData("lesson_number", e.target.value)} />
                     <InputError message={errors.lesson_number} />
 
                     <InputLabel className='mt-4' htmlFor='isPractice' value='Es ejercicio práctica: ' />
@@ -605,11 +605,11 @@ const Course = ({ auth }) => {
                     <InputError message={errors.content} />
 
                     <InputLabel className='mt-4' htmlFor='content_houres' value='Horas de lección: ' />
-                    <TextInput className='h-36 mt-2 w-full' type='number' id='content_houres' name='content_houres' ref={content_houresInput} value={data.content_houres || ''} onChange={(e) => setData("content_houres", e.target.value)} />
+                    <TextInput className='h-36 mt-2 w-full' type='number' onWheel={(e) => e.target.blur()} id='content_houres' name='content_houres' ref={content_houresInput} value={data.content_houres || ''} onChange={(e) => setData("content_houres", e.target.value)} />
                     <InputError message={errors.content_houres} />
 
                     <InputLabel className='mt-4' htmlFor='content_minutes' value='Minutos de lección: ' />
-                    <TextInput className='h-36 mt-2 w-full' type='number' id='content_minutes' name='content_minutes' ref={content_minutesInput} value={data.content_minutes || ''} onChange={(e) => setData("content_minutes", e.target.value)} />
+                    <TextInput className='h-36 mt-2 w-full' type='number' onWheel={(e) => e.target.blur()} id='content_minutes' name='content_minutes' ref={content_minutesInput} value={data.content_minutes || ''} onChange={(e) => setData("content_minutes", e.target.value)} />
                     <InputError message={errors.content_minutes} />
 
                     <InputLabel className='mt-4' htmlFor='resources_url' value='Enlace a recursos: ' />

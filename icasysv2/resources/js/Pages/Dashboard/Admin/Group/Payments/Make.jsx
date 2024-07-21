@@ -28,8 +28,10 @@ import ButtonShow from "@/Components/ButtonShow";
 import 'react-toastify/dist/ReactToastify.css';
 import { CImage } from "@coreui/react";
 import ButtonYellow from "@/Components/ButtonYellow";
-import Receipt from "@/Pages/PDF/Receipt";
-import { PDFViewer } from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import ReactPDF from '@react-pdf/renderer';
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import GroupReceipt from "@/Pages/PDF/GroupReceipt";
 
 
 const Make = (props) => {
@@ -197,14 +199,19 @@ const Make = (props) => {
             <DashboardLayout title={`Registrando pagos de Grupo: ${group.schedule.day.name} | ${group.schedule.hour.name} | ${group.professor.name}`} auth={auth}>
                 <form onSubmit={submit} id="form">
 
-                    {group.schedule.day.name == dayOfWeek ? <></> : <div className="flex justify-center mb-3 bg-red-500 text-white py-4">
-                        <h3>No se pueden agregar pagos, espere al día de clase</h3>
-                    </div>}
+                    {group.schedule.day.name.includes(dayOfWeek) ? (
+                        <></>
+                    ) : (
+                        <div className="flex justify-center mb-3 bg-red-500 text-white py-4">
+                            <h3>No se pueden agregar pagos, espere al día de clase</h3>
+                        </div>
+                    )}
+
 
 
                     <div className="flex justify-end mb-3">
-                        {group.schedule.day.name == dayOfWeek ? <ButtonYellow type="button" onClick={() => handleDownloadClick()} className="mr-3">Generar recibos</ButtonYellow> : <ButtonYellow className="mr-3" disabled={true}>Generar recibos</ButtonYellow>}
-                        {group.schedule.day.name == dayOfWeek ? <ButtonPrimary type='submit'>Generar pagos</ButtonPrimary> : <ButtonPrimary type='submit' disabled={true}>Generar pagos</ButtonPrimary>}
+                        {group.schedule.day.name.includes(dayOfWeek) ? <ButtonYellow type="button" onClick={() => handleDownloadClick()} className="mr-3">Generar recibos</ButtonYellow> : <ButtonYellow className="mr-3" disabled={true}>Generar recibos</ButtonYellow>}
+                        {group.schedule.day.name.includes(dayOfWeek) ? <ButtonPrimary type='submit'>Generar pagos</ButtonPrimary> : <ButtonPrimary type='submit' disabled={true}>Generar pagos</ButtonPrimary>}
                     </div>
 
 
@@ -253,7 +260,7 @@ const Make = (props) => {
                                                     checked={data[`payment_check_${student.id}`]}
                                                     onChange={(e) => { handleSwitch(student.id, e) }}
                                                     inputProps={{ 'aria-label': 'controlled' }}
-                                                    disabled={group.schedule.day.name !== dayOfWeek || flag} // Condición para deshabilitar el Switch
+                                                    disabled={group.schedule.day.name.includes(dayOfWeek) === false || flag}
                                                 />
                                             </TableCell>
                                         </TableRow>
@@ -302,25 +309,19 @@ const Make = (props) => {
                 <DialogTitle>Vista Previa del Recibo</DialogTitle>
                 <DialogContent>
                     <PDFViewer width="100%" height="500">
-                        {matchingReceipts.map((items, index) => {
-                            const student = items[0];  // Primer elemento del arreglo
-                            const receipt = items[1];  // Segundo elemento del arreglo
 
-                            <Receipt
-                                student={student}
-                                payments={receipt.studentpayments}
-                                schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`}
-                                receipt={receipt}
-                            />
-                        })}
+                        <GroupReceipt
+                            matchingReceipts = {matchingReceipts}
+                        />
+
                     </PDFViewer>
                 </DialogContent>
                 <DialogActions>
                     <ButtonCancel onClick={() => setPreviewOpen(false)}>Cerrar</ButtonCancel>
-                    {/* {selectedReceipt && (
+                    {matchingReceipts && (
                         <PDFDownloadLink
-                            document={<Receipt student={student} payments={selectedReceipt.studentpayments} schedule={`${student.group.schedule.day.name} ${student.group.schedule.hour.name}`} receipt={selectedReceipt} />}
-                            fileName={`Recibo - ${selectedReceipt.student.name} - ${selectedReceipt.date_payment}`}
+                            document={<GroupReceipt  matchingReceipts = {matchingReceipts}/>}
+                            fileName={`Recibos`}
                         >
                             {({ loading }) =>
                                 loading ? (
@@ -330,7 +331,7 @@ const Make = (props) => {
                                 )
                             }
                         </PDFDownloadLink>
-                    )} */}
+                    )}
                 </DialogActions>
             </Dialog>
 

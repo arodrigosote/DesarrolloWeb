@@ -556,7 +556,7 @@ const Student = () => {
                         <InputError message={errors.make} />
 
                         <InputLabel htmlFor='tuition' value='Colegiatura: ' />
-                        <TextInput className='' type='number' id='tuition' name='tuition' ref={tuitionInput} value={data.tuition || ''} onChange={(e) => setData("tuition", e.target.value)} />
+                        <TextInput className='' type='number' onWheel={(e) => e.target.blur()} id='tuition' name='tuition' ref={tuitionInput} value={data.tuition || ''} onChange={(e) => setData("tuition", e.target.value)} />
                         <InputError message={errors.make} />
 
                         <InputLabel htmlFor='profile_pic' value='Foto de perfil: ' />

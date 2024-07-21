@@ -374,7 +374,7 @@ const Course = ({ auth }) => {
 
 
                         <InputLabel htmlFor='price' value='Precio: ' />
-                        <TextInput className='h-36 mt-2' type='number' id='price' name='price' ref={priceInput} value={data.price || ''} onChange={(e) => setData("price", e.target.value)} />
+                        <TextInput className='h-36 mt-2' type='number' onWheel={(e) => e.target.blur()} id='price' name='price' ref={priceInput} value={data.price || ''} onChange={(e) => setData("price", e.target.value)} />
                         <InputError message={errors.make} />
 
                         <InputLabel htmlFor='target_learning' value='¿Qué se aprenderá?'></InputLabel>
@@ -386,7 +386,7 @@ const Course = ({ auth }) => {
                         <InputError message={errors.make}></InputError>
 
                         <InputLabel htmlFor='houres' value='Horas del curso: ' />
-                        <TextInput className='' type='number' id='houres' name='houres' ref={houresInput} value={data.houres || ''} onChange={(e) => setData("houres", e.target.value)} />
+                        <TextInput className='' type='number' onWheel={(e) => e.target.blur()} id='houres' name='houres' ref={houresInput} value={data.houres || ''} onChange={(e) => setData("houres", e.target.value)} />
                         <InputError message={errors.make} />
 
                         <InputLabel htmlFor='requirements' value='¿Cuáles son los requerimientos?'></InputLabel>

@@ -151,75 +151,82 @@ const Receipt = ({ receipt, student, payments, schedule }) => {
     const MILLARES = ["Mil", "Millón", "Millardo", "Billón", "Trillón", "Cuatrillón", "Quintillón", "Sextillón", "Septillón", "Octillón", "Nonillón", "Decillón"];
 
     const convertirNumeroALetra = (numero) => {
+        const UNIDADES = ["", "Un", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve"];
+        const DECENAS = ["", "", "Veinte", "Treinta", "Cuarenta", "Cincuenta", "Sesenta", "Setenta", "Ochenta", "Noventa"];
+        const CENTENAS = ["", "Ciento", "Doscientos", "Trescientos", "Cuatrocientos", "Quinientos", "Seiscientos", "Setecientos", "Ochocientos", "Novecientos"];
+
         if (isNaN(numero)) {
             return "No es un número válido";
         }
 
         if (numero === 0) {
-            return "cero";
+            return "Cero";
         }
 
         let numeroStr = numero.toString();
         let negativo = numero < 0;
         numeroStr = numeroStr.replace("-", "");
 
-        let parteEntera = numeroStr.split(".")[0];
+        let parteEntera = parseInt(numeroStr.split(".")[0], 10);
         let parteDecimal = numeroStr.split(".")[1] || "";
 
-        let resultado = "";
-        let gruposDeTres = parteEntera.length / 3;
-        let resto = parteEntera.length % 3;
+        const convertirSeccion = (numero) => {
+            let salida = "";
 
-        for (let i = 0; i < gruposDeTres; i++) {
-            let grupo = parseInt(parteEntera.substr(i * 3, 3));
-            let centena = Math.floor(grupo / 100);
-            let decena = Math.floor((grupo % 100) / 10);
-            let unidad = grupo % 10;
-
-            if (centena > 0) {
-                resultado += CENTENAS[centena - 1] + " ";
-            }
-
-            if (decena > 1) {
-                resultado += DECENAS[decena - 1] + " ";
-            } else if (decena === 1 && unidad > 0) {
-                resultado += "once ";
-            } else if (decena === 1) {
-                resultado += "diez ";
-            }
-
-            if (unidad > 0) {
-                if (decena === 1 && unidad === 1) {
-                    resultado += "y uno";
-                } else {
-                    resultado += UNIDADES[unidad - 1] + " ";
+            if (numero < 20) {
+                salida = UNIDADES[numero];
+            } else if (numero < 100) {
+                let unidades = numero % 10;
+                let decenas = Math.floor(numero / 10);
+                salida = DECENAS[decenas];
+                if (unidades > 0) {
+                    salida += " y " + UNIDADES[unidades];
+                }
+            } else {
+                let unidades = numero % 10;
+                let decenas = Math.floor((numero % 100) / 10);
+                let centenas = Math.floor(numero / 100);
+                salida = CENTENAS[centenas];
+                if (decenas > 0 || unidades > 0) {
+                    salida += " " + convertirSeccion(numero % 100);
                 }
             }
 
-            if (i < gruposDeTres - 1) {
-                resultado += MILLARES[i] + " ";
+            return salida;
+        };
+
+        const seccionMiles = (numero) => {
+            if (numero === 0) {
+                return "";
+            } else if (numero === 1) {
+                return "Mil";
+            } else {
+                return convertirSeccion(numero) + " Mil";
             }
+        };
+
+        let resultado = "";
+        let miles = Math.floor(parteEntera / 1000);
+        let resto = parteEntera % 1000;
+
+        if (miles > 0) {
+            resultado += seccionMiles(miles) + " ";
         }
 
         if (resto > 0) {
-            let grupo = parseInt(parteEntera.substr(parteEntera.length - resto));
-            resultado += convertirNumeroALetra(grupo);
+            resultado += convertirSeccion(resto);
         }
 
         if (parteDecimal.length > 0) {
-            resultado += " con ";
-            for (let i = 0; i < parteDecimal.length; i++) {
-                resultado += UNIDADES[parseInt(parteDecimal[i])] + " ";
-            }
-            resultado += "décimas";
+            resultado += " con " + convertirSeccion(parseInt(parteDecimal, 10)) + " centavos";
         }
 
         if (negativo) {
-            resultado = "menos " + resultado;
+            resultado = "Menos " + resultado;
         }
 
         return resultado.trim();
-    }
+    };
 
     const money = convertirNumeroALetra(receipt.amount);
 

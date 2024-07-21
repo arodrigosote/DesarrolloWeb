@@ -26,6 +26,7 @@ import ButtonSecondary from "@/Components/ButtonSecondary";
 import SecondaryLink from "@/Components/SecondaryLink";
 import ButtonShow from "@/Components/ButtonShow";
 import 'react-toastify/dist/ReactToastify.css';
+import ButtonYellow from "@/Components/ButtonYellow";
 
 
 const ShowGroup = (props) => {
@@ -63,6 +64,10 @@ const ShowGroup = (props) => {
         get(route('alumnos.show', id));
     }
 
+    const studentPayment = (id) => {
+        get(route('alumnos.payment.show', id));
+    }
+
 
     return (
         <>
@@ -95,7 +100,8 @@ const ShowGroup = (props) => {
                                     <TableCell>
                                         {auth.user.rol === 2 ? (
                                             <>
-                                            <ButtonShow onClick={() => showStudent(student.id)}>
+                                            <ButtonYellow type='button' className="md:inline-block w-full my-0" onClick={(e) => studentPayment(student.id)}>Pago</ButtonYellow>
+                                            <ButtonShow className="md:inline-block w-full my-0" onClick={() => showStudent(student.id)}>
                                             Mostrar
                                         </ButtonShow>
                                         </>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssistanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DayController;
+use App\Http\Controllers\GenerateController;
 use App\Http\Controllers\HourController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LessonController;
@@ -93,6 +94,10 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get("/pagos", [GroupController::class, "payments"])->name("grupos.payments");
     Route::get("/pagos/{group_id}", [GroupController::class, "make_payments"])->name("grupos.make.payments");
     Route::post("/pagos", [GroupController::class, "store_payments"])->name('grupos.payment.store');
+
+    Route::get("/concetrado-recibos", [GenerateController::class,"index_receipts"])->name("index.receipts");
+    Route::delete("/concetrado-recibos/{id}", [GenerateController::class,"delete_receipts"])->name("delete.receipts");
+    Route::delete("/concetrado-recibos/{id}", [GenerateController::class,"truncate"])->name("truncate.receipts");
 
     //COURSES
     Route::get("/admin/cursos", [CourseController::class, "index"])->name("admin.courses");

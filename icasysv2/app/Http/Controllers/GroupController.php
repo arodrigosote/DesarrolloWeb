@@ -317,7 +317,7 @@ class GroupController extends Controller
                         'student_id' => $student->id,
                         'amount' => $student->tuition,
                         'date_payment' => $week_topay_date,
-                        'weeks_number' => $week_topay_number,
+                        'weeks_number' => 1,
                     ]);
 
                     $payment = Studentpayment::create([
