@@ -69,10 +69,20 @@ const ShowReceipts = (props) => {
     };
     //-------------------------------------------------------------------------------------------------------
 
+    const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
+        id:'',
+    });
+    const handleShowGroup = ($id) => {
+        get(route('grupos.show', $id));
+    }
+
     return (
         <>
             <ToastContainer />
             <DashboardLayout title={`Recibos de: ${student.name}`} auth={auth}>
+                <div className="flex justify-end mb-7">
+                    <ButtonPrimary onClick={()=>{handleShowGroup(student.group.id)}}>Ver grupo del alumno</ButtonPrimary>
+                </div>
                 <div>
                     <table className="w-full">
                         <thead>

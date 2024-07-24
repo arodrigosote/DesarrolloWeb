@@ -25,6 +25,6 @@ class Professor extends Model
 
     public function groups()
     {
-        return $this->hasMany('App\Models\Group', 'professor_id', 'id');
+        return $this->hasOne('App\Models\Group', 'professor_id', 'id');
     }
 }

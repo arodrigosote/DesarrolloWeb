@@ -10,6 +10,7 @@ use App\Models\Locations;
 use App\Models\Professor;
 use App\Models\Pucharse;
 use App\Models\Receipt;
+use App\Models\Receiptpool;
 use App\Models\Schedule;
 use App\Models\Student;
 use App\Models\Studentclasssubject;
@@ -298,6 +299,10 @@ class StudentController extends Controller
                 $receipt->date_payment = $payment->payment_day;
                 $receipt->weeks_number = $trueCount;
                 $receipt->save();
+
+                $poolReceipt = Receiptpool::create([
+                    'receipt_id'=> $receipt->id,
+                ]);
 
 
                 return Inertia::render('Dashboard/Admin/Student/Receipts', [
