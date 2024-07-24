@@ -9,7 +9,7 @@ npm run dev
 
 npm install react-icons --save
 npm install --save react-toastify
-npm install @inertiajs/react
+npm install @coreui/react @coreui/coreui
 npm install sweetalert2
 npm install boxicons --save
 npm install @react-pdf/renderer --save
