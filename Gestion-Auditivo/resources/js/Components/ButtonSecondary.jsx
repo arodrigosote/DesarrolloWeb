@@ -5,7 +5,7 @@ export default function ButtonSecondary({ className = '', disabled, children, ..
         <button
             {...props}
             className={
-                `inline-flex items-center mt-2 px-3 py-3 border border-transparent rounded-md font-semibold text-xs text-white uppercase bg-color2 hover:bg-opacity-25 transition-colors ${
+                `inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-sm text-white uppercase bg-color2 hover:bg-opacity-25 transition-colors ${
                     disabled && 'opacity-25'
                 } ` + className
             }

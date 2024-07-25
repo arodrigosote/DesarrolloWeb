@@ -1,6 +1,6 @@
 import ButtonPrimary from '@/Components/ButtonPrimary';
 import CardPrimary from '@/Components/CardPrimary';
-import { RiHotelFill } from "react-icons/ri";
+import { RiDeleteBin5Fill, RiEditBoxFill, RiEyeFill, RiHotelFill, RiSortAlphabetAsc } from "react-icons/ri";
 import DashboardLayout from '@/Layouts/Dashboard/DashboardLayout';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { CImage } from "@coreui/react";
@@ -188,23 +188,40 @@ export default function SettingsBranches(props) {
                     <table className="w-full min-w-max">
                         <thead>
                             <tr>
-                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortBranches('logo')}>Logo</th>
-                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortBranches('name')}>Nombre</th>
-                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortBranches('address')}>Dirección</th>
+                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortBranches('logo')}>
+                                    <div className='flex justify-between'>
+                                        <span>Logo</span>
+                                    </div>
+                                </th>
+                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortBranches('name')}>
+                                    <div className='flex justify-between'>
+                                        <span>Nombre</span>
+                                        <RiSortAlphabetAsc className='text-xl' />
+                                    </div>
+                                </th>
+                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortBranches('address')}>
+                                    <div className='flex justify-between'>
+                                        <span>Dirección</span>
+                                        <RiSortAlphabetAsc className='text-xl' />
+                                    </div>
+                                </th>
                                 <th className="p-4 text-[15px] bg-color1 text-white border">Accciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {sortedBranches.map((branch) => (
-                                <tr key={branch.id}>
+                            {sortedBranches.map((branch, index) => (
+                                <tr key={branch.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
                                     <td><CImage rounded thumbnail src={`${url}storage/${branch.logo}`} width={200} height={200} alt={branch.name} /></td>
-                                    <td className="border rounded text-xs text-center">{branch.name}</td>
-                                    <td className="border rounded text-xs text-center">{branch.address}</td>
-                                    <td className="flex flex-col items-center justify-center space-y-1">
-                                        <ButtonSecondary>Mostrar</ButtonSecondary>
-                                        <ButtonEdit onClick={(e) => { openModal(2, branch.id, branch.name, branch.address, branch.image) }}>Editar</ButtonEdit>
-                                        <ButtonDelete onClick={(e) => {openDeleteModal(branch.id, branch.name)}}>Eliminar</ButtonDelete>
+                                    <td className="p-4 border">{branch.name}</td>
+                                    <td className="p-4 border">{branch.address}</td>
+                                    <td className='p-4 border'>
+                                        <div className="flex justify-center">
+                                            <ButtonSecondary><RiEyeFill /></ButtonSecondary>
+                                            <ButtonEdit onClick={(e) => { openModal(2, branch.id, branch.name, branch.address, branch.image) }}><RiEditBoxFill /></ButtonEdit>
+                                            <ButtonDelete onClick={(e) => { openDeleteModal(branch.id, branch.name) }}><RiDeleteBin5Fill/></ButtonDelete>
+                                        </div>
                                     </td>
+
 
                                 </tr>
                             ))}

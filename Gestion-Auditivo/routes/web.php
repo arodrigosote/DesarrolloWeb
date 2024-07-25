@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Foundation\Application;
@@ -35,6 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/ajustes/sucursales/{id}', [SettingsController::class, 'update_branches'])->name('admin.settings.branches.update');
     Route::delete('/ajustes/sucursales/{id}', [SettingsController::class, 'destroy_branches'])->name('admin.settings.branches.destroy');
     Route::get('/ajustes/empleados', [SettingsController::class, 'index_employees'])->name('admin.settings.employees');
+
+    //PATIENTS
+    Route::get('/pacientes', [PatientController::class, 'index'])->name('patient.index');
+    Route::post('/pacientes', [PatientController::class, 'store'])->name('patient.store');
+    Route::post('/pacientes/{id}', [PatientController::class, 'update'])->name('patient.update');
+    Route::delete('/pacientes/{id}', [PatientController::class, 'destroy'])->name('patient.destroy');
+    Route::get('/paciente/mostrar/{id}', [PatientController::class, 'show'])->name('patient.show');
 });
 
 require __DIR__.'/auth.php';
