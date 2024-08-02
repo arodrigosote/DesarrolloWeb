@@ -13,16 +13,14 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('patients')->onUpdate('cascade')->onDelete('restrict');
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('set null');
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->foreign('patient_id')->references('id')->on('patients')->onUpdate('cascade')->onDelete('set null');
-            $table->date('date');
-            $table->string('model');
-            $table->string('brand');
-            $table->decimal('price', 10, 2);
-            $table->string('serial_number');
-            $table->string('guarranty')->nullable();
+            $table->unsignedBigInteger('guarranty_id')->nullable();
+            $table->foreign('guarranty_id')->references('id')->on('guarranties')->onUpdate('cascade')->onDelete('set null');
+            $table->decimal('amount', 10, 2);
+            $table->date('time')->nullable();
             $table->text('details')->nullable();
             $table->timestamps();
         });

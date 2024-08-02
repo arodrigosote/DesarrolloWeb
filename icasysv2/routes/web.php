@@ -132,6 +132,10 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/curso/comprar/{id}/{slug}/aprobado', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/curso/comprar/{id}/{slug}/pendiente', [PaymentController::class, 'pending'])->name('payment.pending');
     Route::get('/curso/comprar/{id}/{slug}/error', [PaymentController::class, 'failure'])->name('payment.failure');
+
+    //Generate
+    Route::get('/generar', [GenerateController::class, 'index'])->name('generate');
+    Route::get('/generar/lista-asistencia', [GenerateController::class, 'assistance_list'])->name('generate.assistance');
 });
 
 

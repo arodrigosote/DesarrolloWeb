@@ -90,7 +90,7 @@ const GenerateReceipts = (props) => {
         Swal.fire({ title: message, icon: 'error', confirmButtonColor: '#014ba0' })
     };
 
- // --------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------
     // Receipt generation
     // --------------------------------------------------------------------------------------
 
@@ -106,7 +106,6 @@ const GenerateReceipts = (props) => {
     const handleDownloadClick = () => {
         setPreviewOpen(true);
     };
-
 
     const handleTruncate = () => {
 

@@ -37,13 +37,13 @@ export default function () {
                     <h2 className="text-gray-300 font-bold xl:text-[14px] xs:text-[10px] md:text-[16px] mt-5 ml-4">PANEL ADMINISTRADOR</h2>
                     <MenuList>
                         <MenuItem className=""><Link href={route('dashboard')} className=" text-gray-300 w-full pt-2 pb-1 pl-2 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[17px] xl:text-[15px]"><RiHome2Fill className="text-xl"></RiHome2Fill>Escritorio</Link></MenuItem>
-                        <MenuItem className=""><Link href={route('dashboard')} className=" text-gray-300 w-full pt-2 pb-1 pl-2 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[17px] xl:text-[15px]"><RiBookMarkedFill  className="text-xl"></RiBookMarkedFill >Bitácora</Link></MenuItem>
+                        <MenuItem className=""><Link href={route('binnacle.index')} className=" text-gray-300 w-full pt-2 pb-1 pl-2 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[17px] xl:text-[15px]"><RiBookMarkedFill  className="text-xl"></RiBookMarkedFill >Bitácora</Link></MenuItem>
                         <MenuItem className=""><Link href={route('patient.index')} className=" text-gray-300 w-full pt-2 pb-1 pl-2 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[17px] xl:text-[15px]"><RiUser3Fill   className="text-xl"></RiUser3Fill  >Pacientes</Link></MenuItem>
                     </MenuList>
-                    <h2 className="text-gray-300 font-bold xl:text-[14px] xs:text-[10px] md:text-[16px] mt-5 ml-4">AJUSTES DE CURSOS</h2>
+                    {/* <h2 className="text-gray-300 font-bold xl:text-[14px] xs:text-[10px] md:text-[16px] mt-5 ml-4">AJUSTES DE CURSOS</h2>
                     <MenuList>
                         <MenuItem className=""><Link href='#' className=" text-gray-300 w-full pt-2 pb-1 pl-2 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[17px] xl:text-[15px]"><RiDashboardFill className="text-xl"></RiDashboardFill>Cursos</Link></MenuItem>
-                    </MenuList>
+                    </MenuList> */}
                     <h2 className="text-gray-300 font-bold xl:text-[14px] xs:text-[10px] md:text-[16px] mt-5 ml-4">AJUSTES</h2>
                     <MenuList>
                         <MenuItem className=""><Link href={route('admin.settings')} className=" text-gray-300 w-full pt-2 pb-1 pl-2 gap-2 rounded-xl transition-colors text-lg flex items-center justify-start xs:text-[10px] md:text-[17px] xl:text-[15px]"><RiSettings4Fill  className="text-xl"></RiSettings4Fill >General</Link></MenuItem>

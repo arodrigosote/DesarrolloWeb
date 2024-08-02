@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('patients')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('user_id')->references('id')->on('patients')->onUpdate('cascade')->onDelete('set null');
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches')->onUpdate('cascade')->onDelete('set null');
             $table->string('name');
             $table->string('address')->nullable();
+            $table->string('cp')->nullable();
             $table->string('phone')->nullable();
             $table->integer('age')->nullable();
             $table->string('gender')->nullable();

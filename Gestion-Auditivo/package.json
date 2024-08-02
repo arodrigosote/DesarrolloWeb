@@ -27,6 +27,7 @@
         "@mui/material": "^5.16.4",
         "@react-pdf/renderer": "^3.4.4",
         "react-icons": "^5.2.1",
+        "react-tabs": "^6.0.2",
         "react-toastify": "^10.0.5",
         "sweetalert2": "^11.12.3"
     }

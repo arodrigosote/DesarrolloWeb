@@ -14,7 +14,7 @@ export default function Settings({ auth }) {
 
                 <div className='flex justify-evenly'>
                 <CardPrimary title={'Sucursales'} text={'Administra todas tus sucursales'} icon={<RiHotelFill />} route={route('admin.settings.branches')}/>
-                <CardPrimary title={'Usuarios'} text={'Administra a tus usuarios o empleados'} icon={<RiUser2Fill />} route={route('admin.settings.employees')}/>
+                <CardPrimary title={'Usuarios'} text={'Administra a tus usuarios o empleados'} icon={<RiUser2Fill />} route={route('employee.index')}/>
                 {/* <CardPrimary title={'Sucursales'} text={'Administra todas tus sucursales'} icon={<RiHotelFill></RiHotelFill>} route={route('admin.settings.branches')}/>
                 <CardPrimary title={'Sucursales'} text={'Administra todas tus sucursales'} icon={<RiHotelFill></RiHotelFill>} route={route('admin.settings.branches')}/> */}
                 </div>

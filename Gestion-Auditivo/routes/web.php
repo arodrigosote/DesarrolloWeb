@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BinnacleController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
@@ -35,7 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/ajustes/sucursales', [SettingsController::class, 'store_branches'])->name('admin.settings.branches.store');
     Route::post('/ajustes/sucursales/{id}', [SettingsController::class, 'update_branches'])->name('admin.settings.branches.update');
     Route::delete('/ajustes/sucursales/{id}', [SettingsController::class, 'destroy_branches'])->name('admin.settings.branches.destroy');
-    Route::get('/ajustes/empleados', [SettingsController::class, 'index_employees'])->name('admin.settings.employees');
+
+    //BINNACLE
+    Route::get('/bitacora', [BinnacleController::class, 'index'])->name('binnacle.index');
 
     //PATIENTS
     Route::get('/pacientes', [PatientController::class, 'index'])->name('patient.index');
@@ -43,6 +47,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/pacientes/{id}', [PatientController::class, 'update'])->name('patient.update');
     Route::delete('/pacientes/{id}', [PatientController::class, 'destroy'])->name('patient.destroy');
     Route::get('/paciente/mostrar/{id}', [PatientController::class, 'show'])->name('patient.show');
+    //FullData
+    Route::post('/paciente/mostrar/fulldata', [PatientController::class, 'store_fulldata'])->name('patient.store.fulldata');
+    Route::post('/paciente/mostrar/fulldata/{id}', [PatientController::class, 'update_fulldata'])->name('patient.update.fulldata');
+
+    //EMPLOYEES
+    Route::get('/ajustes/empleados', [EmployeeController::class, 'index'])->name('employee.index');
+    Route::post('/ajustes/empleados', [EmployeeController::class, 'store'])->name('employee.store');
+    Route::post('/ajustes/empleados/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+    Route::delete('/ajustes/empleados/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+    Route::get('/ajustes/empleado/mostrar/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+    // Route::get('/ajustes/empleados', [SettingsController::class, 'index_employees'])->name('admin.settings.employees');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
