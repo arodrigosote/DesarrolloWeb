@@ -93,6 +93,7 @@ const ShowStudent = () => {
         initialData[`week_topay_date_${i}`] = dates[i];
         initialData[`payment_date_${i}`] = formatterCurretDate;
         initialData[`payment_check_${i}`] = false;
+        initialData[`assistance_${i}`] = false;
     }
 
     const { data, setData, delete: destroy, post, get, put, processing, errors, reset } = useForm({
@@ -130,6 +131,10 @@ const ShowStudent = () => {
         setData(`payment_check_${data}`, e.target.checked)
     }
 
+    const handleSwitchAssistance = (data, e) => {
+        setData(`assistance_${data}`, e.target.checked)
+    }
+
 
     const handleConfirmation = () => {
         // Enviar el formulario si se confirma la acción
@@ -165,10 +170,11 @@ const ShowStudent = () => {
                                     <thead className="">
                                         <tr className="w-16">
                                             <th className="hidden">Número <br />de semana</th>
-                                            <th className="p-4 text-[14px]">Número<br /> semana</th>
-                                            <th className="p-4 text-[14px]">Fecha a <br />pagar</th>
-                                            <th className="p-4 text-[14px]">Fecha de pago</th>
-                                            <th className="p-4 text-[14px]">Seleccionar</th>
+                                            <th className="p-1 text-[12px]">Número<br /> semana</th>
+                                            <th className="p-1 text-[12px]">Fecha a <br />pagar</th>
+                                            <th className="p-1 text-[12px]">Fecha de pago</th>
+                                            <th className="p-1 text-[12px]">Seleccionar</th>
+                                            <th className="p-1 text-[12px]">Asistencia</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -187,7 +193,7 @@ const ShowStudent = () => {
                                                 <td className="">
                                                     <input
                                                         type="number"
-                                                        className="border rounded border-blue-300 text-[12px] text-center mx-auto w-16"
+                                                        className="border rounded border-blue-300 text-[12px] text-center mx-auto w-10 px-0"
                                                         name={`week_${payment.week_topay_number}`}
                                                         value={`${payment.week_topay_number}`}
                                                         readOnly
@@ -216,16 +222,27 @@ const ShowStudent = () => {
                                                     />
                                                 </td>
                                                 <td className="">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="weeks[]"
-                                                        value={payment.week_topay_number}
-                                                        className="appearance-none border border-gray-300 rounded-md checked:bg-slate-400 checked:border-transparent"
-                                                        defaultChecked
-                                                        disabled
-                                                        required
-                                                    />
+                                                    <div className='border rounded border-blue-300'>
+                                                        <p className="text-gray-400 text-sm my-0">${`${student.tuition}`}</p>
+                                                        <input
+                                                            type="checkbox"
+                                                            name="weeks[]"
+                                                            value={payment.week_topay_number}
+                                                            className="appearance-none border border-gray-300 rounded-md checked:bg-slate-400"
+                                                            defaultChecked
+                                                            disabled
+                                                            required
+                                                        />
+                                                    </div>
                                                 </td>
+                                                <td className="flex justify-center items-center h-full p-0 ">
+                                                    {payment.assistance == 1 ? (
+                                                        <RiCircleFill className="text-green-600 my-4" />
+                                                    ) : (
+                                                        <RiCircleFill className="text-red-600 my-4" />
+                                                    )}
+                                                </td>
+
                                             </tr>
                                         ))}
                                     </tbody>
@@ -235,7 +252,7 @@ const ShowStudent = () => {
 
                         </div>
                         <div className="w-full overflow-x-auto ">
-                        <h2 className="mt-8 mb-1 text-xl">Semanas <strong>no</strong> pagadas</h2>
+                            <h2 className="mt-8 mb-1 text-xl">Semanas <strong>no</strong> pagadas</h2>
                             <div className="w-full overflow-x-auto flex justify-center">
 
                                 <table className="table">
@@ -243,10 +260,11 @@ const ShowStudent = () => {
 
                                         <tr>
                                             <th className="hidden">student_id</th>
-                                            <th className="p-4 text-[14px]">Número<br /> semana</th>
-                                            <th className="p-4 text-[14px]">Fecha a<br /> pagar</th>
-                                            <th className="p-4 text-[14px]">Fecha de<br /> pago</th>
-                                            <th className="p-4 text-[14px]">Seleccionar</th>
+                                            <th className="p-1 text-[12px]">Número<br /> semana</th>
+                                            <th className="p-1 text-[12px]">Fecha a pagar</th>
+                                            <th className="p-1 text-[12px]">Fecha de pago</th>
+                                            <th className="p-1 text-[12px]">Seleccionar</th>
+                                            <th className="p-1 text-[12px]">Asistencia</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -266,7 +284,7 @@ const ShowStudent = () => {
                                                 <td>
                                                     <input
                                                         type="number"
-                                                        className="border rounded border-blue-300  text-[12px] text-center w-16"
+                                                        className="border rounded border-blue-300  text-[12px] text-center w-10 px-0"
                                                         name={`week_topay_number_${dato[0]}`}
                                                         value={data[`week_topay_number_${dato[0]}`]}
                                                         readOnly
@@ -293,12 +311,23 @@ const ShowStudent = () => {
                                                         onChange={(e) => setData(`payment_date_${dato[0]}`, e.target.value)}
                                                     />
                                                 </td>
-                                                <td>
+                                                <td className="block">
+                                                    {data[`payment_check_${dato[0]}`] ? `$${student.tuition}` : ''}
                                                     <Switch
                                                         id={`payment_check_${dato[0]}`}
                                                         name={`payment_check_${dato[0]}`}
                                                         checked={data[`payment_check_${dato[0]}`]}
                                                         onChange={(e) => { handleSwitch(dato[0], e) }}
+                                                        inputProps={{ 'aria-label': 'controlled' }}
+                                                    />
+                                                </td>
+                                                <td>
+
+                                                    <Switch
+                                                        id={`assistance_${dato[0]}`}
+                                                        name={`assistance_${dato[0]}`}
+                                                        checked={data[`assistance_${dato[0]}`]}
+                                                        onChange={(e) => { handleSwitchAssistance(dato[0], e) }}
                                                         inputProps={{ 'aria-label': 'controlled' }}
                                                     />
                                                 </td>

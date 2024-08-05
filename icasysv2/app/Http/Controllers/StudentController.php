@@ -292,6 +292,9 @@ class StudentController extends Controller
                             'receipt_id' => $receipt->id,
                         ]);
                         $trueCount++;
+                    }else if (strpos($key, "assistance_") === 0 && $value === true) {
+                        $payment->assistance = 1;
+                        $payment->save();
                     }
                 }
 
