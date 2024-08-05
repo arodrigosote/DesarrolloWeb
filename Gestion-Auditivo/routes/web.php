@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     //BINNACLE
     Route::get('/bitacora', [BinnacleController::class, 'index'])->name('binnacle.index');
+    Route::post('/bitacora', [BinnacleController::class, 'store'])->name('binnacle.store');
 
     //PATIENTS
     Route::get('/pacientes', [PatientController::class, 'index'])->name('patient.index');

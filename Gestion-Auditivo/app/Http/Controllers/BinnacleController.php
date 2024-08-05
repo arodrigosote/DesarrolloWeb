@@ -32,7 +32,7 @@ class BinnacleController extends Controller
 
             $binnacle = Binnacle::whereDate('date', now()->toDateString())
                 ->where('branch_id', $user->branch_id)
-                ->get();
+                ->first();
 
             return Inertia::render('Binnacle/Index', [
                 'binnacle' => $binnacle,
@@ -46,7 +46,28 @@ class BinnacleController extends Controller
     }
 
     public function store(Request $request){
+        if (Gate::allows("isAdmin")) {
+            $user = auth()->user();
 
+            $binnacle = Binnacle::create([
+                'user_id' => $user->id,
+                'branch_id' => $user->branch_id,
+                'date' => now()->toDateString(),
+            ]);
+
+            if($request->alias){
+                $binnacle->alias = $request->alias;
+            }
+
+            $binnacle->save();
+
+
+        } else {
+            return Inertia::render("Dashboard")->with('toast', [
+                'mensaje' => 'No estás autorizado.',
+                'tipo' => 'error',
+            ]);
+        }
     }
 }
 
