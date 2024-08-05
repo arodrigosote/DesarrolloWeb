@@ -3,6 +3,7 @@
 use App\Http\Controllers\BinnacleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Foundation\Application;
@@ -58,6 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/ajustes/empleados/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
     Route::get('/ajustes/empleado/mostrar/{id}', [EmployeeController::class, 'show'])->name('employee.show');
     // Route::get('/ajustes/empleados', [SettingsController::class, 'index_employees'])->name('admin.settings.employees');
+
+    //PRODUCTS
+    Route::get('/productos', [ProductController::class, 'index'])->name('product.index');
+    Route::post('/productos', [ProductController::class, 'store'])->name('product.store');
+    Route::post('/productos/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('/productos/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 });
 
 require __DIR__ . '/auth.php';
