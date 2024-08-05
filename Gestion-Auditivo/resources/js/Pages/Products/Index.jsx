@@ -1,8 +1,14 @@
 import ButtonSecondary from "@/Components/ButtonSecondary";
 import DashboardLayout from "@/Layouts/Dashboard/DashboardLayout";
-import { usePage } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
+import { useEffect, useRef, useState } from "react";
 import { RiSortAlphabetAsc } from "react-icons/ri";
 import { ToastContainer } from "react-toastify";
+import { Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import TextInput from "@/Components/TextInput";
+import InputError from "@/Components/InputError";
+import ButtonCancel from "@/Components/ButtonCancel";
+import ButtonPrimary from "@/Components/ButtonPrimary";
 
 export default function ProductIndex (props) {
     const { products, auth, toast: toastProp, url } = usePage().props;
@@ -87,12 +93,6 @@ export default function ProductIndex (props) {
 
     // const nameInput = useRef();
 
-
-
-
-
-
-
     const brandInput = useRef();
     const modelInput = useRef();
     const serial_numberInput = useRef();
@@ -109,21 +109,16 @@ export default function ProductIndex (props) {
     });
 
     //MODAL
-    const openModal = (op, id, user_id, name, address, phone, age, gender, publicity_method, ailments, background, email) => {
+    const openModal = (op, id, brand,model,serial_number,pila,price) => {
         setModal(true);
         setOperation(op);
         setData({
             id: '',
-            user_id: '',
-            name: '',
-            address: '',
-            phone: '',
-            age: '',
-            gender: '',
-            publicity_method: '',
-            ailments: '',
-            background: '',
-            email: '',
+            brand: '',
+            model:'',
+            serial_number: '',
+            pila: '',
+            price: '',
         })
         if (op === 1) {
             setTitle('Crear producto');
@@ -131,16 +126,11 @@ export default function ProductIndex (props) {
             setTitle('Editar producto');
             setData({
                 id: id,
-                user_id: user_id,
-                name: name,
-                address: address,
-                phone: phone,
-                age: age,
-                gender: gender,
-                publicity_method: publicity_method,
-                ailments: ailments,
-                background: background,
-                email: email,
+                brand: brand,
+                model:model,
+                serial_number: serial_number,
+                pila: pila,
+                price: price,
             })
         }
     }
@@ -154,11 +144,11 @@ export default function ProductIndex (props) {
 
         if (operation === 1) {
             post(route('product.store'), {
-                onSuccess: () => { ok('Paciente creado con éxito') },
+                onSuccess: () => { ok('Producto creado con éxito') },
             });
         } else {
             post(route('product.update', data.id), {
-                onSuccess: () => { ok('Paciente editado con éxito') },
+                onSuccess: () => { ok('Producto editado con éxito') },
             });
         }
     }
@@ -236,6 +226,70 @@ export default function ProductIndex (props) {
                     </table>
                 </div>
             </DashboardLayout>
+
+            <Dialog open={modal} onClose={closeModal} maxWidth="md" fullWidth>
+                <form onSubmit={save} className="p-6" encType="multipart/form-data" method="POST">
+                    <DialogTitle className="">
+                        <span className="text-2xl text-color1 font-bold">{title}</span>
+                    </DialogTitle>
+                    <DialogContent>
+                        <InputLabel className='text-gray-600' htmlFor='serial_number' value=' '>Número de serie:</InputLabel>
+                        <TextInput className='w-full mb-4' id='serial_number' name='serial_number' ref={serial_numberInput} value={data.serial_number} required='required' onChange={(e) => setData('serial_number', e.target.value)}></TextInput>
+                        <InputError message={errors.serial_number}></InputError>
+
+                        {/* <InputLabel className='text-gray-600' htmlFor='address' value=''>Dirección:</InputLabel>
+                        <TextInput className='w-full mb-4' id='address' name='address' ref={addressInput} value={data.address} required='required' onChange={(e) => setData('address', e.target.value)}></TextInput>
+                        <InputError message={errors.address}></InputError>
+
+                        <InputLabel className='text-gray-600' htmlFor='email' value=' '>Email:</InputLabel>
+                        <TextInput className='w-full mb-4' id='email' name='email' ref={emailInput} value={data.email} required='required' onChange={(e) => setData('email', e.target.value)}></TextInput>
+                        <InputError message={errors.email}></InputError>
+
+                        <InputLabel className='text-gray-600' htmlFor='phone' value=''>Teléfono:</InputLabel>
+                        <TextInput className='w-full mb-4' id='phone' name='phone' ref={phoneInput} value={data.phone} required='required' onChange={(e) => setData('phone', e.target.value)}></TextInput>
+                        <InputError message={errors.phone}></InputError>
+
+                        <InputLabel className='text-gray-600' htmlFor='age' value=''>Edad:</InputLabel>
+                        <TextInput className='w-full mb-4' id='age' type='number' name='age' ref={ageInput} value={data.age} required='required' onChange={(e) => setData('age', e.target.value)}></TextInput>
+                        <InputError message={errors.age}></InputError>
+
+                        <InputLabel htmlFor='gender'>Género:</InputLabel>
+                        <Select
+                            className="w-full mb-4"
+                            id='gender'
+                            ref={genderInput}
+                            value={data.gender || ''} // Ensure that value is not undefined
+                            onChange={(e) => setData("gender", e.target.value)}
+                        >
+                            <MenuItem value={'Masculino'}>
+                                Masculino
+                            </MenuItem>
+                            <MenuItem value={'Masculino'}>
+                                Femenino
+                            </MenuItem>
+                        </Select>
+
+                        <InputLabel className='text-gray-600' htmlFor='publicity_method' value=''>Método publicitario:</InputLabel>
+                        <TextInput className='w-full mb-4' id='publicity_method' name='publicity_method' ref={publicity_methodInput} value={data.publicity_method} required='required' onChange={(e) => setData('publicity_method', e.target.value)}></TextInput>
+                        <InputError message={errors.publicity_method}></InputError>
+
+                        <InputLabel htmlFor='ailments'>Padecimientos:</InputLabel>
+                        <TextField multiline className="w-full mb-4" rows={6} id="ailments" name="ailments" ref={ailmentsInput} value={data.ailments || ''} onChange={(e) => setData('ailments', e.target.value)} />
+                        <InputError message={errors.ailments}></InputError>
+
+                        <InputLabel htmlFor='background'>Antecedentes:</InputLabel>
+                        <TextField multiline className="w-full mb-4" rows={6} id="background" name="background" ref={backgroundInput} value={data.background || ''} onChange={(e) => setData('background', e.target.value)} />
+                        <InputError message={errors.background}></InputError> */}
+
+                    </DialogContent>
+                    <DialogActions>
+                        <div className="flex justify-end items-center mt-4">
+                            <ButtonCancel type='button' onClick={closeModal} disabled={processing}>Cancelar</ButtonCancel>
+                            <ButtonPrimary className="ml-3" disabled={processing}>Enviar</ButtonPrimary>
+                        </div>
+                    </DialogActions>
+                </form>
+            </Dialog>
         </>
     )
 }
