@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Studentpayment extends Model
 {
     use HasFactory;
-    protected $fillable = ['student_id','payment_day','week_topay_date','week_topay_number','receipt_id'];
+    protected $fillable = ['student_id','payment_day','week_topay_date','week_topay_number', 'assistance','receipt_id'];
 
     public function student()
     {

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('studentspayments', function (Blueprint $table) {
-            $table->boolean('assistance')->default(false)->after('receipt_id');
+        Schema::table('studentpayments', function (Blueprint $table) {
+            $table->boolean('assistance')->default(false)->after('week_topay_number');
         });
     }
 
