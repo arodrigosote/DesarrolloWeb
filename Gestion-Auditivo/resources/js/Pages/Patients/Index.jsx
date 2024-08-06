@@ -114,6 +114,7 @@ export default function PatientIndex(props) {
 
     const { data, setData, delete: destroy, post, get, put, processing, progress, errors, reset } = useForm({
         id: '',
+        name:'',
         user_id: '',
         name: '',
         address: '',

@@ -1,14 +1,17 @@
 import ButtonSecondary from "@/Components/ButtonSecondary";
 import DashboardLayout from "@/Layouts/Dashboard/DashboardLayout";
-import { useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
-import { RiSortAlphabetAsc } from "react-icons/ri";
+import { RiDeleteBin5Fill, RiEditBoxFill, RiEyeFill, RiSortAlphabetAsc } from "react-icons/ri";
 import { ToastContainer } from "react-toastify";
 import { Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import ButtonCancel from "@/Components/ButtonCancel";
 import ButtonPrimary from "@/Components/ButtonPrimary";
+import ButtonEdit from "@/Components/ButtonEdit";
+import ButtonDelete from "@/Components/ButtonDelete";
+import Swal from "sweetalert2";
 
 export default function ProductIndex (props) {
     const { products, auth, toast: toastProp, url } = usePage().props;
@@ -58,7 +61,7 @@ export default function ProductIndex (props) {
         setSearchQuery(query);
 
         const filteredProducts = products.filter(product =>
-            product.name.toLowerCase().includes(query)
+            product.serial_number.toLowerCase().includes(query)
         );
 
         setSortedProducts(filteredProducts);
@@ -109,7 +112,7 @@ export default function ProductIndex (props) {
     });
 
     //MODAL
-    const openModal = (op, id, brand,model,serial_number,pila,price) => {
+    const openModal = (op, id, brand,model,serial_number,price,pila) => {
         setModal(true);
         setOperation(op);
         setData({
@@ -158,7 +161,33 @@ export default function ProductIndex (props) {
         closeModal();
         closeDeleteModal();
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: getCssVariable('--color1') })
+        get(route('product.index'));
     };
+
+     // ---------------------------------------------------------------------------------------
+    // DELETE MODAL --------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------
+    const [deleteModal, setDeleteModal] = useState(false);
+
+    const openDeleteModal = (id, name) => {
+        setDeleteModal(true);
+        setData({
+            id: id,
+            name: name,
+        })
+    }
+
+    const closeDeleteModal = () => {
+        setDeleteModal(false);
+    }
+
+    const borrar = (e) => {
+        e.preventDefault();
+        destroy(route('product.destroy', data.id), {
+            preserveScroll: true,
+            onSuccess: () => { ok('Producto eliminado con éxito.') },
+        });
+    }
 
     return (
         <>
@@ -167,7 +196,7 @@ export default function ProductIndex (props) {
             <div className='flex justify-between my-2'>
                     <input
                         type="text"
-                        placeholder="Buscar por nombre"
+                        placeholder="Buscar por número de serie"
                         value={searchQuery}
                         onChange={handleSearch}
                         className="border p-1 rounded border-gray-400 px-5"
@@ -179,25 +208,25 @@ export default function ProductIndex (props) {
                     <table className="w-full min-w-max">
                         <thead>
                             <tr className=''>
-                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortPatients('name')}>
+                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortProducts('serial_number')}>
                                     <div className='flex justify-between'>
                                         <span>Número de serie</span>
                                         <RiSortAlphabetAsc className='text-xl' />
                                     </div>
                                 </th>
-                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortPatients('address')}>
+                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortProducts('brand')}>
                                     <div className='flex justify-between'>
                                         <span>Marca</span>
                                         <RiSortAlphabetAsc className='text-xl' />
                                     </div>
                                 </th>
-                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortPatients('phone')}>
+                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortProducts('model')}>
                                     <div className='flex justify-between'>
                                         <span>Modelo</span>
                                         <RiSortAlphabetAsc className='text-xl' />
                                     </div>
                                 </th>
-                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortPatients('email')}>
+                                <th className="p-4 text-[15px] bg-color1 text-white border cursor-pointer" onClick={() => sortProducts('price')}>
                                     <div className='flex justify-between'>
                                         <span>Precio</span>
                                         <RiSortAlphabetAsc className='text-xl' />
@@ -209,15 +238,15 @@ export default function ProductIndex (props) {
                         <tbody>
                             {sortedProducts.map((product, index) => (
                                 <tr key={product.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
-                                    <td className="p-4 border">{product.name}</td>
-                                    <td className="p-4 border">{product.address}</td>
-                                    <td className="p-4 border">{product.phone}</td>
-                                    <td className="p-4 border">{product.email}</td>
+                                    <td className="p-4 border">{product.serial_number}</td>
+                                    <td className="p-4 border">{product.brand}</td>
+                                    <td className="p-4 border">{product.model}</td>
+                                    <td className="p-4 border">{product.price}</td>
                                     <td className="p-4 border">
                                         <div className='flex justify-center'>
-                                            <ButtonSecondary onClick={()=>handleShowProduct(product.id)}><RiEyeFill /></ButtonSecondary>
-                                            <ButtonEdit onClick={() => openModal(2, product.id, patient.user_id, patient.name, patient.address, patient.phone, patient.age, patient.gender, patient.publicity_method, patient.ailments, patient.background, patient.email)}><RiEditBoxFill /> </ButtonEdit>
-                                            <ButtonDelete onClick={() => openDeleteModal(product.id, patient.name)}><RiDeleteBin5Fill/> </ButtonDelete>
+                                            {/* <ButtonSecondary onClick={()=>handleShowProduct(product.id)}><RiEyeFill /></ButtonSecondary> */}
+                                            <ButtonEdit onClick={() => openModal(2, product.id, product.brand, product.model, product.serial_number, product.price)}><RiEditBoxFill /> </ButtonEdit>
+                                            <ButtonDelete onClick={() => openDeleteModal(product.id, `${product.brand} ${product.model}`)}><RiDeleteBin5Fill/> </ButtonDelete>
                                         </div>
                                     </td>
                                 </tr>
@@ -237,49 +266,17 @@ export default function ProductIndex (props) {
                         <TextInput className='w-full mb-4' id='serial_number' name='serial_number' ref={serial_numberInput} value={data.serial_number} required='required' onChange={(e) => setData('serial_number', e.target.value)}></TextInput>
                         <InputError message={errors.serial_number}></InputError>
 
-                        {/* <InputLabel className='text-gray-600' htmlFor='address' value=''>Dirección:</InputLabel>
-                        <TextInput className='w-full mb-4' id='address' name='address' ref={addressInput} value={data.address} required='required' onChange={(e) => setData('address', e.target.value)}></TextInput>
-                        <InputError message={errors.address}></InputError>
+                        <InputLabel className='text-gray-600' htmlFor='brand' value=''>Marca:</InputLabel>
+                        <TextInput className='w-full mb-4' id='brand' name='brand' ref={brandInput} value={data.brand} required='required' onChange={(e) => setData('brand', e.target.value)}></TextInput>
+                        <InputError message={errors.brand}></InputError>
 
-                        <InputLabel className='text-gray-600' htmlFor='email' value=' '>Email:</InputLabel>
-                        <TextInput className='w-full mb-4' id='email' name='email' ref={emailInput} value={data.email} required='required' onChange={(e) => setData('email', e.target.value)}></TextInput>
-                        <InputError message={errors.email}></InputError>
+                        <InputLabel className='text-gray-600' htmlFor='model' value=' '>Modelo:</InputLabel>
+                        <TextInput className='w-full mb-4' id='model' name='model' ref={modelInput} value={data.model} required='required' onChange={(e) => setData('model', e.target.value)}></TextInput>
+                        <InputError message={errors.model}></InputError>
 
-                        <InputLabel className='text-gray-600' htmlFor='phone' value=''>Teléfono:</InputLabel>
-                        <TextInput className='w-full mb-4' id='phone' name='phone' ref={phoneInput} value={data.phone} required='required' onChange={(e) => setData('phone', e.target.value)}></TextInput>
-                        <InputError message={errors.phone}></InputError>
-
-                        <InputLabel className='text-gray-600' htmlFor='age' value=''>Edad:</InputLabel>
-                        <TextInput className='w-full mb-4' id='age' type='number' name='age' ref={ageInput} value={data.age} required='required' onChange={(e) => setData('age', e.target.value)}></TextInput>
-                        <InputError message={errors.age}></InputError>
-
-                        <InputLabel htmlFor='gender'>Género:</InputLabel>
-                        <Select
-                            className="w-full mb-4"
-                            id='gender'
-                            ref={genderInput}
-                            value={data.gender || ''} // Ensure that value is not undefined
-                            onChange={(e) => setData("gender", e.target.value)}
-                        >
-                            <MenuItem value={'Masculino'}>
-                                Masculino
-                            </MenuItem>
-                            <MenuItem value={'Masculino'}>
-                                Femenino
-                            </MenuItem>
-                        </Select>
-
-                        <InputLabel className='text-gray-600' htmlFor='publicity_method' value=''>Método publicitario:</InputLabel>
-                        <TextInput className='w-full mb-4' id='publicity_method' name='publicity_method' ref={publicity_methodInput} value={data.publicity_method} required='required' onChange={(e) => setData('publicity_method', e.target.value)}></TextInput>
-                        <InputError message={errors.publicity_method}></InputError>
-
-                        <InputLabel htmlFor='ailments'>Padecimientos:</InputLabel>
-                        <TextField multiline className="w-full mb-4" rows={6} id="ailments" name="ailments" ref={ailmentsInput} value={data.ailments || ''} onChange={(e) => setData('ailments', e.target.value)} />
-                        <InputError message={errors.ailments}></InputError>
-
-                        <InputLabel htmlFor='background'>Antecedentes:</InputLabel>
-                        <TextField multiline className="w-full mb-4" rows={6} id="background" name="background" ref={backgroundInput} value={data.background || ''} onChange={(e) => setData('background', e.target.value)} />
-                        <InputError message={errors.background}></InputError> */}
+                        <InputLabel className='text-gray-600' htmlFor='price' value=''>Precio:</InputLabel>
+                        <TextInput className='w-full mb-4' id='price' type='number' onWheel={(e) => e.target.blur()} name='price' ref={priceInput} value={data.price} required='required' onChange={(e) => setData('price', e.target.value)}></TextInput>
+                        <InputError message={errors.price}></InputError>
 
                     </DialogContent>
                     <DialogActions>
@@ -290,6 +287,18 @@ export default function ProductIndex (props) {
                     </DialogActions>
                 </form>
             </Dialog>
+
+            <Dialog open={deleteModal} onClose={closeDeleteModal}>
+                <DialogTitle>¿Estás seguro de que deseas eliminar este producto?</DialogTitle>
+                <DialogContent>
+                    <p>El producto <strong>{data.name}</strong> será eliminado.</p>
+                </DialogContent>
+                <DialogActions>
+                    <ButtonCancel onClick={closeDeleteModal}>Cancelar</ButtonCancel>
+                    <ButtonDelete onClick={borrar} disabled={processing}>Eliminar</ButtonDelete>
+                </DialogActions>
+            </Dialog>
+            <Head title="Productos" />
         </>
     )
 }
