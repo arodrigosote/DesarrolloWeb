@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ButtonPrimary from "@/Components/ButtonPrimary";
 import DashboardLayout from "@/Layouts/Dashboard/DashboardLayout";
 import { useForm, usePage } from "@inertiajs/react";
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select, TextField } from "@mui/material";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
@@ -12,7 +12,7 @@ import ButtonSecondary from "@/Components/ButtonSecondary";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 export default function IndexBinnacle(props) {
-    const { binnacle, auth } = usePage().props;
+    const { binnacle, patients, auth } = usePage().props;
     const getCssVariable = (variable) => {
         return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
     };
@@ -34,15 +34,16 @@ export default function IndexBinnacle(props) {
     const [modal, setModal] = useState(false);
     const [modalTicket, setModalTicket] = useState(false);
     const [title, setTitle] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
     const handleCreation = (alias) => {
         setTitle('Crear bitácora');
         setModal(true);
         setData({
             alias: '',
-        })
-
+        });
     }
+
     const closeModal = () => {
         setModal(false);
     }
@@ -58,17 +59,12 @@ export default function IndexBinnacle(props) {
     const ok = (message) => {
         reset();
         closeModal();
-        Swal.fire({ title: message, icon: 'success', confirmButtonColor: getCssVariable('--color1') })
-        // get(route('patient.index'))
+        Swal.fire({ title: message, icon: 'success', confirmButtonColor: getCssVariable('--color1') });
     };
-
-    // --------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------
 
     const openModalTicket = () => {
         setModalTicket(true);
-        setTitle('¿Qué desea registrar?')
+        setTitle('¿Qué desea registrar?');
     }
 
     const closeModalTicket = () => {
@@ -83,6 +79,14 @@ export default function IndexBinnacle(props) {
         });
     }
 
+    const { data: data2, setData: setData2, delete: delete2, post: post2, get: get2, put: put2, processing: processing2, progress: progress2, errors: errors2, reset: reset2 } = useForm({
+        id: '',
+        patient_id: '',
+    });
+
+    const filteredPatients = patients.filter((patient) =>
+        patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <>
@@ -92,7 +96,7 @@ export default function IndexBinnacle(props) {
                         <h2 className="font-semibold text-color2 text-lg">
                             Mostrando la bitácora del, {formattedDate}.
                         </h2>
-                        <ButtonSecondary onClick={()=>openModalTicket()}>Crear registro</ButtonSecondary>
+                        <ButtonSecondary onClick={() => openModalTicket()}>Crear registro</ButtonSecondary>
                     </div>
 
                     :
@@ -107,7 +111,6 @@ export default function IndexBinnacle(props) {
                     </div>
                 }
             </DashboardLayout>
-
 
             <Dialog open={modal} onClose={closeModal} maxWidth="md" fullWidth>
                 <form onSubmit={save} className="p-6" encType="multipart/form-data" method="POST">
@@ -141,10 +144,33 @@ export default function IndexBinnacle(props) {
                                 <Tab className="py-2 px-4 cursor-pointer focus:outline-none transition duration-300 font-semibold text-md" selectedClassName="bg-cyan-500">Ingreso/Egreso</Tab>
                             </TabList>
 
-                            <TabPanel>Mostrando consultas</TabPanel>
+                            <TabPanel>
+                                <h3 className="text-color2 font-bold mt-4 text-lg">Generar consulta:</h3>
+                                <InputLabel className='text-gray-600' htmlFor='patient_id' value='¿Desea agregar una nota a la bitácora?'>Seleccione al paciente</InputLabel>
+                                <TextField
+                                    className="w-full mb-4"
+                                    id='search'
+                                    label='Buscar paciente'
+                                    variant='outlined'
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <Select
+                                    className="w-full mb-4"
+                                    id='patient_id'
+                                    value={data2.patient_id || ''} // Ensure that value is not undefined
+                                    onChange={(e) => setData2("patient_id", e.target.value)}
+                                >
+                                    {filteredPatients.map((patient) => (
+                                        <MenuItem key={patient.id} value={patient.id}>
+                                            {patient.name} - {patient.address}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <InputError message={errors.patient_id}></InputError>
+                            </TabPanel>
                             <TabPanel>Mostrando ventas</TabPanel>
-                            <TabPanel>Mostrando Ingresp</TabPanel>
-
+                            <TabPanel>Mostrando Ingreso</TabPanel>
                         </Tabs>
                     </DialogContent>
                     <DialogActions>

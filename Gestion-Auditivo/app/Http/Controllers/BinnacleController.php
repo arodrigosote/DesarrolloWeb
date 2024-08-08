@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Binnacle;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Gate;
@@ -34,8 +35,11 @@ class BinnacleController extends Controller
                 ->where('branch_id', $user->branch_id)
                 ->first();
 
+                $patients = Patient::where('branch_id', $user->branch_id)->get();
+
             return Inertia::render('Binnacle/Index', [
                 'binnacle' => $binnacle,
+                'patients' => $patients,
             ]);
         } else {
             return Inertia::render("Dashboard")->with('toast', [

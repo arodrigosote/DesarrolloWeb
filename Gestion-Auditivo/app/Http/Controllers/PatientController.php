@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Audiometry;
 use App\Models\Fullinfo;
 use App\Models\Patient;
 use App\Models\Product;
@@ -105,6 +106,7 @@ class PatientController extends Controller
             try {
                 return Inertia::render('Patients/Show', [
                     'patient' => Patient::findOrFail($id),
+                    'audiometries' => Audiometry::where('patient_id',$id)->get(),
                     'fullinfo' => Fullinfo::where('patient_id', $id)->first(),
                     'sales' => Sale::where('patient_id',$id)->with('product')->get(),
                 ]);

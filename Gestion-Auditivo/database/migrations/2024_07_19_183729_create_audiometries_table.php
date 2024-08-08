@@ -18,14 +18,16 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->foreign('patient_id')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->date('date');
-            $table->enum('oido', ['O.D.', 'O.I.', 'T.D.', 'T.L.']);
+            $table->enum('oido', ['O.D.', 'O.I.', 'T.D.', 'T.L.'])->nullable();
             $table->integer('frecuencia_250')->nullable();
             $table->integer('frecuencia_500')->nullable();
             $table->integer('frecuencia_1000')->nullable();
             $table->integer('frecuencia_2000')->nullable();
             $table->integer('frecuencia_4000')->nullable();
             $table->integer('frecuencia_6000')->nullable();
-            $table->integer('nivel_confort')->nullable();
+            $table->string('nivel_confort')->nullable();
+            $table->string('comments')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

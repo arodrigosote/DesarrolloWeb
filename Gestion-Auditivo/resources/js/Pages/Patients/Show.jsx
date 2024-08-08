@@ -23,7 +23,7 @@ import 'react-tabs/style/react-tabs.css';
 
 
 export default function PatientShow(props) {
-    const { patient, fullinfo, sales, auth, toast: toastProp, url } = usePage().props;
+    const { patient, fullinfo, audiometries, sales, auth, toast: toastProp, url } = usePage().props;
 
     const getCssVariable = (variable) => {
         return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
@@ -328,6 +328,90 @@ export default function PatientShow(props) {
     const handleEditFullinfo = () => {
         setEnable(!enable);
     }
+
+
+    // ----------------------------------------------------------------------------------------------------
+    // Audiometries ---------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------
+
+    const [modalAudio, setModalAudio] = useState(false);
+
+    const idInput = useRef();
+    const dateInput = useRef();
+    const nivel_confortInput = useRef();
+    const commentsInput = useRef();
+    const imageInput = useRef();
+
+    const { data: dataAudio, setData: setDataAudio, delete: deleteAudio, post: postAudio, get: getAudio, put: putAudio, processing: processingAudio, progress: progressAudio, errors: errorsAudio, reset: resetAudio } = useForm({
+        id: '',
+        user_id: '',
+        patient_id: '',
+        date: '',
+        nivel_confort: '',
+        comments: '',
+        image: '',
+    })
+
+    const openModalAudio = (op, id, user_id, patient_id, date, nivel_confort, comments, image) => {
+        setModalAudio(true);
+        setOperation(op);
+        setDataAudio({
+            id: '',
+            user_id: '',
+            patient_id: patient.id,
+            date: '',
+            nivel_confort: '',
+            comments: '',
+            image: '',
+        })
+        if (op === 1) {
+            setTitle('Crear audiometría');
+        } else {
+            setTitle('Editar audiometría');
+            setDataAudio({
+                id: id,
+                user_id: user_id,
+                patient_id: patient_id,
+                date: date,
+                nivel_confort: nivel_confort,
+                comments: comments,
+                image: image,
+            })
+        }
+    }
+    const closeModalAudio = () => {
+        setModalAudio(false);
+    }
+
+    //SUBMIT SECTION
+    //SUBMIT SECTION
+    const submitAudio = (e) => {
+        e.preventDefault();
+
+        if (operation === 1) {
+            post(route('patient.store.audiometry'), {
+                onSuccess: () => { okFullAudio('Audiometría creada con éxito') },
+            });
+        } else {
+            post(route('patient.update.audiometry', data.id), {
+                onSuccess: () => { okFullAudio('Audiometría editada con éxito') },
+            });
+        }
+    }
+
+    const okFullAudio = (message) => {
+        reset();
+        closeModalAudio();
+        closeDeleteModal();
+        Swal.fire({ title: message, icon: 'success', confirmButtonColor: getCssVariable('--color1') })
+
+    };
+
+    const handleCredentialpicChange = (e) => {
+        const file = e.target.files[0];
+        setDataAudio('image', file); // Actualiza el estado solo con el archivo de imagen
+    };
+
 
     return (
         <>
@@ -1079,7 +1163,51 @@ export default function PatientShow(props) {
                                     </Tab>
                                 </TabList>
                                 <TabPanel>
-                                    Audiometria ss
+                                    <div className='flex justify-between mt-12'>
+                                        <h3 className='text-xl font-bold'>Listando audiometrías del paciente</h3>
+                                        <ButtonSecondary onClick={() => { openModalAudio(1) }}>Registrar nueva</ButtonSecondary>
+                                    </div>
+                                    <table className="w-full min-w-max mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th className="p-4 text-[15px] bg-color4 text-white border">
+                                                    <div className='flex justify-between'>
+                                                        <span>Fecha</span>
+                                                    </div>
+                                                </th>
+                                                <th className="p-4 text-[15px] bg-color4 text-white border" >
+                                                    <div className='flex justify-between'>
+                                                        <span>Creada por:</span>
+                                                    </div>
+                                                </th>
+                                                <th className="p-4 text-[15px] bg-color4 text-white border">
+                                                    <div className='flex justify-between'>
+                                                        <span>Comentarios</span>
+                                                    </div>
+                                                </th>
+                                                <th className="p-4 text-[15px] bg-color4 text-white border">Accciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {audiometries.map((audiometry, index) => (
+                                                <tr key={sale.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                                    <td className="p-4 border">{audiometry.date}</td>
+                                                    <td className="p-4 border">{audiometry.user_id}</td>
+                                                    <td className="p-4 border">{audiometry.comments}</td>
+                                                    <td className='p-4 border'>
+                                                        <div className="flex justify-center">
+                                                            <ButtonSecondary><RiEyeFill /></ButtonSecondary>
+                                                            {/* <ButtonEdit onClick={(e) => { openModal(2, branch.id, branch.name, branch.address, branch.image) }}><RiEditBoxFill /></ButtonEdit>
+                                                        <ButtonDelete onClick={(e) => { openDeleteModal(branch.id, branch.name) }}><RiDeleteBin5Fill /></ButtonDelete> */}
+                                                        </div>
+                                                    </td>
+
+
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+
                                 </TabPanel>
                                 <TabPanel></TabPanel>
                                 <TabPanel></TabPanel>
@@ -1143,7 +1271,7 @@ export default function PatientShow(props) {
                         </TabPanel>
 
                         <TabPanel>
-                        <div className='p-6'>
+                            <div className='p-6'>
                                 <h3 className="text-xl font-bold mb-4">Garantías del paciente</h3>
                                 <table className="w-full min-w-max">
                                     <thead>
@@ -1268,6 +1396,60 @@ export default function PatientShow(props) {
                 </DialogActions>
             </Dialog>
             <Head title="Pacientes" />
+
+
+
+            <Dialog open={modalAudio} onClose={closeModalAudio} maxWidth="md" fullWidth>
+                <form onSubmit={submitAudio} className="p-6" encType="multipart/form-data" method="POST">
+                    <DialogTitle className="">
+                        <span className="text-2xl text-color1 font-bold">{title}</span>
+                    </DialogTitle>
+                    <DialogContent>
+                        {/* <InputLabel className='text-gray-600 hidden' htmlFor='patient_id'>Dirección:</InputLabel> */}
+                        <TextInput className='w-full mb-4 hidden' id='patient_id' name='patient_id' ref={patient_idInput} value={data.address} required='required' onChange={(e) => setData('patient_id', e.target.value)}></TextInput>
+                        <InputError className='hidden' message={errors.patient_id}></InputError>
+
+                        <InputLabel className='text-gray-600' htmlFor='date'>Fecha:</InputLabel>
+                        <TextInput
+                            type='date'
+                            className='w-full mb-4'
+                            id='date'
+                            name='date'
+                            ref={dateInput}
+                            value={data.date}
+                            required='required'
+                            onChange={(e) => setData('date', e.target.value)}
+                        ></TextInput>
+                        <InputError message={errors.date}></InputError>
+
+
+                        <InputLabel className='text-gray-600' htmlFor='nivel_confort'>Nivel de confort:</InputLabel>
+                        <TextInput className='w-full mb-4' id='nivel_confort' name='nivel_confort' ref={nivel_confortInput} value={data.nivel_confort} required='required' onChange={(e) => setData('nivel_confort', e.target.value)}></TextInput>
+                        <InputError message={errors.nivel_confort}></InputError>
+
+                        <InputLabel className='text-gray-600' htmlFor='comments'>Comentarios:</InputLabel>
+                        <TextInput className='w-full mb-4' id='comments' name='comments' ref={commentsInput} value={data.comments} required='required' onChange={(e) => setData('comments', e.target.value)}></TextInput>
+                        <InputError message={errors.comments}></InputError>
+
+                        <InputLabel htmlFor='image' value=''>Imagen de la audiometría: </InputLabel>
+                        <TextField
+                            type="file"
+                            accept="image/*"
+                            id="image"
+                            name="image"
+                            onChange={handleCredentialpicChange}
+                        />
+                        <InputError message={errors.image} />
+
+                    </DialogContent>
+                    <DialogActions>
+                        <div className="flex justify-end items-center mt-4">
+                            <ButtonCancel type='button' onClick={closeModalAudio} disabled={processingAudio}>Cancelar</ButtonCancel>
+                            <ButtonPrimary className="ml-3" disabled={processingAudio}>Enviar</ButtonPrimary>
+                        </div>
+                    </DialogActions>
+                </form>
+            </Dialog>
         </>
     );
 }

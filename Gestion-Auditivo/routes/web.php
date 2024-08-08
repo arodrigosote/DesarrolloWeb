@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AudiometryController;
 use App\Http\Controllers\BinnacleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PatientController;
@@ -52,6 +53,9 @@ Route::middleware('auth')->group(function () {
     //FullData
     Route::post('/paciente/mostrar/fulldata', [PatientController::class, 'store_fulldata'])->name('patient.store.fulldata');
     Route::post('/paciente/mostrar/fulldata/{id}', [PatientController::class, 'update_fulldata'])->name('patient.update.fulldata');
+    //Audiometries
+    Route::post('/paciente/mostrar/audiometria', [AudiometryController::class, 'store'])->name('patient.store.audiometry');
+    Route::post('/paciente/mostrar/audiometria/{id}', [AudiometryController::class, 'update'])->name('patient.update.audiometry');
 
     //EMPLOYEES
     Route::get('/ajustes/empleados', [EmployeeController::class, 'index'])->name('employee.index');

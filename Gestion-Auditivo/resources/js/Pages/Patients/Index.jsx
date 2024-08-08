@@ -116,7 +116,6 @@ export default function PatientIndex(props) {
         id: '',
         name:'',
         user_id: '',
-        name: '',
         address: '',
         phone: '',
         age: '',
