@@ -364,6 +364,7 @@ export default function PatientShow(props) {
             comments: '',
             image: '',
         })
+        console.log(patient.id);
         if (op === 1) {
             setTitle('Crear audiometría');
         } else {
@@ -389,11 +390,11 @@ export default function PatientShow(props) {
         e.preventDefault();
 
         if (operation === 1) {
-            post(route('patient.store.audiometry'), {
+            postAudio(route('patient.store.audiometry'), {
                 onSuccess: () => { okFullAudio('Audiometría creada con éxito') },
             });
         } else {
-            post(route('patient.update.audiometry', data.id), {
+            postAudio(route('patient.update.audiometry', data.id), {
                 onSuccess: () => { okFullAudio('Audiometría editada con éxito') },
             });
         }
@@ -403,6 +404,7 @@ export default function PatientShow(props) {
         reset();
         closeModalAudio();
         closeDeleteModal();
+        closeDeleteModalAudiometry();
         Swal.fire({ title: message, icon: 'success', confirmButtonColor: getCssVariable('--color1') })
 
     };
@@ -412,6 +414,29 @@ export default function PatientShow(props) {
         setDataAudio('image', file); // Actualiza el estado solo con el archivo de imagen
     };
 
+    // ---------------------------------------------------------------------------------------
+    // DELETE MODAL AUDIO ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------
+    const [deleteModalAudiometry, setDeleteModalAudiometry] = useState(false);
+
+    const openDeleteModalAudiometry = (id) => {
+        setDeleteModalAudiometry(true);
+        setData({
+            id: id,
+        })
+    }
+
+    const closeDeleteModalAudiometry = () => {
+        setDeleteModalAudiometry(false);
+    }
+
+    const borrarAudiometry = (e) => {
+        e.preventDefault();
+        deleteAudio(route('patient.destroy.audiometry', data.id), {
+            preserveScroll: true,
+            onSuccess: () => { okFullAudio('Audiometría eliminada con éxito.') },
+        });
+    }
 
     return (
         <>
@@ -1190,15 +1215,15 @@ export default function PatientShow(props) {
                                         </thead>
                                         <tbody>
                                             {audiometries.map((audiometry, index) => (
-                                                <tr key={sale.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+                                                <tr key={audiometry.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
                                                     <td className="p-4 border">{audiometry.date}</td>
-                                                    <td className="p-4 border">{audiometry.user_id}</td>
+                                                    <td className="p-4 border">{audiometry.user.name}</td>
                                                     <td className="p-4 border">{audiometry.comments}</td>
                                                     <td className='p-4 border'>
                                                         <div className="flex justify-center">
                                                             <ButtonSecondary><RiEyeFill /></ButtonSecondary>
-                                                            {/* <ButtonEdit onClick={(e) => { openModal(2, branch.id, branch.name, branch.address, branch.image) }}><RiEditBoxFill /></ButtonEdit>
-                                                        <ButtonDelete onClick={(e) => { openDeleteModal(branch.id, branch.name) }}><RiDeleteBin5Fill /></ButtonDelete> */}
+                                                            <ButtonEdit onClick={(e) => { openModalAudio(2, audiometry.id, audiometry.user_id, audiometry.patient_id, audiometry.date, audiometry.nivel_confort, audiometry.comments, audiometry.image) }}><RiEditBoxFill /></ButtonEdit>
+                                                            <ButtonDelete onClick={(e) => { openDeleteModalAudiometry(audiometry.id) }}><RiDeleteBin5Fill /></ButtonDelete>
                                                         </div>
                                                     </td>
 
@@ -1406,7 +1431,7 @@ export default function PatientShow(props) {
                     </DialogTitle>
                     <DialogContent>
                         {/* <InputLabel className='text-gray-600 hidden' htmlFor='patient_id'>Dirección:</InputLabel> */}
-                        <TextInput className='w-full mb-4 hidden' id='patient_id' name='patient_id' ref={patient_idInput} value={data.address} required='required' onChange={(e) => setData('patient_id', e.target.value)}></TextInput>
+                        <TextInput className='w-full mb-4 hidden' id='patient_id' name='patient_id' ref={patient_idInput} value={dataAudio.patient_id} required='required' onChange={(e) => setDataAudio('patient_id', e.target.value)}></TextInput>
                         <InputError className='hidden' message={errors.patient_id}></InputError>
 
                         <InputLabel className='text-gray-600' htmlFor='date'>Fecha:</InputLabel>
@@ -1416,19 +1441,19 @@ export default function PatientShow(props) {
                             id='date'
                             name='date'
                             ref={dateInput}
-                            value={data.date}
+                            value={dataAudio.date}
                             required='required'
-                            onChange={(e) => setData('date', e.target.value)}
+                            onChange={(e) => setDataAudio('date', e.target.value)}
                         ></TextInput>
                         <InputError message={errors.date}></InputError>
 
 
                         <InputLabel className='text-gray-600' htmlFor='nivel_confort'>Nivel de confort:</InputLabel>
-                        <TextInput className='w-full mb-4' id='nivel_confort' name='nivel_confort' ref={nivel_confortInput} value={data.nivel_confort} required='required' onChange={(e) => setData('nivel_confort', e.target.value)}></TextInput>
+                        <TextInput className='w-full mb-4' id='nivel_confort' name='nivel_confort' ref={nivel_confortInput} value={dataAudio.nivel_confort} required='required' onChange={(e) => setDataAudio('nivel_confort', e.target.value)}></TextInput>
                         <InputError message={errors.nivel_confort}></InputError>
 
                         <InputLabel className='text-gray-600' htmlFor='comments'>Comentarios:</InputLabel>
-                        <TextInput className='w-full mb-4' id='comments' name='comments' ref={commentsInput} value={data.comments} required='required' onChange={(e) => setData('comments', e.target.value)}></TextInput>
+                        <TextInput className='w-full mb-4' id='comments' name='comments' ref={commentsInput} value={dataAudio.comments} required='required' onChange={(e) => setDataAudio('comments', e.target.value)}></TextInput>
                         <InputError message={errors.comments}></InputError>
 
                         <InputLabel htmlFor='image' value=''>Imagen de la audiometría: </InputLabel>
@@ -1449,6 +1474,16 @@ export default function PatientShow(props) {
                         </div>
                     </DialogActions>
                 </form>
+            </Dialog>
+            <Dialog open={deleteModalAudiometry} onClose={closeDeleteModalAudiometry}>
+                <DialogTitle>¿Estás seguro de que deseas eliminar la audiometría?</DialogTitle>
+                <DialogContent>
+                    <p>Esta acción no se puede revertir</p>
+                </DialogContent>
+                <DialogActions>
+                    <ButtonCancel onClick={closeDeleteModalAudiometry}>Cancelar</ButtonCancel>
+                    <ButtonDelete onClick={borrarAudiometry} disabled={processingAudio}>Eliminar</ButtonDelete>
+                </DialogActions>
             </Dialog>
         </>
     );

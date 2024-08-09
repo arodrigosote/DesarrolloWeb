@@ -106,7 +106,7 @@ class PatientController extends Controller
             try {
                 return Inertia::render('Patients/Show', [
                     'patient' => Patient::findOrFail($id),
-                    'audiometries' => Audiometry::where('patient_id',$id)->get(),
+                    'audiometries' => Audiometry::with('user')->where('patient_id',$id)->get(),
                     'fullinfo' => Fullinfo::where('patient_id', $id)->first(),
                     'sales' => Sale::where('patient_id',$id)->with('product')->get(),
                 ]);

@@ -55,7 +55,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/paciente/mostrar/fulldata/{id}', [PatientController::class, 'update_fulldata'])->name('patient.update.fulldata');
     //Audiometries
     Route::post('/paciente/mostrar/audiometria', [AudiometryController::class, 'store'])->name('patient.store.audiometry');
-    Route::post('/paciente/mostrar/audiometria/{id}', [AudiometryController::class, 'update'])->name('patient.update.audiometry');
+    Route::post('/paciente/editar/audiometria/{id}', [AudiometryController::class, 'update'])->name('patient.update.audiometry');
+    Route::delete('/paciente/eliminar/audiometria/{id}', [AudiometryController::class, 'destroy'])->name('patient.destroy.audiometry');
 
     //EMPLOYEES
     Route::get('/ajustes/empleados', [EmployeeController::class, 'index'])->name('employee.index');

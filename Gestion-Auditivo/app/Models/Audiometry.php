@@ -17,4 +17,13 @@ class Audiometry extends Model
         'comments',
         'image',
     ];
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
+    public function patient()
+    {
+        return $this->hasOne('App\Models\Patient', 'id', 'patient_id');
+    }
 }
